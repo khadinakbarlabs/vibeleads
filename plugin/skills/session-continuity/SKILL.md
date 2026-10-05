@@ -1,6 +1,6 @@
 ---
 name: session-continuity
-description: Resume prospecting across sessions, reuse scoped business context and summarize progress without repeating work or renewing old permissions. Use for continue, weekly reviews, handoffs, remembered preferences or returning users.
+description: Resume a known B2B prospecting task from its business brief, partial run or saved lead report without repeating completed work or renewing spending authority. Use for continuing lead research and prospecting handoffs, not generic project continuation.
 ---
 
 # Session Continuity
@@ -10,6 +10,8 @@ Apply the [shared contract](../lead-engine/references/operating-contract.md) and
 At session start, read the chosen business brief and latest handoff if available. Check profile identity, date/revision, completed work, current intent and still-relevant user corrections. Say briefly what is being reused and the useful next step. Missing saved files mean recover from current context or request the missing path, not pretend to remember.
 
 Reconcile pending/uncertain run IDs, partial datasets, source coverage and cumulative charges before rerunning collection. A previous report is a baseline, not current evidence of employment/source health or renewed spending. Reuse applicable explicit authorization; never reset it with a new session or week unless its stated allowance actually renews then.
+
+For a saved exact run, the [contained reader](../lead-engine/references/local-data-workflow.md) resumes bounded reads from its checkpoint without starting another collection. Keep only the checkpoint path, scope, observed state and next action in the handoff; retained rows remain in the private working dataset. An unknown start stays unassigned until exact permitted readback succeeds.
 
 Resume only missing partitions/fields. Deduplicate at the same account/contact/branch grain, preserve original IDs and richer provider evidence in the companion mapping. For comparisons, distinguish new, retained, changed, not observed and uncertain identity. Missing in a partial session is not lost; independent source/time windows are not automatically comparable.
 

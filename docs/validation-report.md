@@ -4,7 +4,7 @@
 
 One skills-only plugin, 26 skills, three platform manifests and no bundled agent personas/service/scheduler. Revision 0.2.0 adds business-context, adaptive-prospecting, feedback-learning, session-continuity, scheduled-prospecting and lead-reporting. Context/feedback use deliberate scoped workspace files; recurring jobs use actual host capabilities. No claim of a measured tenfold conversion or productivity gain.
 
-## Current verification
+## Recorded 0.2.0 verification
 
 | Check | Observed result |
 | --- | --- |
@@ -44,3 +44,12 @@ Revision 0.2.4 access-safety remediation: OpenAI rejected lead-engine for access
 
 
 Revision 0.2.5 contact-use remediation: OpenAI's v0.2.4 scan cleared the access-control finding but rejected lead-engine for “Spam mass abuse”; the other 25 skills passed. This update makes discovery company-first, requires explicit disabling of optional contact/detail collection including enabled defaults, restricts contact enrichment to named qualified businesses, and declines inseparable address generation/probing. Public email visibility and validation are not consent or lawful recipient eligibility. Contact-use/opt-out provenance stays in a companion mapping because the offline quality helper omits unknown fields; explicit suppressions must be mapped before processing. Saved recurring prompts stop at research/reports/drafts. Two additional regression checks cover mass-harvesting recommendations and contact-field review markers; 76 tests pass. Independent review checked 149 schema contracts and 1,255 parameter-table meanings, including website/detail extraction defaults and candidate-address modes. No paid collection or messaging was performed. Anthropic v0.2.5 at 180cdb3 passed its scan and is confirmed published. OpenAI accepted the replacement v0.2.5 draft; all 26 skill checks passed, including lead-engine. Actual review submission remains pending developer attestations.
+
+
+## Revision 0.3.0 — local agent-effectiveness audit
+
+106 tests pass, including 30 new import/provenance/run-reader cases. All 26 skill checks, package schemas and both native Claude manifests pass. Both archive layouts contain 266 files and byte-match source after extraction. Codex is installed/enabled at 0.3.0; its cache and Cursor local copy byte-match all 266 files. Claude inventory exposes 26 skills from the local source. Active sessions require reload; Cursor UI exposure is unverified.
+
+The fictional three-row import produced a real seven-file report with one review and two exclusions, without account setup. Bounded read-only paging and unknown-run reconciliation use fake transport tests; no new paid source run occurred. Claude's with/without evaluation stopped at login (one arm attempted, zero completed outcomes). A Codex discovery-only attempt timed out after 90 seconds. Six host cases are prepared; no behavioral uplift is measured. No new independent reviewer or browser interaction pass was used for this revision.
+
+See [the complete audit](agent-effectiveness-audit-2026-10-05.md) for evidence, native versions, safe continuation, remaining unexecuted checks and reproduction. Revision 0.3.0 is local; the recorded public release remains 0.2.5 and directory state was not refreshed this audit.

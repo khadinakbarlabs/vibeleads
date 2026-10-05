@@ -1,6 +1,6 @@
 ---
 name: company-enrichment
-description: Enrich B2B company and decision-maker records with source-backed business details and contact routes. Use for enrichment waterfalls, Apollo or ZoomInfo source requests, and completing account lists.
+description: Fill missing company fields in a named B2B account list using source-backed business details. Use for account enrichment or an exact Apollo/ZoomInfo source request; separate contact enrichment and mailbox validation stages.
 ---
 
 # Company Enrichment

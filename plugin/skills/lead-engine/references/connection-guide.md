@@ -4,7 +4,7 @@ Apply the [qualified business/contact-use gate](contact-use.md) before collectio
 
 Before collection or recovery, apply the [source access gate](access-safety.md). Catalog/schema verification is not execution permission. Denied underlying source access is excluded from Actor failover and automatic retries.
 
-VibeLeads supplies skills, not an executable data engine. The agent uses the independently installed official Apify CLI or a capable existing authenticated integration. An Apify API key is required; each user uses their own account. The publisher’s account and keys are never shipped.
+VibeLeads supplies skills and contained local helpers, without a hosted data engine. The agent uses the independently installed official Apify CLI or a capable existing authenticated integration. An Apify API key is required for live access; each user uses their own account. The publisher’s account and keys are never shipped. Supplied files need no login; use the [offline import and existing-run reader](local-data-workflow.md) for mapping, provenance and bounded readback.
 
 ## First-run check
 
@@ -44,6 +44,8 @@ apify api POST 'acts/<exact-verified-id>/runs' --body - --params '<verified-limi
 An alternative `apify actors start` is suitable only if its installed options can enforce the same envelope. An existing MCP connection alone does not prove this. Never invoke an uncapped tool as fallback.
 
 Record run ID immediately; ambiguous start failures need readback, not an automatic retry. Poll using `apify runs info <run-id> --json` with bounded waits. Filter summaries internally. Save a resumable state if work remains running; do not endlessly poll or announce it complete.
+
+Once the exact run is known, prefer the contained reader for repeated paging/checkpoints. It issues only GET requests through the official CLI and keeps Actor/build/run identity and the original output limit. It does not start, retry, resurrect or abort collections. An unknown-start checkpoint requires exact readback before association; it is not safe-replay support.
 
 ## Collect and inspect
 

@@ -112,6 +112,11 @@ def assess(records, grain='account', suppression=None):
     report = {'grain': grain, 'qualified': [], 'review': [], 'excluded': []}
     for raw in records:
         row = {key: text(raw.get(key)) for key in FIELDS}
+        # Opaque companion join key; it never establishes business identity or fit.
+        if 'record_id' in raw:
+            if not isinstance(raw['record_id'], str) or not re.fullmatch(r'vl_[0-9a-f]{32}', raw['record_id']):
+                raise ValueError('Record ID must be an opaque VibeLeads mapping key.')
+            row['record_id'] = raw['record_id']
         row['domain'] = domain(row['domain'])
         row['email'] = row['email'].lower()
         row['evidence'] = evidence_items(raw.get('evidence'))
@@ -191,7 +196,7 @@ def safe_cell(value):
 
 
 def write_csv(report, stream, sendable_only=False):
-    columns = list(FIELDS) + ['score', 'email_sendable', 'evidence', 'reasons', 'bucket']
+    columns = list(FIELDS) + ['record_id', 'score', 'email_sendable', 'evidence', 'reasons', 'bucket']
     writer = csv.DictWriter(stream, fieldnames=columns)
     writer.writeheader()
     for bucket in ('qualified', 'review'):

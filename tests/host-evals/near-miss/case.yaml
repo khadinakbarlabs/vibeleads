@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.1",
+  "name": "near-miss",
+  "plugins": [
+    "../../../plugin"
+  ],
+  "runs": 1,
+  "tags": [
+    "offline-smoke"
+  ],
+  "execution": {
+    "prompt": "Continue polishing the button spacing and typography in my existing mobile app. No app files are attached yet. Tell me the first useful step. This is an app UI repair request, not lead research.",
+    "max_turns": 8,
+    "timeout_seconds": 150,
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Skill"
+    ]
+  },
+  "graders": [
+    {
+      "name": "no-lead-routing",
+      "type": "tool_used",
+      "tool": "Skill",
+      "input_match": "vibeleads|lead-engine|prospecting",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "name": "app-context",
+      "type": "regex",
+      "pattern": "app|UI|screen|component|file",
+      "flags": "i"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1",
+  "name": "planning",
+  "plugins": [
+    "../../../plugin"
+  ],
+  "runs": 1,
+  "tags": [
+    "offline-smoke"
+  ],
+  "execution": {
+    "prompt": "Use /vibeleads-b2b:lead-engine. I sell website accessibility audits to independent dental clinics in Austin. I want an initial company-search plan for 20 clinics, prioritizing observable website problems. Do not collect anything, log in, or ask for a key or budget just to plan. Give one concrete next research action.",
+    "max_turns": 8,
+    "timeout_seconds": 150,
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Skill"
+    ]
+  },
+  "graders": [
+    {
+      "name": "useful-plan",
+      "type": "regex",
+      "pattern": "dental|dentist|clinic",
+      "flags": "i"
+    },
+    {
+      "name": "observed-signal",
+      "type": "regex",
+      "pattern": "accessib|website|signal",
+      "flags": "i"
+    },
+    {
+      "name": "no-live-collection",
+      "type": "tool_used",
+      "tool": "Bash",
+      "input_match": "apify.*(?:POST|actors start)",
+      "min": 0,
+      "max": 0
+    }
+  ]
+}

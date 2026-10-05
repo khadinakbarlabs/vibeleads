@@ -1,6 +1,6 @@
 ---
 name: lead-reporting
-description: Present lead research as an evidence-backed visual brief, quality dashboard, session comparison or printable report with honest counts and budget status. Use for reports, charts, weekly reviews, presentation or clearer lead-list handoffs.
+description: Create a private HTML, Markdown or JSON report from saved B2B prospects, compare lead-research sessions or explain list quality and coverage. Use for prospect dashboards and weekly lead reviews; supplied files need no live collection.
 ---
 
 # Lead Reporting
@@ -12,6 +12,8 @@ Lead with the business result: best prospects, why they fit/why now, completenes
 Use actual canonical input records, observed coverage and attributed actual spend/reserved allowances. The optional offline helper recalculates quality through the shared lead-quality engine, rather than trusting imported scores or `email_sendable` claims. Never equate company counts with email counts, job success with complete source coverage, or score with conversion probability.
 
 For session comparisons, use the same grain/scope and reviewed prior canonical rows. Label new, retained, changed and not observed; missing from partial coverage does not establish disappearance. Rich provider detail/original IDs remain in the companion mapping. Source-domain counts describe evidence coverage, not independent-provider reliability or revenue attribution.
+
+For a file not yet canonical, use the [offline import workflow](../lead-engine/references/local-data-workflow.md) to map actual CSV/JSON fields and create the provenance/quality/report bundle without account onboarding. Keep `companion.json` beside the brief; missing contact-use eligibility stays unknown. Saved partial-run coverage carries into its report.
 
 Use the bundled helper if Python is available:
 

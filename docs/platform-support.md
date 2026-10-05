@@ -4,12 +4,12 @@ One repository contains the shared `skills/` tree and target-specific metadata. 
 
 | Surface | Package contract | Execution dependency | Evidence |
 | --- | --- | --- | --- |
-| Claude Code | `.claude-plugin/plugin.json`, skills, optional local marketplace | Host tools and user’s authenticated data access | Native validators passed; source-directory prompt tests exercised prospecting, failover and enrichment. See validation report for observed repairs and limits; cached installation untested. |
+| Claude Code | `.claude-plugin/plugin.json`, skills, optional local marketplace | Host tools and user’s authenticated data access | Local 0.3.0 installed; native inventory lists 26 skills and validators pass. Current behavior evaluation blocked by CLI login; earlier source-directory scenarios are separate evidence. |
 | Claude Cowork | Shared skills and compatible plugin metadata | Actual executable/network/filesystem access in that environment | Not tested; imports/planning remain supported instructions. |
 | Claude chat | Skills where supported | A local CLI is not available merely by installing skills | Live collection not asserted. |
-| OpenAI/Codex | Root Agent Plugins `plugin.json` and `extensions.com.openai` | Suitable host tool access | Portable schema checked; live host install not asserted unless recorded. |
+| OpenAI/Codex | Root Agent Plugins `plugin.json` and `extensions.com.openai` | Suitable host tool access | Local 0.3.0 installed/enabled and cache byte-matches source. Fresh conversation discovery timed out; reload and active-session verification remain required. |
 | ChatGPT web/mobile | Target’s actual plugin/skill capability | Existing capable tool; no bundled service | Local CLI execution not asserted. |
-| Cursor | `.cursor-plugin/plugin.json`, shared skills | Host shell/tools and user account | Schema checked; UI installation not tested. |
+| Cursor | `.cursor-plugin/plugin.json`, shared skills | Host shell/tools and user account | Local 0.3.0 copy byte-matches source and schema passes. Window reload/Customize exposure and actual behavior remain unverified. |
 | Other Agent Skills hosts | Whole shared `skills/` tree | Supported resource links and tools | Portable content; host behavior untested. |
 
 Claude documentation: [manifest](https://code.claude.com/docs/en/plugins-reference), [security](https://code.claude.com/docs/en/plugins/security). OpenAI: [packaging](https://developers.openai.com/plugins/build/plugins), [submission](https://developers.openai.com/plugins/deploy/submission). Cursor: [official specification](https://github.com/cursor/plugins). Checked October 5, 2026.
@@ -22,4 +22,11 @@ Release 0.2.1 adds directory support/privacy/terms/documentation metadata. The c
 
 Revision 0.2.2 uses `plugin/` as the installable and submitted folder, with the single shared skill tree. Tests, maintainer scripts, submission documents and the fictional marketing screenshot remain at repository level. Root marketplace source is `./plugin`. Internal identifier `vibeleads-b2b` replaces the earlier `vibeleads`; the display brand is unchanged. Official Anthropic docs accept directory URL metadata on Claude Code v2.1.281+, so older warnings are a validator-version limitation.
 
-Current check: updated official Claude Code v2.1.289 accepts the directory metadata; strict runtime and marketplace checks pass. Live directory scan at c249d37 has zero policy holds and only four listing-field notices explicitly marked no action needed. Directory approval/publication is still pending.
+Recorded 0.2.2 check: updated official Claude Code v2.1.289 accepts the directory metadata; strict runtime and marketplace checks pass. Live directory scan at c249d37 has zero policy holds and only four listing-field notices explicitly marked no action needed. That scan observation preceded the subsequently recorded 0.2.5 publication; see the submission handoff for historical directory state.
+
+
+## Local 0.3.0 audit
+
+Claude Code 2.1.289, Codex 0.146.0 and Cursor app 3.23.12 were inspected. Source, Codex cache and Cursor copy contain the same 266 installable files, 26 skills and complete helper/reference tree. Claude uses the source directory directly. OpenAI local marketplace metadata is in `.agents/plugins/marketplace.json`.
+
+Start a new Claude session or use `/reload-plugins`, reload Codex, and reload Cursor's window to verify new-session skill exposure. Claude model evaluation is blocked by login; Codex's bounded discovery conversation timed out. Cursor UI loading was not observed. No cloud host, live collection or recurring job was tested. Local installation, active exposure, useful model behavior, provider readback and directory approval are distinct evidence states. See [audit details](agent-effectiveness-audit-2026-10-05.md).

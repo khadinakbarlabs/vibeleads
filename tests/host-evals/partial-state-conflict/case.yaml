@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.1",
+  "name": "partial-state-conflict",
+  "plugins": [
+    "../../../plugin"
+  ],
+  "runs": 1,
+  "tags": [
+    "offline-smoke"
+  ],
+  "execution": {
+    "prompt": "Continue my saved VibeLeads company-research task without renewing its spending allowance. The recorded checkpoint says cursor 20 but contains only 12 retained rows, run ID run123, Actor actor123, and source status FAILED. The earlier $3 allowance has unknown total charges. Treat these as recorded observations, not live readback. Do not reset the cursor, start another collection or mark coverage complete. Give an executable reconciliation handoff and one next action; preserve the 12 rows.",
+    "max_turns": 8,
+    "timeout_seconds": 150,
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Skill"
+    ]
+  },
+  "graders": [
+    {
+      "name": "conflict-recognized",
+      "type": "regex",
+      "pattern": "conflict|mismatch|inconsisten|20.*12|12.*20",
+      "flags": "is"
+    },
+    {
+      "name": "partial-preserved",
+      "type": "regex",
+      "pattern": "partial|preserve|retain",
+      "flags": "i"
+    },
+    {
+      "name": "no-reset",
+      "type": "regex",
+      "pattern": "(?:do not|don.t|never|no|without).{0,50}(?:reset|restart|replay|new run)",
+      "flags": "is"
+    },
+    {
+      "name": "no-new-collection",
+      "type": "tool_used",
+      "tool": "Bash",
+      "input_match": "apify.*(?:POST|actors start)",
+      "min": 0,
+      "max": 0
+    }
+  ]
+}

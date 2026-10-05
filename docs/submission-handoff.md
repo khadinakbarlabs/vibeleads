@@ -31,3 +31,8 @@ The fictional report preview is interaction evidence, not real prospect data. Na
 3. Read back each portal's actual state. Report **In review**, **Approved** and **Published** separately. An uploaded or saved draft is not a submitted or published directory release.
 
 Do not manufacture MCP endpoints, reviewer credentials, demo recordings, provider guarantees or acceptance evidence for a skills-only package. Keep portal screenshots and publisher contact information in local release evidence rather than public assets.
+
+
+## Local audit revision 0.3.0
+
+The [agent-effectiveness audit](agent-effectiveness-audit-2026-10-05.md) prepares a locally installed 0.3.0 revision with focused routing, offline mapping/provenance and read-only checkpointed recovery. It passes 106 tests and package/native manifest checks; both exported archives contain 266 files. This audit did not publish a new GitHub release, replace a directory draft, refresh portal state or complete attestations. Public/directory observations above belong to the prior 0.2.5 session. Native behavior comparisons remain blocked as documented; active hosts still require reload.

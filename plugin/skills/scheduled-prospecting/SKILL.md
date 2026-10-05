@@ -1,6 +1,6 @@
 ---
 name: scheduled-prospecting
-description: Prepare or manage bounded recurring lead research, saved-list refreshes, signal monitors and weekly reports using the host's supported scheduler. Use for daily leads, weekly reviews, reminders, monitoring or scheduled prospecting.
+description: Prepare or manage bounded recurring B2B company research, saved-prospect refreshes and weekly lead reports through a supported host scheduler. Use for scheduled prospecting and lead signal monitors, not generic reminders.
 ---
 
 # Scheduled Prospecting

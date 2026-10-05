@@ -1,6 +1,6 @@
 ---
 name: contact-enrichment
-description: Enrich qualified companies with public business contacts and honest email-quality states. Use for finding company contact routes, mapping professional roles, or validating an existing business email list.
+description: Find relevant permitted business contact routes or professional roles for named qualified companies. Use for targeted contact enrichment; existing mailbox verdict checks belong to email-validation, and broad company discovery keeps contact extraction off.
 ---
 
 # Contact Enrichment

@@ -27,7 +27,7 @@ The assistant uses existing context, asks only for material missing information,
 
 ## What you receive
 
-A ranked company or contact list with source links, dates, fit reasons, buying signals, contact status, confidence, exclusions, and the next useful action. CSV exports escape spreadsheet formulas. A successful search with zero matching companies is reported as an empty result. Partial coverage and unknown email deliverability stay visible.
+A ranked company or contact list with source links, dates, fit reasons, buying signals, contact status, confidence, exclusions, and the next useful action. CSV/JSON imports can produce a private report with selected source/CRM fields, opt-outs and duplicate conflicts preserved in a companion mapping. CSV exports escape spreadsheet formulas. A successful search with zero matching companies is reported as an empty result. Partial coverage and unknown email deliverability stay visible.
 
 ## Workflows
 
@@ -78,15 +78,15 @@ This preview uses fictional demonstration records. Scheduled research uses the h
 
 Claude Code: install from GitHub with `/plugin marketplace add khadinakbarlabs/vibeleads-plugin`, then `/plugin install vibeleads-b2b@vibeleads-local`. For local development, test with `claude --plugin-dir /absolute/path/to/vibeleads/plugin`, then use `/vibeleads-b2b:lead-engine` or natural language. For a local marketplace, run `/plugin marketplace add /absolute/path/to/vibeleads` followed by `/plugin install vibeleads-b2b@vibeleads-local` in Claude Code.
 
-Codex/OpenAI: the installable folder’s portable manifest uses the portable Agent Plugins format. Use the host’s supported local plugin flow. The package cannot make a local executable available to a cloud chat that lacks shell access.
+Codex/OpenAI: the installable folder uses the portable Agent Plugins format. For supported local Codex CLI, add this repository with `codex plugin marketplace add /absolute/path/to/vibeleads`, then `codex plugin add vibeleads-b2b@vibeleads-local`. Restart/reload the host and verify component exposure. The package cannot make a local executable available to a cloud chat that lacks shell access.
 
-Cursor: the repository includes the Cursor manifest inside the installable folder. Load through the host’s supported plugin workflow. Other Agent Skills hosts can discover the shared `skills/` directory; keep the whole directory together because the skills share resources.
+Cursor: copy the installable folder into `~/.cursor/plugins/local/vibeleads-b2b`, reload the window and verify its 26 skills in Customize. A same-name marketplace edition takes precedence; symlinks outside the local plugin folder are unsupported. Other Agent Skills hosts can discover the shared `skills/` directory; keep the whole directory together because the skills share resources.
 
 See [platform support](docs/platform-support.md) for tested and untested surfaces. Loading skills, connecting data, and marketplace approval are separate checks.
 
 ## Development and testing
 
-Python 3.10+ is needed only for the optional offline quality helper and maintainer tools. No installation hooks, service, daemon, bundled data client, or background scheduler. Optional offline reports use only the Python standard library and embedded local browser scripts.
+Python 3.10+ is needed for the optional mapping, quality, reporting and existing-run reading helpers. No installation hooks, service, daemon or background scheduler. Local imports/reports use only the standard library. Reading an existing live run uses your already configured data connection; the helper never starts collection.
 
 ```sh
 python3 -m unittest discover -s tests -v

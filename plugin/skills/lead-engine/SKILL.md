@@ -1,19 +1,28 @@
 ---
 name: lead-engine
-description: Coordinate context-aware B2B prospecting, enrichment, qualification, feedback, visual reporting and recurring research. Use for finding clients, resuming a session, or combining stages into a useful lead-generation workflow.
+description: Find and qualify B2B prospects from an offer, plan a company search, or coordinate discovery and enrichment into an evidence-backed lead list. Use for end-to-end prospecting; cleanup, reports and resuming a known lead task have focused routes.
 ---
 
 # VibeLeads Lead Engine
 
 
-Read [operating contract](references/operating-contract.md), [source access gate](references/access-safety.md) and [qualified business/contact-use gate](references/contact-use.md), then [prospecting framework](references/prospecting-framework.md). Apply both gates before every pilot, enrichment or recovery. Discover qualified companies first with optional contact extraction disabled; enrich named businesses only for a permitted, relevant contact stage. Use existing scoped business context before asking questions. Keep the conversation about the offer, prospects and next action; implementation detail belongs in the connection guide. This is an evidence-based decision loop, not a promise of conversion or invisible memory.
+Start with the user's requested result and available business context. Choose the shortest route below; a file report does not require connection onboarding, a new ICP, or a paid pilot. “Continue” needs a known prospecting task; generic code, release or writing work belongs to the relevant product workflow. Preserve all public skill IDs.
 
-1. Reuse the chosen business brief/latest handoff and current conversation. Research available offer/website context before asking. Establish target segment/geography, exclusions, count, account/contact/branch grain and desired signal. State reversible hypotheses; ask once only if a material missing offer/market blocks progress. Use business-context/session-continuity as needed.
-2. Use adaptive-prospecting judgment: one narrow segment, an observable dated signal, primary discovery and verification source, confidence reason and stop condition. Read [source coverage](references/source-coverage.md), select relevant catalog routes, then prepare the exact search plan. Describe sources, fields, gaps, stage limits and total budget. A requested count alone does not authorize paid collection.
-3. Check connection with [connection guide](references/connection-guide.md) only when data access is needed. Prefer owned routes, verify each selected identity/schema, and follow [Actor failover](references/actor-failover.md) when owned coverage is unavailable, unsuitable or unsuccessful. Run a small pilot within existing authorization, inspect usable rows, then scale only if relevant and within remaining budget.
-4. Route to the focused skill below when it changes the work. Read only the relevant reference, not the whole package. Merge source evidence at company level, map decision makers, and distinguish observation from hypotheses.
-5. Map records to [record contract](references/record-contract.md), preserve original IDs/richer provider detail, apply quality/suppression and deliver the strongest accounts with traceable reasons. For larger or recurring results, use lead-reporting for a local visual brief and session comparison. A small result may need only a clear table.
-6. Apply explicit feedback without forcing a rating. Save a concise handoff in the established user workspace when useful, with actual cumulative allowance and next action. Offer relevant recurring research/reviews; activate a real job only for the user's actual scheduling request through scheduled-prospecting. No automatic outreach, telemetry or hidden background work.
+## First useful result
+
+- **Offer or target unclear:** produce an editable segment, signal and exclusions using existing context. Ask only for information that changes the next dependent step.
+- **Supplied list or saved dataset:** inspect its columns, map intentionally, preserve source IDs/use state, and produce a quality table or report. Use [local import and run reader](references/local-data-workflow.md) for repeatable mapping, diagnostics, paging and artifacts. No account or collection budget is needed for local files.
+- **New company discovery:** select one segment and observable signal, explain sources/coverage and prepare a bounded pilot. Read [operating contract](references/operating-contract.md), [source access gate](references/access-safety.md), [contact-use gate](references/contact-use.md) and [connection guide](references/connection-guide.md) before a live start. Prefer owned Actors; verify permitted fallback only for genuine coverage/technical gaps. Denied source access does not permit a publisher switch. Keep optional contact extraction explicitly disabled, including enabled provider defaults.
+- **Named-account/contact enrichment:** reuse qualified companies, load the contact-use gate and relevant source guide, and fill only requested permitted fields. Quality and a public address never establish permission to message.
+- **Resume:** follow [session-continuity](../session-continuity/SKILL.md), reconcile the exact run/checkpoint, then resume only missing pages or fields. A timed-out start has an unknown outcome: read back before any new start. The bundled reader starts no collections and does not renew spending authority.
+
+## Essential decisions
+
+Reuse current intent, accepted corrections and applicable authorization. A requested count is not a spending allowance. Before paid work verify current exact source/build/schema, access, actual pricing and supported controls; record cumulative charges/reservations rather than resetting them on retry. Unsupported tools or caps mean a useful plan/import result and a concrete setup step, not an uncapped fallback.
+
+Use evidence to judge fit/problem/timing; do not invent rows, validation or dates. Preserve diagnostics, ambiguous identities, duplicates, opt-outs and field provenance using the [record contract](references/record-contract.md). Complete source execution, complete paging and useful lead coverage are separate states. Partial data stays partial.
+
+Keep keys in secure host/account configuration. Stop at research, reports and human-review outreach drafts; no sending, audience uploads, hidden telemetry or installation-triggered jobs. Read detailed [prospecting framework](references/prospecting-framework.md) for scoring/design questions, [Actor failover](references/actor-failover.md) only when needed, and context/feedback/schedule guides at those stages. Activate recurring work only for an actual scheduling request with supported tools and scope.
 
 ## Stage routing
 
