@@ -1,5 +1,7 @@
 # Agent effectiveness audit — October 5, 2026
 
+> Update October 6: CLI login is resolved and all six host case pairs have run. See [current host verification](host-validation-2026-10-06.md) for native scores, grader repair, usage limits and remaining integration checks. The original October 5 observations below remain historical evidence.
+
 ## Outcome and scope
 
 Local revision **0.3.0** retains one skills-only plugin, the public `vibeleads-b2b` identifier, 26 skill IDs, Momentum identity and established company-first/source/contact/spending policies. It adds contained Python helpers for deliberate imports and read-only existing-run reconciliation. No dedicated agents, MCP servers, hooks, hosted persistence, sender or scheduler were added.
@@ -69,11 +71,14 @@ Local checks: `python3 -m unittest discover -s tests -q`, `python3 scripts/valid
 After signing in to Claude Code, rerun the prepared bounded comparison from the repository:
 
 ```sh
-claude plugin eval . --eval-dir tests/host-evals --runs 1 --ablation with-without --max-cost-usd 0.5 --allow-tools Bash Write Edit --trust-plugin --no-publish --json /chosen/private/export-directory/host-eval.json --output-dir /chosen/private/export-directory/host-eval
+claude plugin eval . --eval-dir tests/host-evals --runs 1 --ablation with-without --max-cost-usd 0.5 --allow-tools Bash Write Edit --trust-plugin --no-publish --keep-temp --json /chosen/private/export-directory/host-eval.json --output-dir /chosen/private/export-directory/host-eval
 ```
 
-This command may use billed model capacity within its stated cap, but the cases authorize only fictional/offline work. Do not count an authentication failure as a failed plugin case. Review actual artifacts, selection and conversation behavior after successful completion. Separately reload Codex/Cursor and verify native exposure. The concrete next action is **sign in to Claude Code and rerun the six-case comparison**.
+This command may use model capacity up to its nominal stopping threshold plus in-flight overrun; the cases authorize only fictional/offline work. Do not count an authentication failure as a failed plugin case. Review actual artifacts, selection and conversation behavior after successful completion. Separately reload Codex/Cursor and verify native exposure. That October 5 next action was completed on October 6; [current host verification](host-validation-2026-10-06.md) records the six case pairs and current next step.
 
 Last recorded public release remains GitHub/Claude v0.2.5; OpenAI's v0.2.5 draft required human attestations at the prior read. Those are historical session observations, not fresh portal verification. This local revision does not replace a directory draft or change developer attestations.
 
 Primary requirements checked this session: [OpenAI plugin build/install](https://developers.openai.com/plugins/build/plugins), [Claude plugin loading](https://code.claude.com/docs/en/plugins), [Claude evals](https://code.claude.com/docs/en/plugin-evals), [Cursor plugins](https://cursor.com/docs/plugins), [raw dataset paging](https://docs.apify.com/api/v2/dataset-items-get), [run charge controls](https://docs.apify.com/api/v2/actors-runs-post).
+
+
+The nominal model-cost threshold above is checked between runs, not enforced exactly in flight. Account for possible overrun before using it as a budget control; see the October 6 verification.

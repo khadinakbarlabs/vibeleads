@@ -35,7 +35,7 @@
     {
       "name": "no-reset",
       "type": "regex",
-      "pattern": "(?:do not|don.t|never|no|without).{0,50}(?:reset|restart|replay|new run)",
+      "pattern": "\\b(?:do not|don.t|never|no|without)\\s+(?:automatically\\s+)?(?:reset(?:ting)?|restart(?:ing)?|replay(?:ing)?|(?:start(?:ing)?\\s+(?:a\\s+)?)?new runs?)\\b|\\bcursor\\b[^.\\n]{0,80}\\b(?:unchanged|neither reset nor advanced|not reset)\\b|\\bnothing\\s+(?:has been|was)\\s+(?:(?:started|re-read),?\\s+(?:or\\s+)?)*reset\\b",
       "flags": "is"
     },
     {

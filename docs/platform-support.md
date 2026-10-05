@@ -4,7 +4,7 @@ One repository contains the shared `skills/` tree and target-specific metadata. 
 
 | Surface | Package contract | Execution dependency | Evidence |
 | --- | --- | --- | --- |
-| Claude Code | `.claude-plugin/plugin.json`, skills, optional local marketplace | Host tools and user’s authenticated data access | Local 0.3.0 installed; native inventory lists 26 skills and validators pass. Current behavior evaluation blocked by CLI login; earlier source-directory scenarios are separate evidence. |
+| Claude Code | `.claude-plugin/plugin.json`, skills, optional local marketplace | Host tools and user’s authenticated data access | Local 0.3.0 installed; native inventory lists 26 skills and validators pass. Six 0.3.0 case pairs completed October 6; see host validation for native grades and offline grader correction. Earlier source-directory scenarios remain separate evidence. |
 | Claude Cowork | Shared skills and compatible plugin metadata | Actual executable/network/filesystem access in that environment | Not tested; imports/planning remain supported instructions. |
 | Claude chat | Skills where supported | A local CLI is not available merely by installing skills | Live collection not asserted. |
 | OpenAI/Codex | Root Agent Plugins `plugin.json` and `extensions.com.openai` | Suitable host tool access | Local 0.3.0 installed/enabled and cache byte-matches source. Fresh conversation discovery timed out; reload and active-session verification remain required. |
@@ -29,4 +29,7 @@ Recorded 0.2.2 check: updated official Claude Code v2.1.289 accepts the director
 
 Claude Code 2.1.289, Codex 0.146.0 and Cursor app 3.23.12 were inspected. Source, Codex cache and Cursor copy contain the same 266 installable files, 26 skills and complete helper/reference tree. Claude uses the source directory directly. OpenAI local marketplace metadata is in `.agents/plugins/marketplace.json`.
 
-Start a new Claude session or use `/reload-plugins`, reload Codex, and reload Cursor's window to verify new-session skill exposure. Claude model evaluation is blocked by login; Codex's bounded discovery conversation timed out. Cursor UI loading was not observed. No cloud host, live collection or recurring job was tested. Local installation, active exposure, useful model behavior, provider readback and directory approval are distinct evidence states. See [audit details](agent-effectiveness-audit-2026-10-05.md).
+Start a new Claude session or use `/reload-plugins`, reload Codex, and reload Cursor's window to verify new-session skill exposure. Claude login is resolved and six model comparisons ran; Codex's earlier bounded discovery conversation timed out. Cursor UI loading was not observed. No cloud host, live collection or recurring job was tested. Local installation, active exposure, useful model behavior, provider readback and directory approval are distinct evidence states. See [audit details](agent-effectiveness-audit-2026-10-05.md).
+
+
+October 6: [native Claude verification](host-validation-2026-10-06.md) records actual invocation of lead-engine/session-continuity and the unrelated-task near miss. All 26 remain inventoried; not every skill was behavior-tested. Native package bytes remain 0.3.0.

@@ -53,3 +53,8 @@ Revision 0.2.5 contact-use remediation: OpenAI's v0.2.4 scan cleared the access-
 The fictional three-row import produced a real seven-file report with one review and two exclusions, without account setup. Bounded read-only paging and unknown-run reconciliation use fake transport tests; no new paid source run occurred. Claude's with/without evaluation stopped at login (one arm attempted, zero completed outcomes). A Codex discovery-only attempt timed out after 90 seconds. Six host cases are prepared; no behavioral uplift is measured. No new independent reviewer or browser interaction pass was used for this revision.
 
 See [the complete audit](agent-effectiveness-audit-2026-10-05.md) for evidence, native versions, safe continuation, remaining unexecuted checks and reproduction. Revision 0.3.0 is local; the recorded public release remains 0.2.5 and directory state was not refreshed this audit.
+
+
+## October 6 native follow-up
+
+Claude Code login is resolved. Six with/without case pairs ran: native full-case scores are 5/6 in each arm. The plugin's apparent checkpoint failure was a lexical grader mismatch; retained output preserves state, and the repaired rule passes offline rescoring. Native raw results remain unchanged. Import/report passed all seven plugin checks; the baseline missed its opt-out marker, with semantic exclusion accuracy unverified because that first run cleaned up artifacts. Five pairs retain traces identifying claude-opus-5-5. 108 local tests pass, including two new grader checks. Reported total token-cost estimate, including retries: $3.0397058 on Max; between-run thresholds permit in-flight overrun. No live provider collection or publication occurred. See [full host verification](host-validation-2026-10-06.md).
