@@ -24,7 +24,7 @@ class PackageTests(unittest.TestCase):
     def test_installable_tree_excludes_maintainer_tools(self):
         self.assertFalse((ROOT / 'tests').exists())
         self.assertFalse((ROOT / 'scripts').exists())
-        self.assertFalse((ROOT / 'assets/report-preview.png').exists())
+        self.assertFalse(list((ROOT / 'assets').glob('report-preview.*')))
         self.assertEqual(len(list((ROOT / 'skills').glob('*/SKILL.md'))), 26)
 
     def test_roundtrip_both_layouts(self):
@@ -52,13 +52,13 @@ class PackageTests(unittest.TestCase):
         self.assertFalse(validate(self.root)['passed'])
 
     def test_manifest_name_cannot_escape(self):
-        for relative in ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
+        for relative in ['.claude-plugin/plugin.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json']:
             path = self.root / relative; data = json.loads(path.read_text()); data['name'] = '../outside-export'; path.write_text(json.dumps(data))
         self.assertFalse(validate(self.root)['passed'])
         with self.assertRaises(ValueError): package(self.root, Path(self.temp.name) / 'export')
 
     def test_version_must_be_safe_semver(self):
-        for relative in ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
+        for relative in ['.claude-plugin/plugin.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json']:
             path = self.root / relative; data = json.loads(path.read_text()); data['version'] = '../../outside'; path.write_text(json.dumps(data))
         self.assertFalse(validate(self.root)['passed'])
 
@@ -67,7 +67,8 @@ class PackageTests(unittest.TestCase):
         self.assertFalse(validate(self.root)['passed'])
 
     def test_missing_listing_asset_rejected(self):
-        (self.root / 'assets/icon.png').unlink()
+        interface = json.loads((self.root / '.codex-plugin/plugin.json').read_text())['interface']
+        (self.root / interface['logo']).unlink()
         self.assertFalse(validate(self.root)['passed'])
 
     def test_missing_resource_fails_release(self):

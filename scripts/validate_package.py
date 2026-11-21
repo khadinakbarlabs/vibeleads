@@ -10,10 +10,10 @@ ROOT = Path(__file__).resolve().parents[1] / "plugin"
 SECRET = re.compile(r'apify_api_[A-Za-z0-9]{20,}|sk-(?:live-|proj-)?[A-Za-z0-9_-]{24,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----')
 TOP_FILES = {'README.md', 'LICENSE', 'PRIVACY.md', 'TERMS.md',
              'SECURITY.md', 'SUPPORT.md', 'THIRD-PARTY-NOTICES.md', '.gitignore'}
-ALLOWED_EXTENSIONS = {'.md', '.json', '.py', '.yaml', '.png', '.svg'}
+ALLOWED_EXTENSIONS = {'.md', '.json', '.py', '.yaml', '.png'}
 PRIVATE_NAME = re.compile(r'^(?:auth|credentials?|secrets?|tokens?|private[-_].*)(?:\.|$)', re.I)
 SECRET_KEY = re.compile(r'^(?:api[_-]?key|.*api[_-]?key|access[_-]?token|auth[_-]?token|password|.*password|secret|.*secret)$', re.I)
-TOP_DIRS = {'skills', '.claude-plugin', '.cursor-plugin', 'assets'}
+TOP_DIRS = {'skills', '.claude-plugin', '.codex-plugin', '.cursor-plugin', 'assets'}
 NETWORK_CONTROL = re.compile(r'proxy|unblocker|captcha|fingerprint|session.?rotation|cookie|fallback|unlock|^metaAccessTokens$', re.I)
 CONTACT_FIELD = re.compile(r'email|phone|contact|profile|employee|person|enrich|social|author|reviewer|scrapeWebsite|followLinkAggregators|deepScrape|includeDetails|scrapeDetails', re.I)
 MASS_CONTACT_GUIDANCE = re.compile(r'\b(?:set|raise|use|build|stack|split).{0,100}(?:bulk.{0,60}(?:outreach|email|contact)|cold.outreach lists|mass.{0,50}(?:email|outreach)|large.{0,50}contact lists)', re.I)
@@ -110,7 +110,7 @@ def validate(root=ROOT):
                     if not resolved.is_relative_to(root) or not resolved.exists():
                         errors.append('Missing/escaping link in ' + str(path.relative_to(root)) + ': ' + target)
     manifests = []
-    for relative in ('.claude-plugin/plugin.json', '.cursor-plugin/plugin.json'):
+    for relative in ('.claude-plugin/plugin.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json'):
         try:
             manifest = json.loads((root / relative).read_text())
             if not isinstance(manifest, dict):
@@ -127,8 +127,8 @@ def validate(root=ROOT):
         identities = {(str(m.get('name')), str(m.get('version'))) for m in manifests if isinstance(m, dict)}
         if len(identities) != 1: errors.append('Manifest identities/versions disagree')
         for manifest in manifests:
-            for key in ('logo', 'icon'):
-                value = manifest.get(key)
+            interface = manifest.get('interface') if isinstance(manifest.get('interface'), dict) else {}
+            for key, value in [(k, manifest.get(k)) for k in ('logo', 'icon')] + [(k, interface.get(k)) for k in ('logo', 'composerIcon')]:
                 if value is not None:
                     if not isinstance(value, str) or not value.startswith('./'):
                         errors.append('Invalid listing asset path: ' + key); continue

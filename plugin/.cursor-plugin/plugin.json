@@ -6,9 +6,7 @@
     "name": "Khadin Akbar"
   },
   "license": "MIT",
-  "displayName": "VibeLeads: B2B Lead Finder",
   "skills": "./skills/",
-  "logo": "./assets/icon.png",
   "homepage": "https://github.com/khadinakbarlabs/vibeleads-plugin",
   "repository": "https://github.com/khadinakbarlabs/vibeleads-plugin"
 }
