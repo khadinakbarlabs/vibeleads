@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from urllib.parse import parse_qsl, urlsplit
 
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 MAX_CHECKPOINT_BYTES = 20 * 1024 * 1024
 IDENTIFIER = re.compile(r'^[A-Za-z0-9_-]{1,80}$')
 SECRET_KEY = re.compile(r'api.?key|access.?token|auth.?token|refresh.?token|password|secret|cookie|authorization|credential|(?:^|[_-])(?:token|bearer)(?:$|[_-])', re.I)

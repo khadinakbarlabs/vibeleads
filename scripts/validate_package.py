@@ -8,7 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1] / "plugin"
 SECRET = re.compile(r'apify_api_[A-Za-z0-9]{20,}|sk-(?:live-|proj-)?[A-Za-z0-9_-]{24,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----')
-TOP_FILES = {'plugin.json', 'README.md', 'LICENSE', 'PRIVACY.md', 'TERMS.md',
+TOP_FILES = {'README.md', 'LICENSE', 'PRIVACY.md', 'TERMS.md',
              'SECURITY.md', 'SUPPORT.md', 'THIRD-PARTY-NOTICES.md', '.gitignore'}
 ALLOWED_EXTENSIONS = {'.md', '.json', '.py', '.yaml', '.png', '.svg'}
 PRIVATE_NAME = re.compile(r'^(?:auth|credentials?|secrets?|tokens?|private[-_].*)(?:\.|$)', re.I)
@@ -110,7 +110,7 @@ def validate(root=ROOT):
                     if not resolved.is_relative_to(root) or not resolved.exists():
                         errors.append('Missing/escaping link in ' + str(path.relative_to(root)) + ': ' + target)
     manifests = []
-    for relative in ('plugin.json', '.claude-plugin/plugin.json', '.cursor-plugin/plugin.json'):
+    for relative in ('.claude-plugin/plugin.json', '.cursor-plugin/plugin.json'):
         try:
             manifest = json.loads((root / relative).read_text())
             if not isinstance(manifest, dict):
@@ -126,20 +126,15 @@ def validate(root=ROOT):
     if manifests:
         identities = {(str(m.get('name')), str(m.get('version'))) for m in manifests if isinstance(m, dict)}
         if len(identities) != 1: errors.append('Manifest identities/versions disagree')
-        interface = manifests[0].get('extensions', {}).get('com.openai', {}).get('interface', {})
-        if len(interface.get('displayName', '')) > 30 or len(interface.get('shortDescription', '')) > 30:
-            errors.append('OpenAI display/subtitle exceeds limit')
-        for key in ('logo', 'composerIcon', 'logoDark', 'composerIconDark'):
-            value = interface.get(key)
-            if value is not None:
-                if not isinstance(value, str) or not value.startswith('./'):
-                    errors.append('Invalid listing asset path: ' + key); continue
-                asset = (root / value).resolve()
-                if not asset.is_relative_to(root) or not asset.is_file():
-                    errors.append('Missing/escaping listing asset: ' + key)
-        prompts = interface.get('defaultPrompt', [])
-        if not isinstance(prompts, list) or not 1 <= len(prompts) <= 3 or any(not isinstance(p, str) or not p.strip() or len(p) > 128 or '\n' in p for p in prompts):
-            errors.append('Invalid starter prompts')
+        for manifest in manifests:
+            for key in ('logo', 'icon'):
+                value = manifest.get(key)
+                if value is not None:
+                    if not isinstance(value, str) or not value.startswith('./'):
+                        errors.append('Invalid listing asset path: ' + key); continue
+                    asset = (root / value).resolve()
+                    if not asset.is_relative_to(root) or not asset.is_file():
+                        errors.append('Missing/escaping listing asset: ' + key)
     skills = sorted((root / 'skills').glob('*/SKILL.md'))
     if not skills: errors.append('No skills')
     for path in skills:

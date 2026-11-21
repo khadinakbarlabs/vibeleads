@@ -17,7 +17,7 @@ def package(root, output):
     if not result['passed']:
         raise ValueError('Package validation failed: ' + '; '.join(result['errors']))
     output.mkdir(parents=True, exist_ok=True)
-    manifest = json.loads((root / 'plugin.json').read_text())
+    manifest = json.loads((root / '.claude-plugin/plugin.json').read_text())
     name, version = manifest['name'], manifest['version']
     files = release_files(root); reports = []
     for layout in ('root', 'portable'):

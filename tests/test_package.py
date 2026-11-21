@@ -52,18 +52,18 @@ class PackageTests(unittest.TestCase):
         self.assertFalse(validate(self.root)['passed'])
 
     def test_manifest_name_cannot_escape(self):
-        for relative in ['plugin.json', '.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
+        for relative in ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
             path = self.root / relative; data = json.loads(path.read_text()); data['name'] = '../outside-export'; path.write_text(json.dumps(data))
         self.assertFalse(validate(self.root)['passed'])
         with self.assertRaises(ValueError): package(self.root, Path(self.temp.name) / 'export')
 
     def test_version_must_be_safe_semver(self):
-        for relative in ['plugin.json', '.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
+        for relative in ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']:
             path = self.root / relative; data = json.loads(path.read_text()); data['version'] = '../../outside'; path.write_text(json.dumps(data))
         self.assertFalse(validate(self.root)['passed'])
 
     def test_nonobject_manifest_rejected_without_crash(self):
-        (self.root / 'plugin.json').write_text('[]')
+        (self.root / '.claude-plugin/plugin.json').write_text('[]')
         self.assertFalse(validate(self.root)['passed'])
 
     def test_missing_listing_asset_rejected(self):
