@@ -1,0 +1,36 @@
+{
+  "title": "PitchBook Public Profile Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "profileUrls": {
+      "title": "Public PitchBook URLs",
+      "type": "array",
+      "description": "Use this when you already have public PitchBook profile, research, or news URLs. Enter up to 25 HTTPS URLs such as https://pitchbook.com/profiles/company/127635-40. When direct public HTML is unavailable, the optional Google fallback can recover only publicly indexed title and description metadata. The actor rejects login, dashboard, and private subscription URLs.",
+      "editor": "stringList",
+      "x-vibeleads-use-review": "required"
+    },
+    "maxItems": {
+      "title": "Maximum records",
+      "type": "integer",
+      "description": "Use this when limiting cost and run time. Sets the number of accepted URLs to process, from 1 to 25; default 10. It is not a search-results limit because this actor does not discover or crawl private PitchBook pages.",
+      "minimum": 1,
+      "maximum": 25
+    },
+    "useApifyProxy": {
+      "title": "Restricted access control",
+      "type": "boolean",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "x-vibeleads-execution": "unsupported"
+    },
+    "useGoogleSearchFallback": {
+      "title": "Restricted access control",
+      "type": "boolean",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

@@ -1,0 +1,131 @@
+{
+  "title": "LinkedIn Company Jobs Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "company": {
+      "title": "Company (LinkedIn URL, slug, or numeric ID)",
+      "type": "string",
+      "description": "The LinkedIn company whose job postings you want. Accepts a company URL (e.g. 'https://www.linkedin.com/company/stripe'), a bare slug ('stripe'), or a numeric LinkedIn company ID ('51737071'). A URL or slug is resolved to the numeric ID via the primary managed public-data route (primary) then the managed fallback route (fallback). NOT a job-search keyword and NOT a personal profile URL \u2014 for keyword job search use the linkedin-jobs-scraper actor.",
+      "editor": "textfield"
+    },
+    "keywords": {
+      "title": "Job title keywords (optional)",
+      "type": "string",
+      "description": "Optional free-text filter applied to the company's postings (e.g. 'engineer', 'product manager'). Matches LinkedIn's job-title search. Leave empty to return all open roles at the company. This filters WITHIN one company, it does not search across companies.",
+      "editor": "textfield"
+    },
+    "location": {
+      "title": "Location filter (optional)",
+      "type": "string",
+      "description": "Optional geographic filter such as 'United States', 'London', or 'Remote'. Maps to LinkedIn's job location facet. Leave empty for all locations. This is a job-location filter, not the company headquarters.",
+      "editor": "textfield"
+    },
+    "datePosted": {
+      "title": "Date posted",
+      "type": "string",
+      "description": "Limit results by how recently a job was posted. 'any' returns all open postings; 'month'/'week'/'day' restrict to the last 30/7/1 days. Defaults to 'any'.",
+      "editor": "select",
+      "enum": [
+        "any",
+        "month",
+        "week",
+        "day"
+      ],
+      "enumTitles": [
+        "Any time",
+        "Past month",
+        "Past week",
+        "Past 24 hours"
+      ]
+    },
+    "jobType": {
+      "title": "Employment type",
+      "type": "string",
+      "description": "Filter by employment type. 'any' returns all types. Maps to LinkedIn's job-type facet (F/P/C/T/I). Defaults to 'any'.",
+      "editor": "select",
+      "enum": [
+        "any",
+        "full-time",
+        "part-time",
+        "contract",
+        "temporary",
+        "internship"
+      ],
+      "enumTitles": [
+        "Any",
+        "Full-time",
+        "Part-time",
+        "Contract",
+        "Temporary",
+        "Internship"
+      ]
+    },
+    "experienceLevel": {
+      "title": "Experience level",
+      "type": "string",
+      "description": "Filter by seniority. 'any' returns all levels. Maps to LinkedIn's experience facet. Defaults to 'any'.",
+      "editor": "select",
+      "enum": [
+        "any",
+        "internship",
+        "entry",
+        "associate",
+        "mid-senior",
+        "director",
+        "executive"
+      ],
+      "enumTitles": [
+        "Any",
+        "Internship",
+        "Entry level",
+        "Associate",
+        "Mid-Senior level",
+        "Director",
+        "Executive"
+      ]
+    },
+    "remoteOnly": {
+      "title": "Remote jobs only",
+      "type": "boolean",
+      "description": "When true, returns only roles LinkedIn flags as remote. Defaults to false (all workplace types: on-site, hybrid, remote).",
+      "editor": "checkbox"
+    },
+    "maxResults": {
+      "title": "Max jobs",
+      "type": "integer",
+      "description": "Maximum number of job postings to return. LinkedIn's guest endpoint caps near 1000 per company-query. Defaults to 50. Each returned job is billed at the per-job rate.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "enrichJobDetails": {
+      "title": "Fetch full job details",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "enrichCompany": {
+      "title": "Attach company metadata",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [
+    "company"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

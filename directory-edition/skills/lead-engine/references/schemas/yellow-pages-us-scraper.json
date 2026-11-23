@@ -1,0 +1,58 @@
+{
+  "title": "Yellow Pages US Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchTerms": {
+      "title": "Search terms",
+      "type": "string",
+      "description": "Business type or name to search (e.g. \"plumber\", \"pizza\", \"auto repair\"). Combine with \"location\" for best results.",
+      "editor": "textfield"
+    },
+    "location": {
+      "title": "Location",
+      "type": "string",
+      "description": "City, state, or ZIP code to narrow the search (e.g. \"Los Angeles, CA\", \"90210\"). Leave blank to search nationwide.",
+      "editor": "textfield"
+    },
+    "startUrls": {
+      "title": "Start URLs (optional)",
+      "type": "array",
+      "description": "Direct yellowpages.com search URLs or business profile URLs (/mip/...). Overrides searchTerms + location when provided.",
+      "editor": "stringList",
+      "items": {
+        "type": "string"
+      }
+    },
+    "maxResults": {
+      "title": "Max results",
+      "type": "integer",
+      "description": "Maximum number of business listings to return. Each result costs $0.005.",
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "maxPagesPerSearch": {
+      "title": "Max pages per search",
+      "type": "integer",
+      "description": "Max search result pages to paginate through (~30 businesses/page). Increase for broader coverage.",
+      "minimum": 1,
+      "maximum": 40
+    },
+    "enrichDetails": {
+      "title": "Enrich with detail pages",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

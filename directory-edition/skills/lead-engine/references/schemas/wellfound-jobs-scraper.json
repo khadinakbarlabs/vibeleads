@@ -1,0 +1,72 @@
+{
+  "title": "Wellfound Jobs Scraper Input",
+  "description": "Search Wellfound jobs by role and location, or scrape pasted Wellfound search and job URLs.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "role": {
+      "title": "Role",
+      "type": "string",
+      "description": "Use this when you want Wellfound startup jobs for a specific role. Enter a plain job title such as 'software engineer' or 'product manager'. Defaults to 'software engineer'. This is not a Wellfound URL; paste URLs into Start URLs instead.",
+      "editor": "textfield"
+    },
+    "location": {
+      "title": "Location",
+      "type": "string",
+      "description": "Use this when you want jobs in a city, country, or startup hub. Enter Wellfound-style text such as 'san francisco', 'new york', or 'united states'. Defaults to blank when Remote only is enabled. This is not a country code field.",
+      "editor": "textfield"
+    },
+    "remoteOnly": {
+      "title": "Remote only",
+      "type": "boolean",
+      "description": "Use this when you only want remote Wellfound jobs for the selected role. When true, the actor uses Wellfound remote role pages such as /role/r/software-engineer. Defaults to true for a reliable small health-check run. This does not guarantee every company hires in every country.",
+      "editor": "checkbox"
+    },
+    "startUrls": {
+      "title": "Start URLs",
+      "type": "array",
+      "description": "Use this when you already have Wellfound role, location, remote, or job-detail URLs. Accepts URLs like https://wellfound.com/role/l/software-engineer/san-francisco or https://wellfound.com/jobs/1234567. When set, Role, Location, and Remote only are ignored. This is not for LinkedIn, Indeed, or Google Jobs URLs.",
+      "editor": "requestListSources"
+    },
+    "maxItems": {
+      "title": "Maximum jobs",
+      "type": "integer",
+      "description": "Use this to cap the number of Wellfound jobs returned and billed in one run. Accepts 1 to 50000; the default is 20 and the health-check prefill is 1. The actor stops before charging past this limit. This is not a page count.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 50000
+    },
+    "enrichDetails": {
+      "title": "Fetch job detail pages",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    },
+    "maxConcurrency": {
+      "title": "Max concurrency",
+      "type": "integer",
+      "description": "Use this to tune how many Wellfound pages are open in parallel. Accepts 1 to 10; the default is 2 and the health-check prefill is 1 for safer session consistency. Lower it if the run hits blocks, raise it only for healthy large exports. This is not the result limit.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "debugDumpHtml": {
+      "title": "Debug dump HTML",
+      "type": "boolean",
+      "description": "Use this only for troubleshooting extractor drift. When enabled, raw HTML snapshots are saved to the key-value store under DEBUG keys. Defaults to false. This is not needed for normal exports.",
+      "editor": "hidden"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

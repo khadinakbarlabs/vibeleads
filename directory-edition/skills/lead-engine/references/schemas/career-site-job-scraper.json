@@ -1,0 +1,59 @@
+{
+  "title": "Career Site Job Listing Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrls": {
+      "title": "Career page URLs",
+      "type": "array",
+      "description": "One or more company career-page URLs to scrape. Paste any career/jobs page and the actor auto-detects the ATS behind it \u2014 Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Recruitee, or Workable (e.g. 'https://boards.greenhouse.io/stripe', 'https://jobs.ashbyhq.com/posthog', 'https://acme.wd5.myworkdayjobs.com/en-US/careers', or a custom domain like 'https://careers.stripe.com' \u2014 it sniffs the embedded ATS). Accepts plain URL strings, one per line. NOT a job-board aggregator query (Indeed/LinkedIn) \u2014 this reads a single company's own career page.",
+      "editor": "stringList"
+    },
+    "maxResultsPerSite": {
+      "title": "Max jobs per career page",
+      "type": "integer",
+      "description": "Upper bound on how many job listings to return from each career page. Accepts a whole number (e.g. 200). Defaults to 200; set to a high value like 5000 to pull an entire board. Applied per URL, so total cost scales with URL count times this cap.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 20000
+    },
+    "enrichDescriptions": {
+      "title": "Enrich full descriptions",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "descriptionFormat": {
+      "title": "Description format",
+      "type": "string",
+      "description": "How to render the job description field. 'text' returns clean plain text (best for AI agents and resume-matching), 'html' returns the raw HTML, 'both' returns plain text plus a separate descriptionHtml field, and 'none' omits descriptions for the smallest, fastest output. Defaults to 'text'.",
+      "editor": "select",
+      "enum": [
+        "text",
+        "html",
+        "both",
+        "none"
+      ],
+      "enumTitles": [
+        "Plain text",
+        "HTML",
+        "Both (text + html)",
+        "None"
+      ]
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [
+    "startUrls"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

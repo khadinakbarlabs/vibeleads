@@ -1,0 +1,52 @@
+{
+  "title": "ThomasNet Suppliers Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchQueries": {
+      "title": "Search keywords",
+      "type": "array",
+      "description": "Free-text searches run on ThomasNet's nsearch (e.g. 'cnc machining', 'sheet metal fabrication', 'plastic injection molding'). Each keyword is searched separately across the entire North America directory and paginated up to maxPagesPerQuery. Use this for product/service-led supplier discovery. NOT a URL \u2014 to scrape a specific category, state, or city page use startUrls instead.",
+      "editor": "stringList"
+    },
+    "startUrls": {
+      "title": "ThomasNet nsearch or profile URLs",
+      "type": "array",
+      "description": "Direct ThomasNet URLs. Supported: (1) nsearch results URLs \u2014 e.g. https://www.thomasnet.com/nsearch.html?cov=NA&searchterm=cnc%20machining (paginated like a search); (2) supplier profile URLs \u2014 e.g. https://www.thomasnet.com/company/fruehauf-manufacturing-30088334/profile (scraped as one enriched supplier). NOT supported: /products-suppliers/ or /suppliers/usa/{state} directory URLs (these are subcategory hubs, not supplier listings \u2014 use searchQueries with a keyword instead).",
+      "editor": "stringList"
+    },
+    "maxResults": {
+      "title": "Max suppliers",
+      "type": "integer",
+      "description": "Hard cap on the total number of suppliers scraped and billed across all queries and URLs. The run stops once this is reached. Defaults to 20; max 5000. Primary cost control \u2014 at $0.005/supplier basic, 20 suppliers is about $0.10. With enrichDetails on, double the cost estimate.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "maxPagesPerQuery": {
+      "title": "Max pages per query",
+      "type": "integer",
+      "description": "How many listing pages (about 20-30 suppliers each) to paginate through for each keyword or listing URL before moving on. Defaults to 5; max 50. Lower it to sample top results; raise it for deep coverage. Bounded again by maxResults.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "enrichDetails": {
+      "title": "Scrape full supplier profiles",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

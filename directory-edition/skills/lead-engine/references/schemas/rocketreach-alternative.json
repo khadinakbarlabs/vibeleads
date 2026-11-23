@@ -1,0 +1,161 @@
+{
+  "title": "RocketReach Alternative work-email enrichment input",
+  "description": "Find or validate work email for known B2B contacts, or search public professional profiles by an explicit professional query. Work-email routes use EmailListVerify; public-profile search uses HarvestAPI and returns only public profile fields with provenance. VibeLeads scope: qualify companies first. Optional contact extraction stays disabled in discovery; enable only a reviewed, relevant contact stage for named qualified businesses under the contact-use gate. Provider bounds are not recommended volumes or permission.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "operation": {
+      "title": "Operation",
+      "type": "string",
+      "description": "Choose work_email_enrichment for caller-supplied known contacts, or public_profile_search for a bounded public professional-profile search. Public-profile search is available only after its separately priced event becomes active; it never returns email or phone data.",
+      "editor": "select",
+      "enum": [
+        "work_email_enrichment",
+        "public_profile_search"
+      ]
+    },
+    "contacts": {
+      "title": "Known B2B contacts",
+      "type": "array",
+      "description": "Required for work_email_enrichment: one to 200 contacts you already know, each with fullName and companyDomain. An optional externalId is preserved for CRM matching and optional linkedInUrl is stored only as supplied provenance. Leave empty for public_profile_search.",
+      "editor": "json",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "title": "Full name",
+            "type": "string",
+            "description": "The known professional contact's full name, for example Ada Lovelace."
+          },
+          "companyDomain": {
+            "title": "Company domain",
+            "type": "string",
+            "description": "The employer's registrable website domain, for example example.com, not a profile URL."
+          },
+          "companyName": {
+            "title": "Company name",
+            "type": "string",
+            "description": "Optional employer name carried through to the result, for example Example Ltd."
+          },
+          "externalId": {
+            "title": "External ID",
+            "type": "string",
+            "description": "Optional caller-owned CRM or spreadsheet key carried through unchanged, for example crm-001."
+          },
+          "linkedInUrl": {
+            "title": "Provided LinkedIn URL",
+            "type": "string",
+            "description": "Optional public LinkedIn /in/ URL already known to you; it is retained as caller-provided provenance and is not fetched."
+          },
+          "email": {
+            "title": "Known work email",
+            "type": "string",
+            "description": "A known, lawfully held business email supplied for validation. Do not leave it empty to activate address generation or a finder mode.",
+            "x-vibeleads-use-review": "required"
+          }
+        },
+        "required": [
+          "fullName",
+          "companyDomain"
+        ]
+      },
+      "x-vibeleads-use-review": "required"
+    },
+    "publicProfileSearch": {
+      "title": "Public professional-profile search",
+      "type": "object",
+      "description": "Required for public_profile_search: provide a professional search query or a public LinkedIn company URL, with optional title and location filters. VibeLeads scope: qualify companies first. Optional contact extraction stays disabled in discovery; enable only a reviewed, relevant contact stage for named qualified businesses under the contact-use gate. Provider bounds are not recommended volumes or permission.",
+      "editor": "json",
+      "properties": {
+        "query": {
+          "title": "Professional query",
+          "type": "string",
+          "description": "Optional professional search text such as sales operations or data engineering. Supply this or currentCompany."
+        },
+        "currentCompany": {
+          "title": "Current LinkedIn company URL",
+          "type": "string",
+          "description": "Optional public LinkedIn company URL used as an employer filter. Supply this or query."
+        },
+        "title": {
+          "title": "Professional title",
+          "type": "string",
+          "description": "Optional public professional-title filter, such as Director of Sales."
+        },
+        "location": {
+          "title": "Location",
+          "type": "string",
+          "description": "Optional public professional-location filter, such as New York."
+        }
+      },
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-use-scope": "named qualified employer only; require currentCompany for this workflow"
+    },
+    "maxProfiles": {
+      "title": "Maximum public profiles",
+      "type": "integer",
+      "description": "For public_profile_search, process one to 25 returned public profiles. Each accepted complete profile is charged only after the separately priced public-profile event has become active. Defaults to 10.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 25,
+      "x-vibeleads-use-review": "required"
+    },
+    "enrichmentMode": {
+      "title": "Enrichment mode",
+      "type": "string",
+      "description": "VibeLeads allows verify_supplied_email only, for known lawfully held business emails. Address-pattern generation and finder modes are unavailable. Verify actual build behavior and source/use rights before execution.",
+      "editor": "select",
+      "enum": [
+        "find_and_verify",
+        "verify_supplied_email",
+        "candidate_only"
+      ],
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-allowed-values": [
+        "verify_supplied_email"
+      ]
+    },
+    "fallbackPolicy": {
+      "title": "Restricted access control",
+      "type": "string",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "select",
+      "enum": [
+        "strict",
+        "dns_candidate"
+      ],
+      "x-vibeleads-execution": "unsupported"
+    },
+    "maxResults": {
+      "title": "Maximum contact enrichments",
+      "type": "integer",
+      "description": "Hard cap on contacts processed in one run. Defaults to 25 and accepts 1 to 200 contacts, limiting maximum event charges to $0.12 per completed enrichment plus platform usage. This is not a search-result page limit because the Actor does not search a people database.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "maxCandidatesPerContact": {
+      "title": "Maximum candidates per contact",
+      "type": "integer",
+      "description": "Candidate-address generation is unavailable in VibeLeads. This provider field is retained as structural metadata only; do not activate a candidate mode.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-execution": "unsupported"
+    },
+    "includeMxValidatedCandidates": {
+      "title": "Include MX-valid email candidates",
+      "type": "boolean",
+      "description": "Unavailable for enablement. Explicitly disable candidate-address output and verify the actual build, or decline the route.",
+      "editor": "checkbox",
+      "x-vibeleads-execution": "unsupported",
+      "x-vibeleads-use-review": "required"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

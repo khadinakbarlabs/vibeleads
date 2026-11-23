@@ -1,0 +1,60 @@
+{
+  "title": "Etsy Shop Details Scraper Input",
+  "description": "Use this actor when you need public profile details for known Etsy shops. Supply shop URLs, shop names, or both. This actor does not search products, download reviews, or scrape listing details.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "shopUrls": {
+      "title": "Etsy shop URLs",
+      "description": "Use this when you have full Etsy shop URLs. Each item must look like https://www.etsy.com/shop/HunchbackLeather. URLs are deduplicated case-insensitively and combined with shopNames. Do not provide Etsy listing, search, or review URLs here.",
+      "type": "array",
+      "editor": "requestListSources",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "title": "Shop URL",
+            "description": "A full Etsy shop profile URL, for example https://www.etsy.com/shop/HunchbackLeather.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    "shopNames": {
+      "title": "Etsy shop names",
+      "description": "Use this when you know Etsy shop handles instead of URLs. Enter values such as HunchbackLeather, without spaces or an @ prefix. Names are combined with shopUrls and deduplicated. Do not enter product keywords; this field performs exact shop lookup only.",
+      "type": "array",
+      "editor": "stringList",
+      "items": {
+        "type": "string"
+      }
+    },
+    "maxShops": {
+      "title": "Maximum shops",
+      "description": "Use this to cap the number of shop profiles processed and billed. One successfully stored profile costs $0.015, so 10 shops cap shop-detail events at $0.15. The default is 10 and the hard maximum is 100. This limit does not represent product listings per shop.",
+      "type": "integer",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "includeShopSections": {
+      "title": "Include shop sections",
+      "description": "Use this to include public shop-section names when an upstream route exposes them. The default is true; unavailable sections remain null instead of becoming a fabricated empty list. Set false for the leanest profile shape. This does not fetch products inside each section.",
+      "type": "boolean",
+      "editor": "checkbox"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "type": "object",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

@@ -1,0 +1,52 @@
+{
+  "title": "LinkedIn Company Finder from Website",
+  "type": "object",
+  "schemaVersion": 1,
+  "description": "Paste company website URLs or domains to resolve each one to its public LinkedIn company page. One row per website: found with URL/slug/name/confidence, or a free CLEAR row when there is no public match.",
+  "properties": {
+    "websites": {
+      "title": "Company websites or domains",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Company homepage URLs or domains to resolve to public LinkedIn company pages, e.g. stripe.com or https://www.notion.so. Accepts bare domains, www URLs, or https links. Up to 100 per run. NOT LinkedIn company URLs \u2014 for those use LinkedIn Company Profile Scraper.",
+      "editor": "stringList",
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "maxItems": {
+      "title": "Max found companies",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Maximum number of matched LinkedIn company pages to save and bill this run. Default 50. CLEAR / not-found rows do not count toward this cap and are never billed. Prefill is 1 so Apify quality tests finish quickly; raise it for production batches."
+    },
+    "minConfidence": {
+      "title": "Minimum match confidence",
+      "type": "integer",
+      "minimum": 40,
+      "maximum": 95,
+      "description": "Minimum 0-100 confidence required to accept a LinkedIn company page as a match. Default 60. Lower values return more matches with a higher false-positive risk; higher values keep only domain or slug locks. This is not a LinkedIn login threshold."
+    },
+    "enrichCompany": {
+      "title": "Enrich matched companies",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "maxConcurrency": {
+      "title": "Max concurrency",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "How many website lookups to run in parallel. Use only permitted direct/public or licensed API access verified against the actual build. Stop on access denial or rate limits; see the source access gate."
+    }
+  },
+  "required": [
+    "websites"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "Google Maps Extractor",
+  "description": "Extract structured Google Maps place data from a keyword plus location, or from direct Google Maps search and place URLs. Built for sales research, local SEO, market mapping, and AI-agent workflows.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchQuery": {
+      "title": "Search query",
+      "type": "string",
+      "description": "Use this when you want to search Google Maps by business type or keyword. Accepted format is plain text such as 'dentists' or 'coffee shops'. Defaults to 'dentists' when no URLs are provided. This is not a Google Maps URL; paste URLs into Google Maps URLs.",
+      "editor": "textfield"
+    },
+    "location": {
+      "title": "Location",
+      "type": "string",
+      "description": "Use this when the search query needs a city, region, or country. Accepted format is 'Miami, FL', 'London, UK', or another natural Maps location. Defaults to 'Miami, FL' for health checks. Leave empty only when every Google Maps URL already contains the target area.",
+      "editor": "textfield"
+    },
+    "startUrls": {
+      "title": "Google Maps URLs",
+      "type": "array",
+      "description": "Use this when you already have Google Maps search or place URLs. Accepted entries are objects with a url field, such as {'url':'https://www.google.com/maps/search/dentists+Miami'}. Defaults to an empty list. This is not for normal website URLs outside Google Maps.",
+      "editor": "requestListSources"
+    },
+    "maxResults": {
+      "title": "Max places",
+      "type": "integer",
+      "description": "Use this to cap how many Google Maps places are returned and charged. Defaults to 20. This is not a page-count setting; one result means one place record. VibeLeads scope: qualify companies first. Optional contact extraction stays disabled in discovery; enable only a reviewed, relevant contact stage for named qualified businesses under the contact-use gate. Provider bounds are not recommended volumes or permission.",
+      "minimum": 1,
+      "maximum": 2000
+    },
+    "minRating": {
+      "title": "Minimum rating",
+      "type": "number",
+      "description": "Use this to keep only places at or above a Google rating threshold. Accepted values are 0 through 5, for example 4.2. Defaults to 0, which keeps unrated and rated places. This is not a review-count filter.",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "skipClosedPlaces": {
+      "title": "Skip permanently closed places",
+      "type": "boolean",
+      "description": "Use this to avoid businesses Google marks as permanently closed. Accepted value is true or false. Defaults to true for lead and market research freshness. This does not remove places that are only closed outside business hours."
+    },
+    "includeWebsiteContacts": {
+      "title": "Scan business websites for contact links",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "language": {
+      "title": "Language",
+      "type": "string",
+      "description": "Use this to choose the Google Maps interface language for names, categories, and addresses. Accepted examples include 'en', 'es', 'fr', 'de', and 'ja'. Defaults to 'en'. This does not translate data after extraction.",
+      "editor": "select",
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt",
+        "nl",
+        "pl",
+        "ru",
+        "ja",
+        "ko",
+        "zh-CN",
+        "ar",
+        "tr",
+        "hi"
+      ]
+    },
+    "countryCode": {
+      "title": "Proxy country",
+      "type": "string",
+      "description": "Accepted format is a two-letter ISO code such as 'US', 'GB', or 'DE'. Defaults to 'US'. This is not a location filter; use Location for the search area. Use only permitted direct/public or licensed API access verified against the actual build. Stop on access denial or rate limits; see the source access gate.",
+      "editor": "textfield"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

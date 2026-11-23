@@ -1,0 +1,91 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "Public Contact Research",
+  "description": "Provide people you already know and their company domains. The Actor only reads public company pages; it does not search private contact databases or infer email addresses.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "contacts": {
+      "title": "Known contacts and company domains",
+      "type": "array",
+      "description": "1\u201325 caller-supplied contacts. companyDomain is required. fullName helps locate a public mention on the company site, but is optional.",
+      "editor": "json",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fullName": {
+            "title": "Full name",
+            "type": "string",
+            "description": "Known business contact name used only to identify public mentions on the supplied company website.",
+            "maxLength": 160
+          },
+          "companyDomain": {
+            "title": "Company domain",
+            "type": "string",
+            "description": "Public company website hostname, such as example.com. Do not provide private, local, or IP-address hosts.",
+            "maxLength": 253
+          },
+          "companyName": {
+            "title": "Company name",
+            "type": "string",
+            "description": "Optional label returned unchanged in the result.",
+            "maxLength": 200
+          },
+          "externalId": {
+            "title": "Your record ID",
+            "type": "string",
+            "description": "Optional identifier returned unchanged so results can be matched to your workflow.",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "companyDomain"
+        ]
+      },
+      "x-vibeleads-use-review": "required"
+    },
+    "maxContacts": {
+      "title": "Maximum contacts to process",
+      "type": "integer",
+      "description": "Safety cap applied after validation. Use a lower number for a small canary run.",
+      "minimum": 1,
+      "maximum": 25,
+      "x-vibeleads-use-review": "required"
+    },
+    "maxPagesPerContact": {
+      "title": "Maximum public pages per contact",
+      "type": "integer",
+      "description": "The Actor tries the homepage, /contact, /about, and /team in a fixed bounded order.",
+      "minimum": 1,
+      "maximum": 4,
+      "x-vibeleads-use-review": "required"
+    },
+    "requestTimeoutSecs": {
+      "title": "Per-page request timeout (seconds)",
+      "type": "integer",
+      "description": "Time limit for each public-page request.",
+      "minimum": 5,
+      "maximum": 45
+    },
+    "useApifyUnblockerFallback": {
+      "title": "Restricted access control",
+      "type": "boolean",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "x-vibeleads-execution": "unsupported"
+    },
+    "preferApifyUnblocker": {
+      "title": "Restricted access control",
+      "type": "boolean",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [
+    "contacts"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

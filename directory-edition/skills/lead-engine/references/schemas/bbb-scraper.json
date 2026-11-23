@@ -1,0 +1,101 @@
+{
+  "title": "BBB Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchKeyword": {
+      "title": "Search keyword",
+      "type": "string",
+      "description": "Business type or name to search on bbb.org, e.g. 'plumber', 'hvac contractor', or a company name. Combine with 'location' to scope by city. Leave empty if you instead pass profile URLs in 'startUrls'. NOT a URL \u2014 for a single known business use 'startUrls'.",
+      "editor": "textfield"
+    },
+    "location": {
+      "title": "Location (City, State)",
+      "type": "string",
+      "description": "Geographic area to scope the search, formatted as 'City, ST' for the US or 'City, Province' for Canada, e.g. 'Los Angeles, CA'. Optional \u2014 omit for a nationwide search. Ignored when only profile 'startUrls' are provided. NOT a ZIP code on its own.",
+      "editor": "textfield"
+    },
+    "country": {
+      "title": "Country",
+      "type": "string",
+      "description": "Country directory to search: US (bbb.org USA) or CA (Canada). Defaults to US. Does not affect direct profile 'startUrls', which already encode their country. Use only permitted direct/public or licensed API access verified against the actual build. Stop on access denial or rate limits; see the source access gate.",
+      "editor": "select",
+      "enum": [
+        "US",
+        "CA"
+      ],
+      "enumTitles": [
+        "United States",
+        "Canada"
+      ]
+    },
+    "startUrls": {
+      "title": "BBB profile URLs",
+      "type": "array",
+      "description": "Direct bbb.org business profile URLs to scrape in depth, e.g. https://www.bbb.org/us/ca/los-angeles/profile/plumber/example-1216-907682 . Use instead of, or alongside, a keyword search. NOT search or category URLs \u2014 only '/profile/' pages are scraped here.",
+      "editor": "stringList"
+    },
+    "maxResults": {
+      "title": "Max results",
+      "type": "integer",
+      "description": "Maximum number of businesses to return across the whole run. Defaults to 100. A single keyword+location search caps at 225 results on bbb.org; raise this and add more locations to collect more. Controls cost \u2014 you are billed per returned business.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "enrichDetails": {
+      "title": "Enrich with profile details",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "minRating": {
+      "title": "Minimum BBB rating",
+      "type": "string",
+      "description": "Only return businesses with at least this BBB letter rating (A+ is highest, F lowest). Defaults to 'Any' (no filter). Businesses with no published rating are excluded when a minimum is set. Applied after scraping each business.",
+      "editor": "select",
+      "enum": [
+        "Any",
+        "A+",
+        "A",
+        "B",
+        "C",
+        "D",
+        "F"
+      ],
+      "enumTitles": [
+        "Any rating",
+        "A+ only",
+        "A and above",
+        "B and above",
+        "C and above",
+        "D and above",
+        "F and above"
+      ]
+    },
+    "accreditedOnly": {
+      "title": "BBB-accredited businesses only",
+      "type": "boolean",
+      "description": "When true, return only BBB-Accredited businesses and skip the rest. Defaults to false (return all). Useful for lead lists that require accreditation. Applied after each business is scraped.",
+      "editor": "checkbox"
+    },
+    "storeRawSample": {
+      "title": "Store raw page sample (debug)",
+      "type": "boolean",
+      "description": "Developer/debug option. When true, the first search and profile page's raw embedded JSON is saved to the key-value store for inspection. Defaults to false. Leave off for normal runs \u2014 it does not change the dataset output.",
+      "editor": "checkbox"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

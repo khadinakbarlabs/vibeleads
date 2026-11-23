@@ -1,0 +1,50 @@
+{
+  "title": "Bulk Website Contact Extractor Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrls": {
+      "title": "Website URLs to process",
+      "type": "array",
+      "description": "Use this field when the user provides a list of website URLs to extract emails, phone numbers, or contact information from. Each URL is crawled independently and returns one result record. Accepts both plain strings ('https://acme.com') and objects ({\"url\": \"https://acme.com\"}). Do NOT use for search queries \u2014 this requires direct URLs. Example triggers: 'extract emails from these sites', 'get contact info for this URL list', 'enrich these domains'.",
+      "editor": "requestListSources"
+    },
+    "maxPagesPerDomain": {
+      "title": "Max pages to crawl per URL",
+      "type": "integer",
+      "description": "How many pages to visit per input URL when hunting for contact info. The crawler always prioritises /contact, /about, /team, and /imprint pages before general pages. Higher values = more thorough extraction but more credits used. Use 1 to scan the homepage only. Default: 6.",
+      "minimum": 1,
+      "maximum": 20,
+      "editor": "number"
+    },
+    "maxResults": {
+      "title": "Max URLs to process",
+      "type": "integer",
+      "description": "Maximum number of input URLs to process. Use when the user says 'process only the first 100', 'limit to 50 websites', or 'stop after 200 results'. Set to 0 to process all input URLs. Default: 1000.",
+      "minimum": 0,
+      "editor": "number"
+    },
+    "followContactPages": {
+      "title": "Follow contact & about pages",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "sectionCaption": "Restricted access control",
+      "sectionDescription": "Proxy and performance configuration",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [
+    "startUrls"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

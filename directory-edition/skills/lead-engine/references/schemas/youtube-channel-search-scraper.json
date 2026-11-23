@@ -1,0 +1,113 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "YouTube Channel Search Scraper input",
+  "description": "Search public YouTube channels by free-text keyword. Returns channel cards (name, handle, subscribers, video count, verified). Optional About-page enrich. Not a mixed video SERP and not a known-URL channel scrape.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchQueries": {
+      "title": "Search queries",
+      "type": "array",
+      "description": "Free-text YouTube search terms used to find public channels, for example 'personal finance' or 'fitness coach'. Each query is searched independently and unique channels are merged. Prefills one example query. This is not a channel URL or @handle \u2014 for a known channel use youtube-channel-scraper.",
+      "editor": "stringList",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "searchUrls": {
+      "title": "YouTube results URLs",
+      "type": "array",
+      "description": "Optional youtube.com/results URLs that already contain a search_query, for example 'https://www.youtube.com/results?search_query=lofi'. The Actor extracts the keyword and runs a channel-only search. Defaults to empty. This is not a /channel or @handle URL.",
+      "editor": "stringList"
+    },
+    "maxResultsPerQuery": {
+      "title": "Max channels per query",
+      "type": "integer",
+      "description": "Maximum unique channels saved for each search query after pagination. Example: 10. Range 1\u2013200; default 10. This is not a global run cap \u2014 see maxResultsTotal.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "maxResultsTotal": {
+      "title": "Max channels per run",
+      "type": "integer",
+      "description": "Hard cap on unique channels billed and saved across every query in this run. Example: 50. Range 1\u2013500; default 50. Extra matches after the cap are skipped. This is not the per-query limit.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "minSubscribers": {
+      "title": "Minimum subscribers",
+      "type": "integer",
+      "description": "Keep channels whose public subscriber count is at least this number, for example 10000. Default 0 (no floor). Channels that hide subscriber counts are kept. This is not a YouTube API quota.",
+      "editor": "number",
+      "minimum": 0,
+      "maximum": 1000000000
+    },
+    "maxSubscribers": {
+      "title": "Maximum subscribers",
+      "type": "integer",
+      "description": "Keep channels whose public subscriber count is at most this number, for example 1000000. Default 0 means no ceiling. Hidden counts are kept. This is not a billing cap.",
+      "editor": "number",
+      "minimum": 0,
+      "maximum": 1000000000
+    },
+    "verifiedOnly": {
+      "title": "Verified channels only",
+      "type": "boolean",
+      "description": "When true, keep only search cards that show YouTube's verified badge. Default false returns verified and unverified public channels. This does not confirm official brand ownership beyond the public badge.",
+      "editor": "checkbox"
+    },
+    "country": {
+      "title": "Country (gl)",
+      "type": "string",
+      "description": "Defaults to 'US'. This is not a language code \u2014 see language. Use only permitted direct/public or licensed API access verified against the actual build. Stop on access denial or rate limits; see the source access gate.",
+      "editor": "textfield"
+    },
+    "language": {
+      "title": "Language (hl)",
+      "type": "string",
+      "description": "Two-letter ISO language code used as YouTube interface language (hl), for example 'en' or 'es'. Defaults to 'en'. This is not a country code \u2014 see country.",
+      "editor": "textfield"
+    },
+    "enrichProfiles": {
+      "title": "Enrich channel profiles",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "editor": "checkbox",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "fallbackMode": {
+      "title": "Restricted access control",
+      "type": "string",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "select",
+      "enum": [
+        "auto",
+        "never",
+        "always"
+      ],
+      "enumTitles": [
+        "Auto (direct first, managed fallback last resort)",
+        "Never (direct only)",
+        "Always (managed fallback only)"
+      ],
+      "x-vibeleads-execution": "unsupported"
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [
+    "searchQueries"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

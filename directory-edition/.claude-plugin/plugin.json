@@ -1,0 +1,20 @@
+{
+  "name": "vibeleads-b2b",
+  "version": "0.3.1",
+  "description": "Context-aware B2B prospecting, enrichment, email quality, feedback, visual reports and bounded recurring research skills. Text-only directory edition.",
+  "author": {
+    "name": "Khadin Akbar"
+  },
+  "homepage": "https://github.com/khadinakbarlabs/vibeleads-plugin",
+  "repository": "https://github.com/khadinakbarlabs/vibeleads-plugin",
+  "license": "MIT",
+  "keywords": [
+    "b2b",
+    "lead-generation",
+    "prospecting",
+    "sales",
+    "account-research",
+    "agent-skills"
+  ],
+  "skills": "./skills/"
+}

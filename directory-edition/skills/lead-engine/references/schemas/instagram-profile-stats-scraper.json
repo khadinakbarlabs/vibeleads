@@ -1,0 +1,44 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "Instagram Profile Stats Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "usernames": {
+      "title": "Instagram usernames or profile URLs",
+      "type": "array",
+      "description": "Look up public Instagram stats for these profiles. Accepts bare usernames (natgeo), @handles (@nasa), or full profile URLs (https://www.instagram.com/instagram/). Each value becomes one dataset row.",
+      "editor": "stringList"
+    },
+    "deduplicate": {
+      "title": "Deduplicate usernames",
+      "type": "boolean",
+      "description": "Collapse repeated handles to a single request after normalization. Keep this on for CRM lists that repeat the same creator."
+    },
+    "maxItems": {
+      "title": "Max input items",
+      "type": "integer",
+      "description": "Process at most this many input tokens, in list order, before stopping. VibeLeads scope: qualify companies first. Optional contact extraction stays disabled in discovery; enable only a reviewed, relevant contact stage for named qualified businesses under the contact-use gate. Provider bounds are not recommended volumes or permission.",
+      "minimum": 1
+    },
+    "maxRequestRetries": {
+      "title": "Max request retries",
+      "type": "integer",
+      "description": "Bounded retry settings may apply only to ordinary technical errors when permitted access remains established. Access denial and challenges must stop the source; verify the actual build or decline this route.",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "requestTimeoutSecs": {
+      "title": "Request timeout (seconds)",
+      "type": "integer",
+      "description": "Seconds allowed for one profile stats request before the next retry. Default 30 is enough for the public web profile endpoint.",
+      "minimum": 10,
+      "maximum": 120
+    }
+  },
+  "required": [
+    "usernames"
+  ],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

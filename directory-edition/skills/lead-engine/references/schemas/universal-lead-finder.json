@@ -1,0 +1,60 @@
+{
+  "title": "Universal B2B Lead Finder \u2014 Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "description": "Find B2B leads with emails, phones, and social profiles. Use only permitted direct/public or licensed API access verified against the actual build. Stop on access denial or rate limits; see the source access gate.",
+  "properties": {
+    "searchQuery": {
+      "title": "Search Query",
+      "type": "string",
+      "description": "Use this field when the user provides a keyword or business type to search for (e.g., 'dentists in Miami', 'plumbers Chicago', 'SaaS companies New York'). Use startUrls instead when direct website URLs are provided.",
+      "editor": "textfield",
+      "sectionCaption": "Search Mode \u2014 find leads by keyword",
+      "sectionDescription": "Search Yellow Pages by business type and location. Returns names, phones, addresses, websites, ratings, and enriched emails."
+    },
+    "location": {
+      "title": "Location (optional)",
+      "type": "string",
+      "description": "City, state, or ZIP code to target (e.g., 'Miami, FL', 'New York, NY', '90210'). Improves search precision. You can also include location directly in the searchQuery above.",
+      "editor": "textfield"
+    },
+    "startUrls": {
+      "title": "Website URLs (direct mode)",
+      "type": "array",
+      "description": "Use this field when the user provides specific company website URLs to extract contact info from. The actor will crawl each site for emails, phones, and social links. Do NOT use this when the user describes a keyword or niche \u2014 use searchQuery for that.",
+      "editor": "requestListSources",
+      "sectionCaption": "Direct URL Mode \u2014 extract contacts from known websites",
+      "sectionDescription": "Provide company website URLs directly. The actor crawls homepage, /contact, and /about pages for email, phone, and social links."
+    },
+    "maxResults": {
+      "title": "Max Results",
+      "type": "integer",
+      "description": "Maximum number of business leads to extract. Each lead counts as one billable event. Default: 50. Max: 1000.",
+      "minimum": 1,
+      "maximum": 1000,
+      "sectionCaption": "Limits & Options",
+      "sectionDescription": "Control how many leads to extract and whether to enrich with website contact data."
+    },
+    "crawlWebsites": {
+      "title": "Enrich with website data (emails & social)",
+      "type": "boolean",
+      "description": "When enabled, visits each business website to extract email addresses and social media links. Recommended \u2014 this is what makes leads actionable. Disable only if you need only phone/address data faster."
+    },
+    "includeSubpages": {
+      "title": "Crawl contact/about subpages",
+      "type": "boolean",
+      "description": "VibeLeads scope: qualify companies first. Optional contact extraction stays disabled in discovery; enable only a reviewed, relevant contact stage for named qualified businesses under the contact-use gate. Provider bounds are not recommended volumes or permission."
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "sectionCaption": "Restricted access control",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "Naver Map Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchQueries": {
+      "title": "Search queries",
+      "type": "array",
+      "description": "Free-text Naver Map searches, one place list per query (e.g. \"\uac15\ub0a8 \ub9db\uc9d1\", \"\ud64d\ub300 \uce74\ud398\", \"Gangnam hair salon\"). Korean queries return the richest results because Naver Map is a Korean service. Leave empty if you are using the Category + Location fields or Place URLs instead. This is NOT a place URL \u2014 put URLs in the Place URLs field.",
+      "editor": "stringList"
+    },
+    "placeType": {
+      "title": "Place type / category route",
+      "type": "string",
+      "description": "Which Naver category route to search. \"restaurant\" is the broadest and covers food, cafes, bakeries, bars, and desserts \u2014 use it for most keyword searches. Pick \"beauty\" for hair salons, nail, and skincare. Applies to Search queries and Category + Location; ignored for Place URLs.",
+      "enum": [
+        "restaurant",
+        "beauty"
+      ],
+      "enumTitles": [
+        "Restaurant / Cafe / Food (broadest)",
+        "Beauty / Salon / Nail (hairshop)"
+      ]
+    },
+    "location": {
+      "title": "Location (for Category + Location mode)",
+      "type": "string",
+      "description": "A Korean area, district, or landmark to search within (e.g. \"\uac15\ub0a8\uad6c\", \"\uc81c\uc8fc\ub3c4\", \"Seoul Hongdae\"). Combined with the Category field and Place type into one Naver search. Leave empty if you already provide full Search queries. Example: \"\uc131\uc218\ub3d9\".",
+      "editor": "textfield"
+    },
+    "category": {
+      "title": "Category keyword (optional, pairs with Location)",
+      "type": "string",
+      "description": "A category or business keyword appended to Location, such as \"\uce74\ud398\", \"\uce58\uacfc\", \"pilates\". Only used when Location is set. Leave empty to search the Location alone. Example: \"\uce58\uacfc\".",
+      "editor": "textfield"
+    },
+    "startUrls": {
+      "title": "Place URLs or IDs",
+      "type": "array",
+      "description": "Direct Naver place URLs or numeric place IDs to look up individually (e.g. \"https://m.place.naver.com/restaurant/1188590985/home\" or \"1188590985\"). Each returns one place record with best-effort menu/detail enrichment. Use this for single-place lookups; use Search queries for discovery. naver.me short links cannot be resolved \u2014 paste the expanded URL.",
+      "editor": "stringList"
+    },
+    "enrichDetails": {
+      "title": "Enrich with menus & details",
+      "type": "boolean",
+      "description": "VibeLeads scope: keep optional contact/detail extraction explicitly disabled during company discovery. A relevant stage for named qualified businesses requires verified actual build controls, source/use rights and suppression under the contact-use gate. Decline inseparable audience collection.",
+      "x-vibeleads-use-review": "required",
+      "x-vibeleads-discovery": "explicitly disabled; verify actual build, otherwise decline route"
+    },
+    "maxPlaces": {
+      "title": "Max places",
+      "type": "integer",
+      "description": "Hard cap on total places scraped (and billed) across all queries and URLs in this run. Prevents runaway cost. Defaults to 100; maximum 2000. One Naver keyword search server-renders roughly 50-70 places.",
+      "minimum": 1,
+      "maximum": 2000
+    },
+    "proxyConfiguration": {
+      "title": "Restricted access control",
+      "type": "object",
+      "description": "VibeLeads restriction: enablement is unsupported. Verify a documented disabled/direct/public mode and actual build behavior before execution; otherwise decline this route. See the source access gate.",
+      "editor": "proxy",
+      "x-vibeleads-execution": "unsupported"
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct"
+}

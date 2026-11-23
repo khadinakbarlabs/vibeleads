@@ -1,0 +1,46 @@
+{
+  "title": "LinkedIn Email Finder",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "linkedinUrls": {
+      "title": "LinkedIn profile URLs",
+      "type": "array",
+      "description": "Structural provider input only. The whole route is unavailable for VibeLeads execution; do not generate or probe candidate addresses.",
+      "editor": "stringList"
+    },
+    "directLeads": {
+      "title": "Direct leads (name + company domain)",
+      "type": "array",
+      "description": "Structural provider input only. The whole route is unavailable for VibeLeads execution; do not generate or probe candidate addresses.",
+      "editor": "json"
+    },
+    "includeUnverified": {
+      "title": "Return best-guess when SMTP can't confirm",
+      "type": "boolean",
+      "description": "Structural provider input only. The whole route is unavailable for VibeLeads execution; do not generate or probe candidate addresses.",
+      "editor": "checkbox"
+    },
+    "maxResults": {
+      "title": "Max leads",
+      "type": "integer",
+      "description": "Structural provider input only. The whole route is unavailable for VibeLeads execution; do not generate or probe candidate addresses.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "maxCandidatesPerLead": {
+      "title": "Max email patterns to test per lead",
+      "type": "integer",
+      "description": "Structural provider input only. The whole route is unavailable for VibeLeads execution; do not generate or probe candidate addresses.",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 15
+    }
+  },
+  "required": [],
+  "x-vibeleads-execution-review": "required; schema inspection is not execution permission",
+  "x-vibeleads-contact-use-review": "required; company discovery and contact stages are distinct",
+  "x-vibeleads-execution": "unsupported; inseparable candidate-address generation/probing",
+  "description": "Unavailable for VibeLeads execution because the documented route generates and probes candidate addresses. Use public source-backed company contacts or lawful existing-list validation instead."
+}
