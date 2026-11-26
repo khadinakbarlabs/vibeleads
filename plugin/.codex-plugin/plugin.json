@@ -1,6 +1,6 @@
 {
   "name": "vibeleads-b2b",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Context-aware B2B prospecting, enrichment, email quality, feedback, visual reports and bounded recurring research skills.",
   "author": {
     "name": "Khadin Akbar"
@@ -20,10 +20,10 @@
   "interface": {
     "displayName": "VibeLeads: B2B Lead Finder",
     "shortDescription": "Find and qualify B2B leads",
-    "longDescription": "A business productivity toolkit for B2B sales teams, agencies and founders. Understand your offer, choose useful prospecting segments, discover companies, research buying signals, enrich public business contacts, check email quality and prepare evidence-backed lead lists. Reuse scoped business context and session handoffs, refine targeting from deliberate feedback, compare sessions and create private visual reports. Includes bounded recurring-research guidance using a supported host scheduler. Prefers Khadin Akbar’s Actors with verified third-party fallback for gaps/failures. An Apify API key is required for live collection; usage is billed to your own account. No bundled server, sender, telemetry or background service. Planning and imported-file analysis need no data key. Live collection and scheduling depend on actual host tools, access and authorization. Company discovery keeps optional contact harvesting disabled. Targeted enrichment is limited to named qualified businesses and relevant permitted business contact routes; contact quality does not establish permission to message. Outreach remains researched drafts for human review.",
+    "longDescription": "A business productivity toolkit for B2B sales teams, agencies and founders. Understand your offer, choose useful prospecting segments, discover companies, research buying signals, enrich public business contacts, check email quality and prepare evidence-backed lead lists. Reuse scoped business context and session handoffs, refine targeting from deliberate feedback, compare sessions and create private visual reports. Includes bounded recurring-research guidance using a supported host scheduler. Prefers Khadin Akbar’s Actors with verified third-party fallback for gaps/failures. Use a supported Apify connection for live collection; usage is billed to your own account. No bundled server, sender, telemetry or background service. Planning and imported-file analysis need no data key. Live collection and scheduling depend on actual host tools, access and authorization. Company discovery keeps optional contact harvesting disabled. Targeted enrichment is limited to named qualified businesses and relevant permitted business contact routes; contact quality does not establish permission to message. Outreach remains researched drafts for human review.",
     "developerName": "Khadin Akbar",
     "defaultPrompt": [
-      "Understand my business and find the most promising B2B prospects with evidence.",
+      "I am a video editor.",
       "Use my feedback to improve this lead list and create a clear visual report.",
       "Prepare a bounded weekly prospecting review using my saved business context."
     ],

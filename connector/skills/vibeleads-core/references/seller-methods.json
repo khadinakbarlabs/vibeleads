@@ -1,0 +1,466 @@
+{
+  "schemaVersion": 1,
+  "methods": [
+    {
+      "id": "public-request",
+      "evidenceClass": "buyer_request",
+      "source": "Public Reddit threads, X posts or publisher openings",
+      "action": {
+        "mode": "host_public_search",
+        "query": "(\"looking for\" OR \"need a\" OR \"seeking\") \"{serviceTerm}\" {market} (paid OR freelance OR contract)",
+        "alternateQuery": "site:reddit.com (\"looking for\" OR \"hiring\") \"{serviceTerm}\" {market}",
+        "recencyDays": 14
+      },
+      "minimumEvidence": "Open the dated buyer-authored original. Distinguish an open commission, supplier RFQ, software evaluation and a recommendation request; recheck closure and reply invitations. Exclude a seller advertising their own product. A full-time job is separate from a freelance commission.",
+      "fallback": "business-fit",
+      "requires": "A host-provided public search and readable originals. The released buying_posts Actor route currently reports a later wave. With no host search or permitted originals, skip this lane.",
+      "cost": "Use included host search only. Any separately billed access needs a quote.",
+      "provenance": [
+        {
+          "label": "Age and buyer wording on X at 0:38",
+          "url": "https://www.youtube.com/watch?v=FRIbOZlHlLg&t=38s"
+        },
+        {
+          "label": "A design commission can already be closed at 9:30",
+          "url": "https://www.youtube.com/watch?v=Ma9vXpJLRzk&t=570s"
+        }
+      ]
+    },
+    {
+      "id": "maps-site",
+      "evidenceClass": "cold_fit",
+      "source": "Business listings and the business’s own site",
+      "action": {
+        "mode": "actor",
+        "tool": "plan_leads",
+        "arguments": {
+          "niche": "{segment}",
+          "locations": [
+            "{market}"
+          ],
+          "count": 10
+        }
+      },
+      "minimumEvidence": "Confirm current business, service area and official website; corroborate a missing site or specific problem on first-party evidence before claiming it. A directory phone is a general business number.",
+      "fallback": "business-fit",
+      "requires": "City or area, supplied by the seller or existing context. Use the public-request lane while this is unknown.",
+      "cost": "Request live quote before collection or website checks. Hosting may add usage.",
+      "provenance": [
+        {
+          "label": "Missing Maps website field at 2:25",
+          "url": "https://www.youtube.com/watch?v=dDtulK6CM-k&t=145s"
+        },
+        {
+          "label": "Trade and city directory at 0:50",
+          "url": "https://www.youtube.com/watch?v=v_Rm-B0-ml8&t=50s"
+        }
+      ]
+    },
+    {
+      "id": "channel-fit",
+      "evidenceClass": "cold_fit",
+      "source": "Active YouTube channels and official studio sites",
+      "action": {
+        "mode": "actor",
+        "tool": "plan_youtube_creators",
+        "arguments": {
+          "topic": "{channelTopic}",
+          "country": "{country}",
+          "language": "{language}",
+          "maxChannels": 10
+        }
+      },
+      "minimumEvidence": "Look for regular long-form episodes and an attributable production contact. Link the published episode with its timestamp when describing a concrete issue. Upload frequency and editing style do not establish an open commission.",
+      "fallback": "public-request",
+      "requires": "Supported country and two-letter language. Where missing, start with included host search for active channels with no assumed country; only propose a country for approval.",
+      "cost": "Actor quote before channel discovery. Any public search must be included in the host.",
+      "provenance": [
+        {
+          "label": "Active channels at 3:43",
+          "url": "https://www.youtube.com/watch?v=WNJYnIz7RT8&t=223s"
+        },
+        {
+          "label": "Distinguishing vacancies at 7:30",
+          "url": "https://www.youtube.com/watch?v=WNJYnIz7RT8&t=450s"
+        }
+      ]
+    },
+    {
+      "id": "hiring-signal",
+      "evidenceClass": "hiring_signal",
+      "source": "Company hiring posts and their original vacancies",
+      "action": {
+        "mode": "actor",
+        "tool": "route_leads",
+        "arguments": {
+          "request": "Companies hiring",
+          "useCase": "hiring",
+          "filters": {
+            "jobTitles": [
+              "{serviceTerm}"
+            ],
+            "keywords": "{serviceTerm}",
+            "location": "{market}"
+          }
+        }
+      },
+      "minimumEvidence": "Read the original posting and source date. A vacancy identifies an employer and possible need. Only an open request explicitly accepting contractors or agency services establishes commissioned work.",
+      "fallback": "business-fit",
+      "requires": "Current owned routing and job coverage; follow the returned plan and supported search filters.",
+      "cost": "Route and quote first. Confirm source scope and cap before paid discovery.",
+      "provenance": [
+        {
+          "label": "Editor vacancies at 7:30",
+          "url": "https://www.youtube.com/watch?v=WNJYnIz7RT8&t=450s"
+        }
+      ]
+    },
+    {
+      "id": "business-fit",
+      "evidenceClass": "cold_fit",
+      "source": "Owned B2B company discovery, then official business websites",
+      "action": {
+        "mode": "actor",
+        "tool": "route_leads",
+        "arguments": {
+          "request": "Find {segment}",
+          "useCase": "company_list",
+          "filters": {
+            "keywords": "{segment}",
+            "location": "{market}"
+          }
+        }
+      },
+      "minimumEvidence": "Confirm that the organization does the relevant work and the contact holds a current matching role. Record official source. Company fit or a sourced business address alone is not proof of demand, ownership or deliverability.",
+      "fallback": "public-request",
+      "requires": "Use returned supported B2B sources; if the Actor requests meaningful missing criteria, use existing context or ask one targeted question.",
+      "cost": "Route and quote before collection. Follow current price and approval for enrichment.",
+      "provenance": [
+        {
+          "label": "Authority at 1:47",
+          "url": "https://www.youtube.com/watch?v=968ytpcG8Vg&t=107s"
+        },
+        {
+          "label": "Limits of mailbox verification at 1:51",
+          "url": "https://www.youtube.com/watch?v=3YpDMgYNoNc&t=111s"
+        }
+      ]
+    },
+    {
+      "id": "retail-assortment",
+      "evidenceClass": "cold_fit",
+      "source": "Retail directories, Maps and independent retailers’ own catalogs",
+      "action": {
+        "mode": "actor",
+        "tool": "plan_leads",
+        "arguments": {
+          "niche": "{segment}",
+          "locations": [
+            "{market}"
+          ],
+          "count": 10
+        }
+      },
+      "minimumEvidence": "Confirm location, actual assortment, wholesale fit and buying contact on the retailer’s own site. Listing the category establishes fit; a dated request for suppliers is separate evidence.",
+      "fallback": "business-fit",
+      "requires": "A real market for the Maps route. Else use included public search for retailer assortment and stockist pages.",
+      "cost": "Plan first; approval before paid business search or contact enrichment.",
+      "provenance": [
+        {
+          "label": "Retail buyers and merchandise assortment",
+          "url": "https://www.gathered.how/arts-crafts/business-tips-how-to-wholesale"
+        }
+      ]
+    },
+    {
+      "id": "organic-fit",
+      "evidenceClass": "cold_fit",
+      "source": "Google organic business results and first-party sites",
+      "action": {
+        "mode": "actor",
+        "tool": "plan_google_prospecting",
+        "arguments": {
+          "niche": "{segment}",
+          "location": "{market}",
+          "countryCode": "{countryLower}",
+          "languageCode": "{language}"
+        }
+      },
+      "minimumEvidence": "Confirm the official site and a concrete service-relevant gap. Organic ranking alone cannot establish advertised spend, buying demand or an individual owner.",
+      "fallback": "public-request",
+      "requires": "One actual niche and city/area with supported country/language. When unavailable, use a permitted public search or B2B route instead.",
+      "cost": "Plan returns source event cap. Include any platform usage in the seller’s budget.",
+      "provenance": [
+        {
+          "label": "Maps omission cross-check at 2:25",
+          "url": "https://www.youtube.com/watch?v=dDtulK6CM-k&t=145s"
+        }
+      ]
+    }
+  ],
+  "professions": [
+    {
+      "id": "web-design",
+      "aliases": [
+        "web designer",
+        "website designer",
+        "web design",
+        "web developer",
+        "build websites",
+        "design websites"
+      ],
+      "offer": "website design and redesign",
+      "serviceTerm": "web designer",
+      "segments": [
+        "independent dental practices",
+        "home service contractors"
+      ],
+      "role": "practice owner or business owner",
+      "methods": [
+        "public-request",
+        "maps-site",
+        "organic-fit",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "video-editing",
+      "aliases": [
+        "video editor",
+        "video editing",
+        "edit videos",
+        "podcast editor",
+        "edit podcasts",
+        "clipper",
+        "short-form editor",
+        "film editor"
+      ],
+      "offer": "video editing and repurposing",
+      "serviceTerm": "video editor",
+      "segments": [
+        "podcast production studios",
+        "brands publishing regular long-form video"
+      ],
+      "role": "producer or head of content",
+      "methods": [
+        "public-request",
+        "channel-fit",
+        "hiring-signal",
+        "business-fit"
+      ],
+      "channelTopic": "podcast interviews"
+    },
+    {
+      "id": "graphic-design",
+      "aliases": [
+        "graphic designer",
+        "brand designer",
+        "packaging designer",
+        "illustrator",
+        "graphic design"
+      ],
+      "offer": "graphic and brand design",
+      "serviceTerm": "graphic designer",
+      "segments": [
+        "brand design studios",
+        "independent product brands"
+      ],
+      "role": "creative director or founder",
+      "methods": [
+        "public-request",
+        "business-fit",
+        "hiring-signal"
+      ]
+    },
+    {
+      "id": "marketing",
+      "aliases": [
+        "seo consultant",
+        "seo specialist",
+        "digital marketer",
+        "marketing agency",
+        "media buyer",
+        "social media manager"
+      ],
+      "offer": "marketing services",
+      "serviceTerm": "marketing consultant",
+      "segments": [
+        "multi-location service businesses",
+        "growing ecommerce brands"
+      ],
+      "role": "owner or marketing director",
+      "methods": [
+        "public-request",
+        "organic-fit",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "local-service",
+      "aliases": [
+        "office cleaner",
+        "cleaning service",
+        "cleaning company",
+        "commercial cleaner"
+      ],
+      "offer": "commercial cleaning",
+      "serviceTerm": "cleaning service",
+      "segments": [
+        "dental practices",
+        "professional offices"
+      ],
+      "role": "practice manager or office manager",
+      "methods": [
+        "maps-site",
+        "public-request",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "bookkeeping",
+      "aliases": [
+        "bookkeeper",
+        "bookkeeping",
+        "accountant",
+        "accounting firm"
+      ],
+      "offer": "bookkeeping and finance services",
+      "serviceTerm": "bookkeeper",
+      "segments": [
+        "independent agencies",
+        "growing service businesses"
+      ],
+      "role": "owner or finance manager",
+      "methods": [
+        "public-request",
+        "hiring-signal",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "wholesale",
+      "aliases": [
+        "wholesaler",
+        "wholesale",
+        "distributor",
+        "wholesale supplier"
+      ],
+      "offer": "wholesale products",
+      "serviceTerm": "wholesale supplier",
+      "segments": [
+        "independent retailers stocking the relevant category",
+        "specialty stores"
+      ],
+      "role": "owner or merchandise buyer",
+      "methods": [
+        "retail-assortment",
+        "public-request",
+        "business-fit"
+      ],
+      "saleType": "product"
+    },
+    {
+      "id": "b2b-product",
+      "aliases": [
+        "saas founder",
+        "b2b saas",
+        "software vendor",
+        "software founder"
+      ],
+      "offer": "business software",
+      "serviceTerm": "software provider",
+      "segments": [
+        "organizations with the problem the software solves"
+      ],
+      "role": "functional budget owner",
+      "methods": [
+        "public-request",
+        "business-fit"
+      ],
+      "saleType": "software"
+    }
+  ],
+  "fallback": {
+    "id": "other-seller",
+    "scope": "b2b",
+    "methods": [
+      "public-request",
+      "business-fit"
+    ],
+    "requiresInference": "For an understandable unfamiliar offer, the assistant derives at least two concrete purchasing segments, a likely buying role and a searchable deliverable from the paid outcome. Pass the first hypothesis to the company search and retain the alternatives. For an opaque label ask what customers pay for.",
+    "saleTypes": [
+      "service",
+      "product",
+      "software"
+    ]
+  },
+  "evidencePolicy": "Return actual cited prospects only after discovery. Tutorials illustrate methods. Never use a featured business, person, or old commissioning post as a seed.",
+  "requestQueries": {
+    "service": "(\"looking for\" OR \"need a\" OR \"seeking\") \"{serviceTerm}\" {market} (paid OR freelance OR contract)",
+    "product": "(\"looking for a supplier\" OR \"seeking suppliers\" OR \"request for quotation\" OR \"sourcing\") {serviceTerm} {market}",
+    "software": "(\"looking for software\" OR \"recommend a tool\" OR \"evaluating alternatives\" OR \"switching from\") {serviceTerm} {market}"
+  },
+  "archetypes": [
+    {
+      "id": "food-photography",
+      "aliases": [
+        "food photographer",
+        "food photography",
+        "photograph food"
+      ],
+      "offer": "food photography for menus and product listings",
+      "serviceTerm": "food photographer",
+      "segments": [
+        "restaurant groups",
+        "packaged food brands"
+      ],
+      "role": "marketing director or brand manager",
+      "saleType": "service",
+      "methods": [
+        "public-request",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "technical-translation",
+      "aliases": [
+        "technical translator",
+        "technical translation",
+        "translate technical manuals"
+      ],
+      "offer": "technical document translation",
+      "serviceTerm": "technical translation",
+      "segments": [
+        "industrial equipment exporters",
+        "medical device manufacturers"
+      ],
+      "role": "localization manager or technical publications director",
+      "saleType": "service",
+      "methods": [
+        "public-request",
+        "business-fit"
+      ]
+    },
+    {
+      "id": "drinkware",
+      "aliases": [
+        "reusable drinkware",
+        "reusable cups",
+        "reusable water bottles",
+        "reusable bottles"
+      ],
+      "offer": "reusable drinkware supply",
+      "serviceTerm": "reusable drinkware",
+      "segments": [
+        "coffee chains",
+        "event caterers"
+      ],
+      "role": "procurement or merchandise buyer",
+      "saleType": "product",
+      "methods": [
+        "public-request",
+        "business-fit"
+      ]
+    }
+  ]
+}

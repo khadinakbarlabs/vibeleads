@@ -11,7 +11,7 @@ Your best leads are local businesses with no website, or a slow, broken or not s
 
 ## Recommended path
 
-1. Ask for the business type and city they want to target. If unsure, suggest trades that depend on local search: dentists, roofers, salons, plumbers, restaurants.
+1. For a seller introduction, apply [seller intake](../vibeleads-core/references/seller-intake.md) and start a feasible search. Use the seller’s stated market when available. For a local-only search with no stated service area, ask which area they serve.
 2. Pick one:
    - No website at all → [no-website-or-slow-site-leads](../no-website-or-slow-site-leads/SKILL.md) with the no-website filter, or playbook `no-website-finder`.
    - Has a site that needs a redesign → playbook `website-redesign-pitch`, or a normal search then [website-speed-check](../website-speed-check/SKILL.md).

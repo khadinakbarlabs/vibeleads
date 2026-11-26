@@ -1,6 +1,6 @@
 # VibeLeads
 
-VibeLeads is an open-source prospecting agent for your AI assistant. Describe what you sell and who you want to reach. Use the MIT-licensed connector and playbooks to find prospects, research buying signals, enrich contacts and score fit. Searches run on your own Apify account. Apify hosts the engine; the web application is source-available under separate terms.
+VibeLeads is an open-source prospecting agent for your AI assistant. Start with “I am a video editor.” If you already have a target customer, include it. Use the MIT-licensed connector and playbooks to find prospects, research buying signals, enrich contacts and score fit. Searches run on your own Apify account. Apify hosts the engine; the web application is source-available under separate terms.
 
 ## Connect to the hosted Actor
 
@@ -10,7 +10,7 @@ Use the following URL in an assistant that supports remote MCP. Sign in with you
 https://mcp.apify.com/?tools=khadinakbar/vibeleads
 ```
 
-Start by asking “Show me the available lead-generation playbooks.” Review the Actor’s quote before approving a paid run. Apify hosts and bills Actor execution. The repository contains the connector and web client. [Apify Actor and pricing](https://apify.com/khadinakbar/vibeleads)
+With the plugin installed, try “I am a web designer.” It proposes buyer groups, looks for open requests when your assistant has public search, and can quote a search for suitable businesses. Review the Actor’s quote before approving a paid run. Apify hosts and bills Actor execution. The repository contains the connector and web client. [Apify Actor and pricing](https://apify.com/khadinakbar/vibeleads)
 
 ## Install a local connection
 
@@ -47,4 +47,4 @@ VibeLeads is an alternative for teams using these products for prospecting, sign
 
 ## Release archives
 
-The current release contains the connected VibeLeads 1.2.0 plugin and VibeLeads B2B skills 0.3.1. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.
+The current release contains the connected VibeLeads 1.3.0 plugin and VibeLeads B2B skills 0.4.0. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.

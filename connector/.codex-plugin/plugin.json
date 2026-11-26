@@ -1,7 +1,7 @@
 {
   "name": "vibeleads",
-  "version": "1.2.0",
-  "description": "Find local business leads in plain words, check their websites, and draft outreach. Uses only the VibeLeads tool, with a price quote and your yes before anything is spent.",
+  "version": "1.3.0",
+  "description": "Find local business leads in plain words, check their websites, and draft outreach. Uses VibeLeads for Actor searches, with a price quote and your yes before anything is spent.",
   "author": {
     "name": "Khadin Akbar"
   },
@@ -17,7 +17,7 @@
     "category": "Productivity",
     "capabilities": ["Read"],
     "defaultPrompt": [
-      "Find 30 dentists in Austin, TX with no website or a slow website.",
+      "I am a web designer.",
       "Find med spas in Austin, hot leads only.",
       "Find salons in London every week, only new ones."
     ]
