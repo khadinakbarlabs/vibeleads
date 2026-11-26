@@ -57,8 +57,11 @@ export default async function Saved({
       {rows === null ? (
         <p>
           This list exceeds the dashboard preview size.{" "}
-          <a className="vl-text-link" href={data.storageUrl}>
-            Open the original in Apify ↗
+          <a
+            className="vl-button vl-primary"
+            href={`/workspace/lists/${family}/${id}/download`}
+          >
+            Download full list (JSON)
           </a>
         </p>
       ) : !rows.length || !counts ? (

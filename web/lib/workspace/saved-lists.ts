@@ -307,3 +307,29 @@ export async function savedList(
     storageUrl,
   };
 }
+
+/** Stream a single authorized Actor result without loading the entire JSON into memory. */
+export async function savedDownload(
+  get: Get,
+  a: Account,
+  family: Collection,
+  id: string,
+) {
+  if (!listId(id)) return null;
+  const path = await storePath(get, a, family);
+  if (!path) return null;
+  const source = await optional(
+    get,
+    path + "/records/" + collections[family].prefix + id,
+    a.accessToken,
+  );
+  if (!source) return null;
+  return new Response(source.body, {
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "content-disposition": `attachment; filename="vibeleads-${id}.json"`,
+      "cache-control": "private, no-store",
+      "x-content-type-options": "nosniff",
+    },
+  });
+}

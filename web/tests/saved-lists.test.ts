@@ -166,3 +166,34 @@ test("saved people retain work address and status, signals retain publisher evid
   assert.match(datasetCsv(rows), /taylor@example.org/);
   assert.match(datasetCsv(rows), /Seeking a freelance editor/);
 });
+
+test("oversize lists stream the exact selected JSON only after checking storage ownership", async () => {
+  const { savedDownload } = await import("../lib/workspace/saved-lists");
+  const paths: string[] = [];
+  const body = '[{"name":"One exact record"}]';
+  const get = async (p: string) => {
+    paths.push(p);
+    return p.includes("~")
+      ? json({
+          data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
+        })
+      : new Response(body);
+  };
+  const res = await savedDownload(get, a, "local", id);
+  assert.match(res!.headers.get("content-disposition")!, /attachment/);
+  assert.equal(await res!.text(), body);
+  assert.equal(
+    paths.at(-1),
+    "key-value-stores/" + sid + "/records/leads." + id,
+  );
+  const oversize = await savedList(
+    async (p) =>
+      p.includes("/records/leads.")
+        ? new Response("[]", { headers: { "content-length": "5000000" } })
+        : get(p),
+    a,
+    "local",
+    id,
+  );
+  assert.equal(oversize?.rows, null);
+});
