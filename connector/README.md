@@ -30,7 +30,7 @@ Slash commands: `/find-leads`, `/lead-playbooks`, `/build-workflow`, `/check-web
 
 **Claude Code**
 
-1. Add the published marketplace with `/plugin marketplace add khadinakbarlabs/vibeleads`. For a checkout, use the repository root as the marketplace path
+1. Add the published marketplace with `/plugin marketplace add https://github.com/khadinakbarlabs/vibeleads.git`. For a checkout, use the repository root as the marketplace path
 2. Install the plugin: `/plugin install vibeleads@vibeleads-local`
 3. Type `/mcp`, pick `vibeleads`, and sign in.
 
