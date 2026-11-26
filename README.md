@@ -47,4 +47,4 @@ VibeLeads is an alternative for teams using these products for prospecting, sign
 
 ## Release archives
 
-The current release contains the connected VibeLeads 1.3.0 plugin and VibeLeads B2B skills 0.4.0. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.
+The current release contains the connected VibeLeads 1.3.1 plugin and VibeLeads B2B skills 0.4.1. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.

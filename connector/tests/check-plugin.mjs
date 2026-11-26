@@ -51,11 +51,11 @@ check(servers.vibeleads?.type === 'http', '.mcp.json: type must be "http"');
 const manifest = parsed['.claude-plugin/plugin.json'] || {};
 check(manifest.name === 'vibeleads', 'plugin.json: name must be "vibeleads"');
 check(manifest.displayName === 'VibeLeads', 'plugin.json: displayName must be "VibeLeads"');
-check(manifest.version === '1.3.0', 'plugin.json: version must be 1.3.0');
+check(manifest.version === '1.3.1', 'plugin.json: version must be 1.3.1');
 const market = parsed['.claude-plugin/marketplace.json'] || {};
-check(market.metadata?.version === '1.3.0', 'marketplace.json: metadata version must be 1.3.0');
-check(parsed['.cursor-plugin/plugin.json']?.version === '1.3.0', 'cursor plugin.json: version must be 1.3.0');
-check(parsed['.codex-plugin/plugin.json']?.version === '1.3.0', 'codex plugin.json: version must be 1.3.0');
+check(market.metadata?.version === '1.3.1', 'marketplace.json: metadata version must be 1.3.1');
+check(parsed['.cursor-plugin/plugin.json']?.version === '1.3.1', 'cursor plugin.json: version must be 1.3.1');
+check(parsed['.codex-plugin/plugin.json']?.version === '1.3.1', 'codex plugin.json: version must be 1.3.1');
 check(Array.isArray(market.plugins) && market.plugins.some((p) => p.name === 'vibeleads' && p.source === './'), 'marketplace.json: must list the vibeleads plugin with source "./"');
 for (const rel of ['README.md', 'LICENSE', 'TOOL-MAP.md']) check(existsSync(join(ROOT, rel)), `${rel}: missing`);
 
