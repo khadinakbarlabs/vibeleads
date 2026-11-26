@@ -1,157 +1,97 @@
 import Link from "next/link";
-import { DM_Sans } from "next/font/google";
-import { ArrowRight, Check, MessageSquareText } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Brand } from "@/components/workspace/Brand";
 import { workspaceAccount } from "@/lib/workspace/auth";
-import { capabilities, PRICE_NOTE } from "@/lib/workspace/capabilities";
+import { AgentSetup } from "@/components/workspace/AgentSetup";
 import "./landing.css";
-
-const font = DM_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--landing-font",
-});
-
-const control = [
-  ["You ask", "Describe who you want in plain words."],
-  ["You approve", "See the plan and price before anything runs."],
-  ["You keep the list", "Sort, filter and export it from your dashboard."],
-];
 
 export default async function Home() {
   const account = await workspaceAccount();
   return (
-    <div className={font.variable + " vl-site lp"}>
+    <div className="vl-site buyer-home">
       <a className="lp-skip" href="#main-content">
         Skip to content
       </a>
       <header className="lp-header lp-wrap">
         <Brand />
         <nav aria-label="Main navigation">
-          <a href="#ask">What you can ask</a>
-          <Link href="/connect">Setup guide</Link>
-        </nav>
-        <a
-          className="lp-account"
-          href={account ? "/workspace" : "/auth/apify/start"}
-        >
-          {account ? "Open dashboard" : "Sign in"}
-        </a>
-      </header>
-
-      <main id="main-content">
-        <section className="lp-hero lp-wrap" aria-labelledby="landing-title">
-          <p className="lp-eyebrow">Lead generation inside your AI assistant</p>
-          <h1 id="landing-title">
-            Ask your assistant for customers.{" "}
-            <span>Get a list you can use.</span>
-          </h1>
-          <p className="lp-lede">
-            VibeLeads finds businesses, checks them and explains why they might
-            buy. Everything happens in Claude, ChatGPT or any assistant that
-            supports connectors.
-          </p>
-
-          <ol className="lp-setup" aria-label="Get started in two steps">
-            <li className={account ? "lp-done" : "lp-current"}>
-              <span className="lp-num" aria-hidden>
-                {account ? <Check size={16} /> : "1"}
-              </span>
-              <div>
-                <h2>Sign in with Apify</h2>
-                <p>
-                  {account
-                    ? `Signed in as ${account.username}.`
-                    : "Free to create. Your searches run and are billed there."}
-                </p>
-              </div>
-              {!account && (
-                <a
-                  className="lp-button lp-button-dark"
-                  href="/auth/apify/start"
-                >
-                  Sign in with Apify
-                  <ArrowRight size={17} aria-hidden />
-                </a>
-              )}
-            </li>
-            <li className={account ? "lp-current" : "lp-next"}>
-              <span className="lp-num" aria-hidden>
-                2
-              </span>
-              <div>
-                <h2>Connect your AI assistant</h2>
-                <p>Add VibeLeads to Claude, ChatGPT, Cursor or Codex.</p>
-              </div>
-              <Link
-                className={
-                  "lp-button " +
-                  (account ? "lp-button-accent" : "lp-button-quiet")
-                }
-                href="/connect"
-              >
-                Connect assistant
-                <ArrowRight size={17} aria-hidden />
-              </Link>
-            </li>
-          </ol>
-
-          <figure className="lp-chat" aria-label="Example request">
-            <MessageSquareText size={18} aria-hidden />
-            <blockquote>
-              “Find 30 dentists in Austin with a slow website, and show me the
-              price first.”
-            </blockquote>
-          </figure>
-        </section>
-
-        <section
-          className="lp-ask lp-wrap"
-          id="ask"
-          aria-labelledby="ask-title"
-        >
-          <div className="lp-section-head">
-            <h2 id="ask-title">What you can ask for</h2>
-            <p>{PRICE_NOTE}</p>
-          </div>
-          <ul>
-            {capabilities.map((c) => (
-              <li key={c.id}>
-                <h3>{c.name}</h3>
-                <p>{c.text}</p>
-                <q>{c.ask}</q>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="lp-control lp-wrap" aria-label="How it works">
-          {control.map(([title, text], i) => (
-            <div key={title}>
-              <span>{String(i + 1).padStart(2, "0")}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </div>
-          ))}
-        </section>
-
-        <section className="lp-final lp-wrap">
-          <h2>Start with one request.</h2>
+          <a href="#connect">Setup</a>
+          {account ? (
+            <Link href="/workspace">My results</Link>
+          ) : (
+            <a href="/auth/apify/start">Sign in with Apify</a>
+          )}
           <a
-            className="lp-button lp-button-dark"
-            href={account ? "/connect" : "/auth/apify/start"}
+            href="https://github.com/khadinakbarlabs/vibeleads"
+            aria-label="VibeLeads on GitHub"
           >
-            {account ? "Connect assistant" : "Sign in with Apify"}
-            <ArrowRight size={17} aria-hidden />
+            GitHub ↗
           </a>
+        </nav>
+      </header>
+      <main id="main-content">
+        <section className="buyer-hero lp-wrap">
+          <div>
+            <h1>Find the businesses that need what you sell.</h1>
+            <p>
+              An open-source prospecting agent for your AI assistant. Describe
+              your ideal customer and run searches on your own Apify account.
+              VibeLeads finds prospects, checks buying signals, enriches contact
+              details and scores the fit.
+            </p>
+            <div className="buyer-actions">
+              <a
+                className="lp-button lp-button-dark"
+                href={account ? "/workspace" : "/auth/apify/start"}
+              >
+                {account ? "Open my results" : "Sign in with Apify"}{" "}
+                <ArrowUpRight size={17} aria-hidden />
+              </a>
+              <a className="vl-text-link" href="#connect">
+                Connect my assistant ↓
+              </a>
+            </div>
+          </div>
+          <aside className="sample-brief">
+            <span>Example prospecting brief</span>
+            <blockquote>
+              “I build websites for dental practices. Find dentists in Austin
+              whose sites are slow on mobile.”
+            </blockquote>
+            <p>
+              Review the plan and price before approving a search. Open the
+              saved prospects in your dashboard.
+            </p>
+          </aside>
         </section>
+        <section id="connect" className="buyer-connect lp-wrap">
+          <h2>Set up VibeLeads</h2>
+          <p>
+            Choose one connection method. Sign in to the dashboard with the same
+            Apify account you use in your assistant.
+          </p>
+          <AgentSetup />
+        </section>
+        <details className="lp-wrap buyer-compare">
+          <summary>How does VibeLeads compare?</summary>
+          <p>
+            The open-source parts are the MIT-licensed connector and agent
+            playbooks. Use them with hosted Apify tools for list building and
+            contact enrichment, workflows also offered by Apollo and Clay.
+            VibeLeads is an alternative for list building, enrichment, signal
+            research and scoring when those are the workflows you need.
+            GojiBerry overlaps on signal-based prospecting. Xply describes
+            social feedback workflows. VibeLeads focuses on finding and
+            qualifying prospects for your offer.
+          </p>
+        </details>
       </main>
-
       <footer className="lp-footer lp-wrap">
         <Brand />
         <nav aria-label="Footer navigation">
-          <Link href="/workspace">Dashboard</Link>
-          <Link href="/connect">Connect an assistant</Link>
+          <a href="https://github.com/khadinakbarlabs/vibeleads">
+            Open-source connector
+          </a>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
         </nav>

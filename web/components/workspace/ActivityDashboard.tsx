@@ -103,15 +103,27 @@ export function ActivityDashboard({
         <section className="rd-card">
           <header>
             <Activity size={18} />
-            <h2>Run activity</h2>
+            <h2>Search activity</h2>
           </header>
           <small>Runs by active day · UTC</small>
           {series.length ? (
-            <div className="rd-bars" aria-label="Run activity by date">
+            <div
+              className="rd-bars"
+              role="list"
+              aria-label="Search activity by date"
+            >
               {series.map(([day, n]) => (
-                <div key={day} title={day + " · " + n + " runs"}>
+                <div
+                  role="listitem"
+                  aria-label={day + ": " + n + " runs"}
+                  key={day}
+                  title={day + " · " + n + " runs"}
+                >
                   <strong>{n}</strong>
-                  <i style={{ height: (n / max) * 76 + "px" }} />
+                  <i
+                    aria-hidden="true"
+                    style={{ height: (n / max) * 76 + "px" }}
+                  />
                   <span>{day.slice(5)}</span>
                 </div>
               ))}
@@ -125,7 +137,7 @@ export function ActivityDashboard({
         <section className="rd-card">
           <header>
             <CheckCheck size={18} />
-            <h2>Run outcomes</h2>
+            <h2>Search outcomes</h2>
           </header>
           <small>Share of runs in the selected period</small>
           <div className="rd-outcomes">
@@ -151,7 +163,7 @@ export function ActivityDashboard({
       </div>
       <section className="rd-card rd-history" id="runs-heading">
         <header>
-          <h2>Workflow history</h2>
+          <h2>Recent searches</h2>
           <small>
             {visible.length} of {runs.length} on this page
           </small>
@@ -195,7 +207,7 @@ export function ActivityDashboard({
                     "Outcome",
                     "Started (UTC)",
                     "Duration",
-                    "Dataset rows",
+                    "Output rows",
                   ].map((h) => (
                     <th key={h}>{h}</th>
                   ))}

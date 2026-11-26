@@ -6,7 +6,7 @@ Find the right companies, understand why they might buy, and prepare a lead list
 
 VibeLeads is a skills-only plugin for your AI assistant. It brings the prospecting process together: ideal customer profiles, source selection, buying signals, company research, company and public contact enrichment, email validation, qualification, list hygiene, account plans, and outreach drafts. It also reuses scoped business context, improves targeting from deliberate feedback, resumes sessions, prepares bounded recurring research and produces private visual reports.
 
-**An Apify API key is required for live collection.** Use your own account; data collection is billed there. Planning and working with files need no data connection. Setup details belong in the [connection guide](plugin/skills/lead-engine/references/connection-guide.md).
+**Live collection requires your own authenticated Apify account.** Use browser sign-in in a supported connector or the official CLI (`apify login`). A local client can also use an Apify API token from its secret environment. The skills-only package `vibeleads-b2b@vibeleads-local` can use your existing connection and does not add a second MCP server. Use your own account; data collection is billed there. Planning and working with files need no data connection. Setup details belong in the [connection guide](plugin/skills/lead-engine/references/connection-guide.md).
 
 ## Start with a normal request
 

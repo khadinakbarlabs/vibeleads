@@ -4,7 +4,7 @@ Apply the [qualified business/contact-use gate](contact-use.md) before collectio
 
 Before collection or recovery, apply the [source access gate](access-safety.md). Catalog/schema verification is not execution permission. Denied underlying source access is excluded from Actor failover and automatic retries.
 
-VibeLeads supplies skills and contained local helpers, without a hosted data engine. The agent uses the independently installed official Apify CLI or a capable existing authenticated integration. An Apify API key is required for live access; each user uses their own account. The publisher’s account and keys are never shipped. Supplied files need no login; use the [offline import and existing-run reader](local-data-workflow.md) for mapping, provenance and bounded readback.
+VibeLeads supplies skills and contained local helpers, without a hosted data engine. The agent uses the independently installed official Apify CLI or a capable existing authenticated integration. Live access requires the user’s own authenticated Apify account. A supported remote connector or the official CLI (`apify login`) can open Apify browser sign-in. For API-token authentication, use the host’s secret environment or the official CLI’s secure token prompt. The skills-only package can use a separately configured local stdio connection. The publisher’s account and keys are never shipped. Supplied files need no login; use the [offline import and existing-run reader](local-data-workflow.md) for mapping, provenance and bounded readback.
 
 ## First-run check
 

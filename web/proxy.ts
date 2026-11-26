@@ -9,7 +9,14 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { publicEnv } from "@/lib/env";
 
+import { dashboardDestination } from "@/lib/workspace/config";
 export async function proxy(request: NextRequest) {
+  if (/^\/workspace(?:\/|$)/.test(request.nextUrl.pathname)) {
+    const destination = dashboardDestination(new URL(request.url));
+    return destination
+      ? NextResponse.redirect(destination)
+      : NextResponse.next();
+  }
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -41,6 +48,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/workspace/:path*",
     /*
      * Match all request paths except:
      * - _next/static, _next/image (asset optimization)

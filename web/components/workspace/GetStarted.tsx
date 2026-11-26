@@ -10,7 +10,7 @@ export function GetStarted({ username }: { username: string }) {
   return (
     <section className="gs" aria-labelledby="gs-title">
       <div className="gs-steps">
-        <h2 id="gs-title">Your results will appear here</h2>
+        <h2 id="gs-title">No search runs in this view</h2>
         <ol>
           <li className="gs-done">
             <span aria-hidden>

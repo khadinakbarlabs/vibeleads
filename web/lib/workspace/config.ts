@@ -27,3 +27,30 @@ export function oauthClientId(): string {
     new URL(OAUTH_CLIENT_METADATA, workspaceOrigin()).href
   );
 }
+
+/** A host-only cookie remains on the origin registered with Apify. Only forward dashboard view options. */
+export function dashboardDestination(input: URL, origin = workspaceOrigin()) {
+  if (
+    !["vibeleads.app", "www.vibeleads.app"].includes(input.hostname) ||
+    input.origin === origin.origin ||
+    !/^\/workspace(?:\/|$)/.test(input.pathname)
+  )
+    return null;
+  const target = new URL(origin);
+  target.pathname = input.pathname;
+  for (const k of [
+    "page",
+    "batch",
+    "status",
+    "range",
+    "group",
+    "bucket",
+    "after",
+    "format",
+    "view",
+  ]) {
+    const v = input.searchParams.get(k);
+    if (v && v.length <= 80) target.searchParams.set(k, v);
+  }
+  return target;
+}

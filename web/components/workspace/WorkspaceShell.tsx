@@ -18,8 +18,9 @@ export function WorkspaceShell({
           <Link href="/workspace">
             <LayoutDashboard size={20} aria-hidden /> Overview
           </Link>
-          <Link href="/workspace#runs-heading">
-            <Clock size={20} aria-hidden /> Workflow history
+          <Link href="/workspace#saved">Saved prospect lists</Link>
+          <Link href="/workspace#history">
+            <Clock size={20} aria-hidden /> Search history
           </Link>
 
           <Link href="/connect">
