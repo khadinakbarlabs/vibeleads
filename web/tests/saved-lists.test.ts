@@ -232,3 +232,32 @@ test("reported fit and checked mail never promote unscored records, signals or c
   );
   assert.deepEqual(salesSummary([{ name: "Unknown" }]).groups, []);
 });
+
+test("the saved check chart accepts explicit deliverable synonyms but excludes shared and catch-all addresses", async () => {
+  const { salesSummary } = await import("../lib/workspace/saved-lists");
+  const statuses = [
+    "valid",
+    "verified",
+    "deliverable",
+    "ok",
+    "safe",
+    "ok_for_all",
+    "catch-all",
+    "unconfirmed",
+    "bad",
+    "shared-inbox",
+  ];
+  const rows = statuses.map((emailStatus, i) => ({
+    kind: "person",
+    workEmail: `buyer${i}@example.org`,
+    email: `buyer${i}@example.org`,
+    emailStatus,
+  }));
+  rows.push({
+    kind: "person",
+    workEmail: "info@example.org",
+    email: "info@example.org",
+    emailStatus: "valid",
+  });
+  assert.equal(salesSummary(rows).passedEmailCheck, 5);
+});

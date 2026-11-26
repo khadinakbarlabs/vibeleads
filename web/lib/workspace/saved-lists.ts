@@ -334,6 +334,20 @@ export async function savedDownload(
   });
 }
 
+const roleMailboxes = new Set(
+  "info contact hello hi office admin sales support enquiries inquiries booking bookings reservations service team mail help manager accounts billing orders reception frontdesk".split(
+    " ",
+  ),
+);
+function passedAddressCheck(r: DataRow) {
+  const address = str(r.workEmail) || str(r.email);
+  const status = str(r.emailStatus).toLowerCase();
+  return (
+    Boolean(address) &&
+    !roleMailboxes.has(address.split("@")[0].toLowerCase()) &&
+    ["verified", "valid", "deliverable", "ok", "safe"].includes(status)
+  );
+}
 export function salesSummary(rows: DataRow[]) {
   const prospects = rows.filter((r) => r.kind !== "post");
   const emailOnFile = prospects.filter(
@@ -380,8 +394,7 @@ export function salesSummary(rows: DataRow[]) {
     ranked: priorities || scores,
     prospects: prospects.length,
     emailOnFile: emailOnFile.length,
-    passedEmailCheck: emailOnFile.filter((r) => r.emailStatus === "verified")
-      .length,
+    passedEmailCheck: emailOnFile.filter(passedAddressCheck).length,
     withRecordedCheck: emailOnFile.some(
       (r) => typeof r.emailStatus === "string" && r.emailStatus.trim() !== "",
     ),
