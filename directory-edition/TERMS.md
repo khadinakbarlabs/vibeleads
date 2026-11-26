@@ -1,6 +1,6 @@
 # VibeLeads terms of use
 
-These terms describe use of the VibeLeads skills-only plugin published by Khadin Akbar at [the public repository](https://github.com/khadinakbarlabs/vibeleads-plugin).
+These terms describe use of the VibeLeads skills-only plugin published by Khadin Akbar at [the public repository](https://github.com/khadinakbarlabs/vibeleads).
 
 Code and original documentation are licensed under MIT. External data services and sources retain their own terms, licensing, fees and access requirements. Users must obtain appropriate access and permission for collection and use. Catalog presence or public availability is not permission to reuse data.
 

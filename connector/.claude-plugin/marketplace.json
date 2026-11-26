@@ -1,0 +1,17 @@
+{
+  "name": "vibeleads",
+  "owner": {
+    "name": "Khadin Akbar"
+  },
+  "metadata": {
+    "description": "VibeLeads: find local and B2B leads that need your service, from inside your AI assistant.",
+    "version": "1.2.0"
+  },
+  "plugins": [
+    {
+      "name": "vibeleads",
+      "description": "Find local and B2B leads in plain words, check their websites, and draft outreach through the VibeLeads MCP server, with a price quote and your yes before anything is spent.",
+      "source": "./"
+    }
+  ]
+}

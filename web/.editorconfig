@@ -1,0 +1,26 @@
+# EditorConfig — https://editorconfig.org
+#
+# Pairs with .prettierrc + the pre-commit hook so contributors using
+# any editor (VS Code, JetBrains, Vim, Zed, etc.) get consistent
+# formatting from the start. Prettier still owns the canonical layout;
+# this file just makes sure the editor doesn't fight it.
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Markdown uses trailing whitespace for soft line breaks (two spaces +
+# newline). Don't strip those.
+[*.md]
+trim_trailing_whitespace = false
+
+# Lockfiles are managed by their package manager — leave alone.
+[*.{lock,lockb}]
+trim_trailing_whitespace = false
+insert_final_newline = false
