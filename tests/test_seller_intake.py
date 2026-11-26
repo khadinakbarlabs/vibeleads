@@ -68,3 +68,17 @@ class SellerIntakeTests(unittest.TestCase):
             plan = planner.build(brief)
             self.assertEqual(plan["intent"], intent)
             self.assertEqual(plan["methods"], [])
+
+    def test_explicit_youtube_region_and_language(self):
+        plan = planner.build("I am a video editor. Find English-language YouTube podcasts in Canada.")
+        self.assertEqual([m["id"] for m in plan["methods"]], ["channel-fit"])
+        args = action(plan, "channel-fit")["arguments"]
+        self.assertEqual((args["country"], args["language"]), ("CA", "en"))
+
+    def test_source_restriction_survives_missing_region(self):
+        plan = planner.build("I am a video editor. Use only YouTube.")
+        self.assertEqual([m["id"] for m in plan["methods"]], ["channel-fit"])
+        self.assertIn("site:youtube.com", action(plan, "channel-fit")["query"])
+        plan = planner.build("I am a video editor. Skip Reddit.")
+        self.assertNotIn("reddit.com", str(action(plan, "public-request")))
+        self.assertIn("site:x.com", action(plan, "public-request")["query"])

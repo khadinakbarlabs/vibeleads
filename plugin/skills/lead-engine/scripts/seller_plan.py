@@ -56,6 +56,35 @@ def profile_for(catalog, opening, selected):
     return max(matches, key=lambda item: item[0])[1] if matches else catalog["fallback"]
 
 
+LANGUAGES = {"english": "en", "french": "fr", "german": "de", "spanish": "es",
+             "portuguese": "pt", "italian": "it", "japanese": "ja"}
+COUNTRIES = {"canada": "CA", "united states": "US", "usa": "US", "united kingdom": "GB",
+             "australia": "AU", "germany": "DE", "france": "FR", "spain": "ES", "japan": "JP"}
+SOCIAL = {"youtube": "youtube.com", "reddit": "reddit.com", "x": "x.com",
+          "linkedin": "linkedin.com", "instagram": "instagram.com"}
+
+
+def mentioned_code(text, codes):
+    return next((code for term, code in codes.items()
+                 if re.search(r"\b" + re.escape(term) + r"\b", text, re.I)), "")
+
+
+def source_scope(brief):
+    terms = r"youtube|reddit|twitter|x|linkedin|instagram|maps"
+    only, excluded = set(), set()
+    for sentence in re.split(r"[.;!\n]", brief.lower()):
+        for part in re.split(r",|\bbut\b", sentence):
+            names = {"x" if name == "twitter" else name for name in
+                     re.findall(r"\b(" + terms + r")\b", part)}
+            if not names:
+                continue
+            if re.search(r"\b(?:no|skip|avoid|exclude|except|without|never)\b", part):
+                excluded |= names
+            elif re.search(r"\b(?:only|exclusively)\b", part) or re.search(r"\bfind\b.*\byoutube\b", part):
+                only |= names
+    return only, excluded
+
+
 def build(brief, answers=None, catalog=None):
     answers = answers or {}
     if not isinstance(answers, dict) or set(answers) - TEXT_FIELDS - LIST_FIELDS - {"count"}:
@@ -98,17 +127,35 @@ def build(brief, answers=None, catalog=None):
     if sale not in catalog["requestQueries"]:
         raise ValueError("Choose service, product or software.")
     role = answers.get("role") or profile.get("role", "")
-    country = answers.get("country", "")
+    country = answers.get("country") or mentioned_code(raw, COUNTRIES)
     market = answers.get("market") or place
     context = {"serviceTerm": service, "segment": next(iter(segments), ""), "role": role,
                "market": market, "country": country.upper(), "countryLower": country.lower(),
-               "language": answers.get("language", ""), "channelTopic": answers.get("channelTopic")
+               "language": answers.get("language") or mentioned_code(raw, LANGUAGES), "channelTopic": answers.get("channelTopic")
                or profile.get("channelTopic", "")}
     allowed = set(answers.get("allowedMethods", profile["methods"]))
     if re.search(r"\b(?:no|avoid|exclude) social(?: media)?\b", raw, re.I):
         allowed.difference_update({"public-request", "channel-fit"})
     if re.search(r"\b(?:only (?:active |open )?(?:buyer requests|commissions)|no cold (?:leads|prospects))\b", raw, re.I):
         allowed.intersection_update({"public-request"})
+    only, excluded = source_scope(raw)
+    platforms = (only or set(SOCIAL)) - excluded
+    public_platforms = [name for name in SOCIAL if name in platforms and name != "youtube"]
+    if only:
+        possible = set()
+        if public_platforms:
+            possible.add("public-request")
+        if "youtube" in platforms:
+            possible.add("channel-fit")
+        if "maps" in platforms:
+            possible.update({"maps-site", "retail-assortment"})
+        allowed &= possible
+    if "youtube" in excluded:
+        allowed.discard("channel-fit")
+    if "maps" in excluded:
+        allowed.difference_update({"maps-site", "retail-assortment"})
+    if not public_platforms:
+        allowed.discard("public-request")
     methods = []
     by_id = {item["id"]: item for item in catalog["methods"]}
     for method_id in profile["methods"]:
@@ -119,9 +166,20 @@ def build(brief, answers=None, catalog=None):
         if method_id in {"business-fit", "maps-site", "organic-fit", "retail-assortment"} and not segments:
             missing.append("assistantInferredBuyerSegments")
         action = None if missing else render(method["action"], context)
+        if method_id == "channel-fit" and missing and "youtube" in only:
+            query = " ".join(filter(None, ["site:youtube.com", context["channelTopic"] or service,
+                                            context["market"], context["language"]]))
+            action = {"mode": "host_public_search", "query": query,
+                      "requires": "Included public search. If unavailable, ask which missing market or language to use for the Actor."}
+            missing = []
         if action and method_id == "public-request":
             action["query"] = render(catalog["requestQueries"][sale], context)
-            action["alternateQuery"] = "site:reddit.com " + action["query"]
+            if only or excluded:
+                scope = " OR ".join("site:" + SOCIAL[name] for name in public_platforms)
+                action["query"] = "(" + scope + ") " + action["query"]
+                action["alternateQuery"] = action["query"]
+            else:
+                action["alternateQuery"] = "site:reddit.com " + action["query"]
         if action and answers.get("count"):
             arguments = action.get("arguments", {})
             if "count" in arguments:
