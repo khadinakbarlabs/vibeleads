@@ -28,7 +28,11 @@ export class ApifyRequestError extends Error {
   }
 }
 
-async function request(path: string, accessToken: string, timeoutMs = 12_000) {
+export async function request(
+  path: string,
+  accessToken: string,
+  timeoutMs = 12_000,
+) {
   const response = await fetch(`https://api.apify.com/v2/${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     redirect: "error",

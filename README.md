@@ -12,6 +12,18 @@ https://mcp.apify.com/?tools=khadinakbar/vibeleads
 
 Start by asking “Show me the available lead-generation playbooks.” Review the Actor’s quote before approving a paid run. Apify hosts and bills Actor execution. The repository contains the connector and web client. [Apify Actor and pricing](https://apify.com/khadinakbar/vibeleads)
 
+## Install a local connection
+
+With Node.js 22+ and Claude Code installed, run the following once. It saves a user-level MCP connection across restarts. Open `/mcp` in Claude Code and select VibeLeads. Apify provides browser OAuth when authentication is needed.
+
+```sh
+claude mcp add --scope user --transport stdio vibeleads -- npx --yes mcp-remote@0.16.7 "https://mcp.apify.com/?tools=khadinakbar/vibeleads"
+```
+
+For another desktop stdio client set the command to `npx` and the arguments to `["--yes","mcp-remote@0.16.7","https://mcp.apify.com/?tools=khadinakbar/vibeleads"]`. If browser authorization is unavailable, set `APIFY_TOKEN` in the local client's secret environment and append `["--header","Authorization: Bearer ${APIFY_TOKEN}"]` to those arguments. The bridge expands the literal variable internally. Keep the token out of chat, URLs and checked-in configuration. [Bridge documentation](https://github.com/punkpeye/mcp-remote) · [Copy the setup prompt or client configuration](https://vibeleads.app/connect)
+
+ChatGPT users can open **Plugins → + → Add custom MCP server**, paste the hosted URL above and choose OAuth. In Claude, use **Settings → Connectors → Add custom connector**. Use the same Apify identity in the assistant and the [results dashboard](https://vibeleads.app/workspace). The dashboard reads your saved prospect lists and Actor-run datasets. Open a list for contact coverage, filtering and CSV export. This works with either connection method.
+
 ## Install in your assistant
 
 | Client | How to install |
@@ -28,6 +40,10 @@ Claude Code can also use this checkout’s project-level MCP entry. Choose eithe
 ## Run the web app
 
 The Next.js web client lives in `web/`. It includes account authentication, billing integration, the Apify workspace, application routes and Supabase migrations. [Local setup and service dependencies](web/README.md) · [VibeLeads product website](https://vibeleads.app/) · [Sign in to the workspace](https://vibeleads.app/workspace) · [Plugin licensing](LICENSE) · [Web application rights](web/NOTICE.md)
+
+## Where it fits
+
+The MIT-licensed connector and playbooks support prospecting, signal research, enrichment and qualification via hosted Apify tools. Apollo and Clay overlap on list building and enrichment. GojiBerry overlaps on buying-signal prospecting. Xply describes social feedback workflows; that comparison is limited to signals. The web app has separate source-available terms. [Apollo](https://www.apollo.io/) · [Clay](https://www.clay.com/) · [GojiBerry](https://www.gojiberry.ai/) · [Xply](https://xply.com/) · [License scope](LICENSE)
 
 ## Release archives
 

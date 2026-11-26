@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Cable } from "lucide-react";
 import { WorkspaceShell } from "@/components/workspace/WorkspaceShell";
 import { ActivityDashboard } from "@/components/workspace/ActivityDashboard";
+import { SavedLists } from "@/components/workspace/SavedLists";
 import { GetStarted } from "@/components/workspace/GetStarted";
 import {
   workspaceRuns,
@@ -28,6 +29,8 @@ export default async function WorkspacePage({
     range?: string;
     group?: string;
     batch?: string;
+    bucket?: string;
+    after?: string;
   }>;
 }) {
   const session = await workspaceAccount();
@@ -86,15 +89,16 @@ export default async function WorkspacePage({
     <WorkspaceShell name={session.username}>
       <header className="rd-heading">
         <div>
-          <small>Workspace / Overview</small>
-          <h1>Workflow overview</h1>
-          <p>Explore activity and open a workflow to see its results.</p>
+          <h1>My prospecting results</h1>
+          <p>Browse the prospects and searches saved to your Apify account.</p>
         </div>
         <Link href="/connect" className="vl-button vl-primary">
           <Cable size={17} />
           Connect an AI agent
         </Link>
       </header>
+      <SavedLists account={session} bucket={query.bucket} after={query.after} />
+      <h2 id="history">Search history</h2>
       {failed ? (
         <section className="rd-card">
           <h2>History is temporarily unavailable</h2>
