@@ -1,0 +1,499 @@
+@import "tailwindcss";
+
+/* Tailwind v4 dark-variant binding.
+   The app's theme toggle persists user choice as `<html data-theme="…">`
+   rather than the OS-level `prefers-color-scheme` media query (so picking
+   "Light" while the OS is set to dark actually gives a light app — and
+   vice versa). Tailwind's default `dark:` prefix only honors the OS
+   query, so we rebind it here. Now `dark:bg-foo` fires whenever the
+   ancestor html has `data-theme="dark"`, perfectly tracking the toggle.
+*/
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Design tokens — VibeLeads
+   Direction: editorial-minimal. Strong type contrast, generous space,
+   one decisive accent, zero template-y aesthetic.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces */
+  --color-bg: oklch(99% 0.004 264);
+  --color-bg-alt: oklch(96.5% 0.006 264);
+  --color-surface: oklch(100% 0 0);
+  --color-border: oklch(90% 0.006 264);
+  --color-border-strong: oklch(82% 0.01 264);
+
+  /* Glass-morphism tokens — translucent surface + edge ring + soft shadow.
+     Used by .glass-card / .glass-panel / .glass-pill. The alpha values
+     stay conservative on light theme so text contrast doesn't degrade
+     when the surface sits above busy content. */
+  --glass-bg: color-mix(in oklab, white 78%, transparent);
+  --glass-bg-strong: color-mix(in oklab, white 86%, transparent);
+  --glass-border: color-mix(in oklab, white 92%, var(--color-fg) 8%);
+  --glass-border-bright: color-mix(in oklab, white 60%, var(--color-fg) 12%);
+  --glass-shadow:
+    0 1px 0 0 color-mix(in oklab, white 80%, transparent) inset,
+    0 8px 32px -12px color-mix(in oklab, var(--color-fg) 18%, transparent),
+    0 2px 6px -2px color-mix(in oklab, var(--color-fg) 8%, transparent);
+  --glass-blur: 18px;
+
+  /* Card hover elevation — used by `hover:shadow-[var(--shadow-card-hover)]`
+     across integration tiles, IcpTemplate cards, capability tiles, etc.
+     Light theme: soft accent-tinted drop shadow (visible against white).
+     Dark theme: deeper black drop shadow + a faint top-rim highlight so
+     the lift reads as elevation against a dark surface (otherwise a
+     dark-on-dark shadow is invisible). */
+  --shadow-card-hover: 0 8px 24px -12px oklch(15% 0.03 274 / 0.18);
+
+  /* Text */
+  --color-fg: oklch(20% 0.02 264);
+  --color-fg-muted: oklch(48% 0.02 264);
+  --color-fg-subtle: oklch(62% 0.015 264);
+  --color-fg-inverse: oklch(99% 0 0);
+
+  /* Accent — confident violet-blue */
+  --color-accent: oklch(56% 0.22 274);
+  --color-accent-hover: oklch(50% 0.22 274);
+  --color-accent-soft: oklch(96% 0.04 274);
+  --color-accent-fg: oklch(99% 0 0);
+
+  /* Status */
+  --color-success: oklch(62% 0.16 152);
+  --color-warning: oklch(72% 0.18 75);
+  --color-danger: oklch(58% 0.22 25);
+
+  /* Tone palette — used by tinted icon backplates on cards (IcpTemplates,
+     onboarding, capability tiles, etc). Each tone has a `bg` (pale tint
+     for light theme — overridden in dark) and a `fg` (saturated mid-L
+     hue used for the icon glyph itself). The `stone` tone reuses the
+     surface tokens so it inherits theme inversion automatically. */
+  --tone-violet-bg: oklch(94% 0.06 274);
+  --tone-violet-fg: oklch(56% 0.22 274);
+  --tone-rose-bg: oklch(96% 0.04 15);
+  --tone-rose-fg: oklch(56% 0.18 15);
+  --tone-amber-bg: oklch(96% 0.06 75);
+  --tone-amber-fg: oklch(56% 0.18 75);
+  --tone-emerald-bg: oklch(94% 0.06 152);
+  --tone-emerald-fg: oklch(50% 0.16 152);
+  --tone-indigo-bg: oklch(94% 0.05 252);
+  --tone-indigo-fg: oklch(50% 0.18 252);
+  --tone-sky-bg: oklch(94% 0.05 220);
+  --tone-sky-fg: oklch(54% 0.18 220);
+  --tone-stone-bg: var(--color-bg-alt);
+  --tone-stone-fg: var(--color-fg-muted);
+
+  /* Type scale (clamp for responsive) */
+  --text-display: clamp(2.75rem, 1.4rem + 5.5vw, 5.5rem);
+  --text-h1: clamp(2rem, 1.2rem + 3vw, 3.25rem);
+  --text-h2: clamp(1.5rem, 1.1rem + 1.5vw, 2.25rem);
+  --text-h3: 1.375rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+
+  /* Spacing rhythm */
+  --space-section: clamp(4rem, 2.5rem + 6vw, 9rem);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 240ms;
+
+  color-scheme: light;
+}
+
+/* ─── Dark theme ────────────────────────────────────────────────────────────
+   Inverts the surface stack while keeping the accent hue. The foreground
+   ramp is anchored at 92% L (instead of 100%) so eyes stay relaxed on
+   surfaces and large text doesn't bloom. Accent gets bumped to 70% L so
+   it stays vibrant against the dark surface, and accent-soft inverts to
+   a low-L tint instead of a near-white pastel.
+
+   Activation: <html data-theme="dark"> (set by ThemeToggle, persisted
+   in localStorage, honoring prefers-color-scheme on first paint).
+   ───────────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Surfaces — base (bg) is the deepest, surface > bg-alt > bg lifted in steps. */
+  --color-bg: oklch(15% 0.012 264);
+  --color-bg-alt: oklch(18% 0.014 264);
+  --color-surface: oklch(21% 0.014 264);
+  --color-border: oklch(28% 0.014 264);
+  --color-border-strong: oklch(36% 0.014 264);
+
+  /* Glass tokens on dark — invert: low-alpha black tint + bright edge so
+     the glass reads as elevated above the deep base. Border-bright gives
+     the rim-light look that sells the "real glass" effect on dark. */
+  --glass-bg: color-mix(in oklab, white 6%, transparent);
+  --glass-bg-strong: color-mix(in oklab, white 10%, transparent);
+  --glass-border: color-mix(in oklab, white 14%, transparent);
+  --glass-border-bright: color-mix(in oklab, white 28%, transparent);
+  --glass-shadow:
+    0 1px 0 0 color-mix(in oklab, white 18%, transparent) inset,
+    0 12px 32px -8px color-mix(in oklab, black 80%, transparent),
+    0 2px 6px -2px color-mix(in oklab, black 60%, transparent);
+
+  /* Text — slightly off-white at 92% so it doesn't bloom on the dark bg. */
+  --color-fg: oklch(92% 0.014 264);
+  --color-fg-muted: oklch(70% 0.014 264);
+  --color-fg-subtle: oklch(56% 0.014 264);
+  --color-fg-inverse: oklch(15% 0.012 264);
+
+  /* Accent — slightly lighter at 70% L so it remains vibrant on dark. */
+  --color-accent: oklch(70% 0.18 274);
+  --color-accent-hover: oklch(76% 0.16 274);
+  --color-accent-soft: oklch(28% 0.06 274);
+  --color-accent-fg: oklch(15% 0.012 264);
+
+  /* Status — pulled lighter so the chroma reads on a dark surface. */
+  --color-success: oklch(72% 0.18 152);
+  --color-warning: oklch(78% 0.18 75);
+  --color-danger: oklch(70% 0.22 25);
+
+  /* Tone palette — dark variants. Backplate L drops to ~24-28% (low-L,
+     low-chroma tinted dark) so the swatch reads as elevated against the
+     deep base instead of glowing white. Foreground L lifts to ~76-82%
+     so the icon glyph stays vibrant on the dark backplate. */
+  --tone-violet-bg: oklch(26% 0.07 274);
+  --tone-violet-fg: oklch(78% 0.18 274);
+  --tone-rose-bg: oklch(26% 0.05 15);
+  --tone-rose-fg: oklch(78% 0.16 15);
+  --tone-amber-bg: oklch(28% 0.06 75);
+  --tone-amber-fg: oklch(82% 0.16 75);
+  --tone-emerald-bg: oklch(24% 0.06 152);
+  --tone-emerald-fg: oklch(78% 0.16 152);
+  --tone-indigo-bg: oklch(26% 0.06 252);
+  --tone-indigo-fg: oklch(78% 0.16 252);
+  --tone-sky-bg: oklch(26% 0.06 220);
+  --tone-sky-fg: oklch(78% 0.16 220);
+  /* `stone` keeps `var(--color-bg-alt)` / `var(--color-fg-muted)` —
+     those tokens already invert on dark, so no override needed. */
+
+  /* Card hover elevation — dark variant.
+     Light shadow on dark surface is invisible, so we layer a deeper
+     black drop + a faint inset top rim so the card edge picks up
+     "highlight" — together they read as a real lift instead of a
+     no-op. MUST stay on one physical line — Lightning CSS strips
+     multi-line CSS-variable declarations during minification, which
+     silently kills the dark hover-elevation in production. */
+  /* prettier-ignore */
+  --shadow-card-hover: 0 -1px 0 0 color-mix(in oklab, white 8%, transparent) inset, 0 12px 28px -10px oklch(0% 0 0 / 0.55), 0 4px 10px -4px oklch(0% 0 0 / 0.4);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-muted: var(--color-fg-muted);
+  --color-subtle: var(--color-fg-subtle);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-accent-fg: var(--color-accent-fg);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family:
+    var(--font-sans),
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 320ms var(--ease-out-expo) both;
+}
+
+/* Indeterminate progress strip used by <BreathingBar /> */
+@keyframes breathing-bar {
+  0% {
+    transform: translateX(-30%);
+  }
+  50% {
+    transform: translateX(70%);
+  }
+  100% {
+    transform: translateX(170%);
+  }
+}
+
+/* Modal pop-in used by <Dialog /> (was referenced but never defined) */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* New-lead-row insertion flash on the live CRM table */
+@keyframes lead-row-flash {
+  0% {
+    background-color: var(--color-accent-soft);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.animate-lead-flash {
+  animation: lead-row-flash 1400ms var(--ease-out-expo);
+}
+
+/* Soft beam-sweep used by AgentTrace's active step */
+@keyframes beam-sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Pulsing dot used in StatusBadge for in-flight runs */
+@keyframes calm-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.45;
+  }
+}
+
+/* Slide-in for the mobile nav drawer (was a snap before) */
+@keyframes drawer-in {
+  from {
+    transform: translateX(-12%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Glass / morphism layer — premium surface treatment for high-visibility
+   panels (wizard steps, /search/[id] progress card, IntentPreview, hero
+   sections). Opt-in: surfaces add `.glass-card` / `.glass-panel` /
+   `.glass-pill`. The base editorial-minimal aesthetic stays intact for
+   content surfaces — glass is reserved for moments where the user is
+   waiting, deciding, or being shown a result.
+
+   Implementation notes:
+   - backdrop-filter: blur() needs `-webkit-backdrop-filter` for older
+     Safari. Both are listed.
+   - On browsers that don't support backdrop-filter the .no-backdrop
+     fallback renders a solid surface so we never lose readability.
+   - Border uses two-tone (rim-light) on dark mode so the glass edges
+     glow against the deep base — this is what sells the effect.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.glass-card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-panel {
+  position: relative;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border-bright);
+  border-radius: 1.5rem;
+  backdrop-filter: blur(calc(var(--glass-blur) + 6px)) saturate(150%);
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 6px)) saturate(150%);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-pill {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+
+/* Rim-light highlight that runs along the top edge of glass surfaces.
+   Applied via ::before so it doesn't interfere with the surface's own
+   content. Subtle — visible only against busy backgrounds. */
+.glass-card::before,
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, white 25%, transparent) 0%,
+    transparent 30%
+  );
+  mask-image: linear-gradient(to bottom, black 0%, transparent 40%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 40%);
+}
+
+[data-theme="dark"] .glass-card::before,
+[data-theme="dark"] .glass-panel::before {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, white 18%, transparent) 0%,
+    transparent 30%
+  );
+}
+
+/* Solid-surface fallback for browsers without backdrop-filter. Detected
+   via @supports — we lose the blur but keep a clean opaque surface so
+   readability is never compromised. */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-card,
+  .glass-panel,
+  .glass-pill {
+    background: var(--color-surface);
+  }
+}
+
+/* Aurora — animated gradient background used behind glass surfaces to
+   give them something to filter against. Three soft conic blobs that
+   drift slowly. Compositor-friendly (translate + opacity only). Opacity
+   is low enough that the brand stays calm; tune --aurora-intensity per
+   surface if a subtler / louder version is needed. */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-12%, -8%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(8%, 12%, 0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-12%, -8%, 0) rotate(360deg);
+  }
+}
+
+.aurora {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: var(--aurora-intensity, 0.55);
+  will-change: transform;
+}
+
+.aurora::before {
+  background:
+    radial-gradient(circle at 20% 30%, var(--color-accent) 0%, transparent 35%),
+    radial-gradient(
+      circle at 80% 70%,
+      color-mix(in oklab, var(--color-accent) 60%, white 40%) 0%,
+      transparent 40%
+    );
+  animation: aurora-drift 22s ease-in-out infinite;
+}
+
+.aurora::after {
+  background:
+    radial-gradient(
+      circle at 70% 20%,
+      color-mix(in oklab, var(--color-accent) 40%, white 60%) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 30% 80%,
+      color-mix(in oklab, var(--color-accent) 70%, transparent 30%) 0%,
+      transparent 35%
+    );
+  animation: aurora-drift 28s ease-in-out -8s infinite reverse;
+}
+
+[data-theme="dark"] .aurora::before,
+[data-theme="dark"] .aurora::after {
+  opacity: calc(var(--aurora-intensity, 0.55) * 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after {
+    animation: none !important;
+  }
+}

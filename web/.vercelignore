@@ -1,0 +1,21 @@
+# Vercel uploads everything except what's listed here. Mirrors .gitignore for
+# secrets and local-only files so they never reach Vercel's build sandbox.
+.env*
+!.env.example
+
+.next/
+out/
+build/
+node_modules/
+coverage/
+.vercel
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Tests / scratch
+/tmp/
+*.log

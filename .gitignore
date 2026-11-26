@@ -6,3 +6,8 @@ __pycache__/
 .private/
 outputs/
 .DS_Store
+
+web/node_modules/
+web/.next/
+web/.vercel/
+web/*.tsbuildinfo

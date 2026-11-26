@@ -78,7 +78,7 @@ Codex/OpenAI: use the portable package with the host’s supported installation 
 
 Cursor: copy the whole plugin into `~/.cursor/plugins/local/vibeleads-b2b`, reload the window and verify its 26 skills in Customize. A same-name marketplace edition takes precedence; external symlinks are unsupported. Other Agent Skills hosts can discover the shared `skills/` directory; keep the whole directory together because the skills share resources.
 
-See [platform support](https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/docs/platform-support.md) for tested and untested surfaces. Loading skills, connecting data, and marketplace approval are separate checks.
+See [platform support](https://github.com/khadinakbarlabs/vibeleads/blob/main/docs/platform-support.md) for tested and untested surfaces. Loading skills, connecting data, and marketplace approval are separate checks.
 
 ## Optional local tools
 
@@ -88,4 +88,4 @@ Python 3.10+ is needed for the optional mapping, quality, reporting and existing
 
 [Privacy](PRIVACY.md), [terms](TERMS.md), [security](SECURITY.md), [support](SUPPORT.md), [inspiration and attribution](THIRD-PARTY-NOTICES.md).
 
-The source is published at [khadinakbarlabs/vibeleads-plugin](https://github.com/khadinakbarlabs/vibeleads-plugin). Tagged packages are available from [GitHub Releases](https://github.com/khadinakbarlabs/vibeleads-plugin/releases). Vendor directory review and approval are separate from GitHub availability; see the [submission handoff](https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/docs/submission-handoff.md) for observed status.
+The source is published at [khadinakbarlabs/vibeleads-plugin](https://github.com/khadinakbarlabs/vibeleads). Tagged packages are available from [GitHub Releases](https://github.com/khadinakbarlabs/vibeleads/releases). Vendor directory review and approval are separate from GitHub availability; see the [submission handoff](https://github.com/khadinakbarlabs/vibeleads/blob/main/docs/submission-handoff.md) for observed status.

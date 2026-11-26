@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vibeleads": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=khadinakbar/vibeleads"
+    }
+  }
+}

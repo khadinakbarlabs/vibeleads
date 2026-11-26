@@ -1,0 +1,28 @@
+# Files Prettier should leave alone.
+#
+# Lockfiles in particular are managed by their package managers and
+# reformatting them produces enormous, churn-only diffs.
+
+# Lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+bun.lockb
+
+# Build / cache output
+.next/
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.vercel/
+
+# Auto-generated docs / data
+.next/types/
+
+# Common non-source patterns
+*.min.js
+*.min.css
+*.svg
+*.lock

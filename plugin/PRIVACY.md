@@ -1,6 +1,6 @@
 # VibeLeads privacy policy
 
-Publisher and maintainer: Khadin Akbar. This policy covers the open-source VibeLeads plugin at [the public repository](https://github.com/khadinakbarlabs/vibeleads-plugin).
+Publisher and maintainer: Khadin Akbar. This policy covers the open-source VibeLeads plugin at [the public repository](https://github.com/khadinakbarlabs/vibeleads).
 
 This skills-only package contains instructions, public source schema snapshots, examples, and offline quality/report/maintainer tools. It contains no hosted VibeLeads service, data-provider key or automatic telemetry. The offline helpers read specified local files and write requested outputs; they do not transmit them. Visual reports use embedded local styles/scripts, with no remote assets or tracking. Clicking an evidence link can open the user's source site.
 

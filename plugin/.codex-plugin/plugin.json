@@ -5,8 +5,8 @@
   "author": {
     "name": "Khadin Akbar"
   },
-  "homepage": "https://github.com/khadinakbarlabs/vibeleads-plugin",
-  "repository": "https://github.com/khadinakbarlabs/vibeleads-plugin",
+  "homepage": "https://github.com/khadinakbarlabs/vibeleads",
+  "repository": "https://github.com/khadinakbarlabs/vibeleads",
   "license": "MIT",
   "keywords": [
     "b2b",
@@ -29,10 +29,10 @@
     ],
     "logo": "./assets/icon.png",
     "composerIcon": "./assets/icon.png",
-    "websiteURL": "https://github.com/khadinakbarlabs/vibeleads-plugin",
-    "supportURL": "https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/plugin/SUPPORT.md",
-    "privacyPolicyURL": "https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/plugin/PRIVACY.md",
-    "termsOfServiceURL": "https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/plugin/TERMS.md",
+    "websiteURL": "https://github.com/khadinakbarlabs/vibeleads",
+    "supportURL": "https://github.com/khadinakbarlabs/vibeleads/blob/main/plugin/SUPPORT.md",
+    "privacyPolicyURL": "https://github.com/khadinakbarlabs/vibeleads/blob/main/plugin/PRIVACY.md",
+    "termsOfServiceURL": "https://github.com/khadinakbarlabs/vibeleads/blob/main/plugin/TERMS.md",
     "category": "Productivity",
     "capabilities": [
       "B2B prospecting",

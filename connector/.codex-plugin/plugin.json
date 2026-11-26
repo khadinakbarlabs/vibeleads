@@ -1,0 +1,25 @@
+{
+  "name": "vibeleads",
+  "version": "1.2.0",
+  "description": "Find local business leads in plain words, check their websites, and draft outreach. Uses only the VibeLeads tool, with a price quote and your yes before anything is spent.",
+  "author": {
+    "name": "Khadin Akbar"
+  },
+  "license": "MIT",
+  "keywords": ["leads", "local-business", "lead-generation", "agency", "outreach"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "VibeLeads",
+    "shortDescription": "Find local business leads that need your service",
+    "longDescription": "Ask for leads in plain words, for example dentists in Austin with no website. VibeLeads finds the businesses, checks emails and websites, scores each lead and explains why they need you. It always shows the price first and asks before spending. It drafts outreach but never sends anything.",
+    "developerName": "Khadin Akbar",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "defaultPrompt": [
+      "Find 30 dentists in Austin, TX with no website or a slow website.",
+      "Find med spas in Austin, hot leads only.",
+      "Find salons in London every week, only new ones."
+    ]
+  }
+}

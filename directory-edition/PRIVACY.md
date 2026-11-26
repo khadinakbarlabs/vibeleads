@@ -1,6 +1,6 @@
 # VibeLeads privacy policy
 
-Publisher and maintainer: Khadin Akbar. This policy covers the open-source VibeLeads plugin at [the public repository](https://github.com/khadinakbarlabs/vibeleads-plugin).
+Publisher and maintainer: Khadin Akbar. This policy covers the open-source VibeLeads plugin at [the public repository](https://github.com/khadinakbarlabs/vibeleads).
 
 This text-only directory edition contains instructions, public source schema snapshots and examples. It contains no bundled programs, hosted VibeLeads service, data-provider key or automatic telemetry. When the assistant follows the skills on local files it reads the files you name and writes the outputs you request in your chosen workspace; the instructions do not transmit them anywhere. Visual reports written by the assistant must use inline styles/scripts only, with no remote assets or tracking. Clicking an evidence link can open the user's source site.
 

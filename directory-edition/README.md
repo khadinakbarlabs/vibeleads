@@ -72,7 +72,7 @@ Scheduled research uses the host’s supported scheduler with explicit scope, ti
 
 ## Directory edition
 
-This folder is the **text-only directory edition** of VibeLeads, built for the Claude plugin directory. It contains only skills, reference documents, JSON schema snapshots and the icon: no Python helpers or other bundled programs. The **full edition**, with its offline helpers, lives in the `plugin/` folder of the [GitHub repository](https://github.com/khadinakbarlabs/vibeleads-plugin) and installs with `/plugin marketplace add khadinakbarlabs/vibeleads-plugin` then `/plugin install vibeleads-b2b@vibeleads-local`. Both editions use the same plugin name, so install only one.
+This folder is the **text-only directory edition** of VibeLeads, built for the Claude plugin directory. It contains only skills, reference documents, JSON schema snapshots and the icon: no Python helpers or other bundled programs. The **full edition**, with its offline helpers, lives in the `plugin/` folder of the [GitHub repository](https://github.com/khadinakbarlabs/vibeleads) and installs with `/plugin marketplace add khadinakbarlabs/vibeleads-plugin` then `/plugin install vibeleads-b2b@vibeleads-local`. Both editions use the same plugin name, so install only one.
 
 **Works the same:** all 26 skills and their triggers, ICP and source planning, the source catalog and about 150 Actor schema snapshots, the Apify CLI collection flow with its spending caps, consent before paid runs and no automatic retry of paid starts, contact-use and access gates, enrichment, email-state rules, outreach drafts, feedback, session continuity and scheduling guidance.
 
@@ -92,7 +92,7 @@ This folder is the **text-only directory edition** of VibeLeads, built for the C
 
 Claude Code: install this edition from the Claude plugin directory, or test it locally with `claude --plugin-dir /absolute/path/to/vibeleads/directory-edition`, then use `/vibeleads-b2b:lead-engine` or natural language. Keep the whole `skills/` directory together because the skills share resources.
 
-See [platform support](https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/docs/platform-support.md) for tested and untested surfaces. Loading skills, connecting data, and marketplace approval are separate checks.
+See [platform support](https://github.com/khadinakbarlabs/vibeleads/blob/main/docs/platform-support.md) for tested and untested surfaces. Loading skills, connecting data, and marketplace approval are separate checks.
 
 ## Working with files
 
@@ -102,4 +102,4 @@ Imports and reports need no account. Reading an existing run uses your configure
 
 [Privacy](PRIVACY.md), [terms](TERMS.md), [security](SECURITY.md), [support](SUPPORT.md), [inspiration and attribution](THIRD-PARTY-NOTICES.md).
 
-The source is published at [khadinakbarlabs/vibeleads-plugin](https://github.com/khadinakbarlabs/vibeleads-plugin). Tagged packages are available from [GitHub Releases](https://github.com/khadinakbarlabs/vibeleads-plugin/releases). Vendor directory review and approval are separate from GitHub availability; see the [submission handoff](https://github.com/khadinakbarlabs/vibeleads-plugin/blob/main/docs/submission-handoff.md) for observed status.
+The source is published at [khadinakbarlabs/vibeleads-plugin](https://github.com/khadinakbarlabs/vibeleads). Tagged packages are available from [GitHub Releases](https://github.com/khadinakbarlabs/vibeleads/releases). Vendor directory review and approval are separate from GitHub availability; see the [submission handoff](https://github.com/khadinakbarlabs/vibeleads/blob/main/docs/submission-handoff.md) for observed status.

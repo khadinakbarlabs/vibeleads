@@ -1,0 +1,19 @@
+<!--
+  Branded favicon — chevron + accent peak in violet, matches the
+  components/brand/LogoMark.tsx mark. Next 16 picks this up at /icon.svg
+  and uses it as the favicon, overriding the default favicon.ico.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#8b6df0"/>
+  <g
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="2.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(4 4)"
+  >
+    <path d="M4 7 L12 19 L20 5"/>
+    <path d="M16 9 L20 5 L20 11"/>
+  </g>
+</svg>
