@@ -27,7 +27,7 @@ Claude Code can also use this checkout’s project-level MCP entry. Choose eithe
 
 ## Run the web app
 
-The Next.js web client lives in `web/`. It includes account authentication, billing integration, the Apify workspace, application routes and Supabase migrations. [Local setup and service dependencies](web/README.md) · [Hosted web app](https://vibeleads-ten.vercel.app) · [Plugin licensing](LICENSE) · [Web application rights](web/NOTICE.md)
+The Next.js web client lives in `web/`. It includes account authentication, billing integration, the Apify workspace, application routes and Supabase migrations. [Local setup and service dependencies](web/README.md) · [VibeLeads product website](https://vibeleads.app/) · [Sign in to the workspace](https://vibeleads.app/workspace) · [Plugin licensing](LICENSE) · [Web application rights](web/NOTICE.md)
 
 ## Release archives
 
