@@ -107,3 +107,62 @@ test("local client restarts reuse setup without embedding a credential", () => {
   assert.ok(!localConfig(false).includes("Bearer"));
   assert.ok(setupPrompt.includes("before starting any paid work"));
 });
+
+test("saved people retain work address and status, signals retain publisher evidence and never enter contact coverage", async () => {
+  const response = [
+    {
+      kind: "person",
+      name: "Taylor",
+      workEmail: "taylor@example.org",
+      emailStatus: "catch_all",
+      location: "NY",
+      whyNow: [
+        { label: "Hiring", proof: "Official opening", internal: "omit" },
+      ],
+    },
+    {
+      kind: "creator",
+      handle: "studio",
+      profileUrl: "https://example.org/studio",
+      followers: 30,
+    },
+    {
+      kind: "post",
+      platform: "Reddit",
+      author: "producer",
+      text: "Seeking a freelance editor",
+      url: "https://example.org/post",
+      postedAt: "2026-11-20",
+      community: "editing",
+    },
+    {
+      name: "Dental practice",
+      whyTheyNeedYou: ["Slow mobile site", "No contact form"],
+    },
+    { kind: "post", text: "No source or author" },
+    { name: "Control", quoteId: "q" },
+  ];
+  const get = async (p: string) =>
+    p.includes("~")
+      ? json({
+          data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
+        })
+      : p.includes("records/lsleads.")
+        ? json(response)
+        : json({ id });
+  const loaded = await savedList(get, a, "prospecting", id);
+  const rows = loaded?.rows ?? [];
+  assert.equal(rows.length, 4);
+  assert.equal(rows[0].email, "taylor@example.org");
+  assert.equal(rows[0].emailStatus, "catch_all");
+  assert.equal(rows[0].whyNow, "Hiring: Official opening");
+  assert.equal(rows[2].kind, "post");
+  assert.equal(rows[2].postedAt, "2026-11-20");
+  assert.match(String(rows[3].whyTheyNeedYou), /No contact form/);
+  const { contactSummary } = await import("../lib/workspace/table");
+  assert.equal(contactSummary(rows.filter((x) => x.kind !== "post")).total, 3);
+  assert.equal(contactSummary(rows).email, 1);
+  const { datasetCsv } = await import("../lib/workspace/data-view");
+  assert.match(datasetCsv(rows), /taylor@example.org/);
+  assert.match(datasetCsv(rows), /Seeking a freelance editor/);
+});

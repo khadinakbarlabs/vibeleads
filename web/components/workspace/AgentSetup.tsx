@@ -3,7 +3,12 @@ import { useState } from "react";
 import { Terminal, Plug, Copy } from "lucide-react";
 import { CopyText } from "./CopyText";
 import { MCP_URL } from "@/lib/workspace/config";
-import { localCommand, localConfig, setupPrompt } from "@/lib/workspace/setup";
+import {
+  localCommand,
+  localConfig,
+  setupPrompt,
+  skillsInstall,
+} from "@/lib/workspace/setup";
 
 const clients = {
   ChatGPT: {
@@ -107,6 +112,16 @@ export function AgentSetup() {
             value={localConfig(token)}
             label="Copy client configuration"
           />
+        </details>
+        <details>
+          <summary>Install the VibeLeads playbooks in Claude Code</summary>
+          <p>
+            This package installs the open-source playbooks and their own hosted
+            Apify connection. Choose it in place of the standalone bridge
+            registration in Claude Code. Open /mcp to sign in after
+            installation.
+          </p>
+          <Snippet value={skillsInstall} label="Copy plugin install commands" />
         </details>
       </section>
       <section className="rd-card setup-prompt">

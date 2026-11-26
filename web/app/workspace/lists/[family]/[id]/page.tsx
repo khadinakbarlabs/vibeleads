@@ -39,7 +39,10 @@ export default async function Saved({
   }
   if (!data) notFound();
   const rows = data.rows,
-    counts = rows ? contactSummary(rows) : null;
+    counts = rows
+      ? contactSummary(rows.filter((row) => row.kind !== "post"))
+      : null;
+  const posts = rows?.filter((row) => row.kind === "post").length ?? 0;
   return (
     <WorkspaceShell name={a.username}>
       <Link className="vl-back-link" href="/workspace#saved">
@@ -58,41 +61,45 @@ export default async function Saved({
             Open the original in Apify ↗
           </a>
         </p>
-      ) : !counts?.total ? (
+      ) : !rows.length || !counts ? (
         <section className="rd-card">
-          <h2>No saved prospects</h2>
-          <p>This list contains no identifiable prospect records.</p>
+          <h2>No saved results</h2>
+          <p>This list contains no identifiable prospects or signal posts.</p>
         </section>
       ) : (
         <>
           <section className="rd-card contact-coverage">
-            <h2>Contact coverage</h2>
+            <h2>{counts.total ? "Contact coverage" : "Signal posts"}</h2>
             <p>
-              {counts.total.toLocaleString()} prospect records. An address on
-              file does not establish deliverability.
+              {counts.total.toLocaleString()} prospect records · {posts} signal
+              posts.{" "}
+              {counts.total > 0 &&
+                "An address on file does not establish deliverability."}
             </p>
-            <ul>
-              {(
-                [
-                  ["Email on file", counts.email],
-                  ["Phone on file", counts.phone],
-                  ["Website on file", counts.website],
-                ] as const
-              ).map(([label, n]) => (
-                <li key={label}>
-                  <span>{label}</span>
-                  <meter
-                    aria-label={label}
-                    min={0}
-                    max={counts.total}
-                    value={n}
-                  />
-                  <strong>
-                    {n} of {counts.total}
-                  </strong>
-                </li>
-              ))}
-            </ul>
+            {counts.total > 0 && (
+              <ul>
+                {(
+                  [
+                    ["Email on file", counts.email],
+                    ["Phone on file", counts.phone],
+                    ["Website on file", counts.website],
+                  ] as const
+                ).map(([label, n]) => (
+                  <li key={label}>
+                    <span>{label}</span>
+                    <meter
+                      aria-label={label}
+                      min={0}
+                      max={counts.total}
+                      value={n}
+                    />
+                    <strong>
+                      {n} of {counts.total}
+                    </strong>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
           <LeadTable filename={"vibeleads-" + id} rows={rows} />
         </>

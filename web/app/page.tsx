@@ -16,7 +16,11 @@ export default async function Home() {
         <Brand />
         <nav aria-label="Main navigation">
           <a href="#connect">Setup</a>
-          <Link href="/workspace">My results</Link>
+          {account ? (
+            <Link href="/workspace">My results</Link>
+          ) : (
+            <a href="/auth/apify/start">Sign in with Apify</a>
+          )}
           <a
             href="https://github.com/khadinakbarlabs/vibeleads"
             aria-label="VibeLeads on GitHub"
@@ -30,9 +34,10 @@ export default async function Home() {
           <div>
             <h1>Find the businesses that need what you sell.</h1>
             <p>
-              Describe your ideal customer in your AI assistant. VibeLeads finds
-              prospects, checks buying signals, enriches contact details and
-              scores the fit.
+              An open-source prospecting agent for your AI assistant. Describe
+              your ideal customer and run searches on your own Apify account.
+              VibeLeads finds prospects, checks buying signals, enriches contact
+              details and scores the fit.
             </p>
             <div className="buyer-actions">
               <a
@@ -70,11 +75,14 @@ export default async function Home() {
         <details className="lp-wrap buyer-compare">
           <summary>How does VibeLeads compare?</summary>
           <p>
-            Use the MIT-licensed connector and playbooks with hosted Apify tools
-            for list building and contact enrichment, workflows also offered by
-            Apollo and Clay. GojiBerry overlaps on signal-based prospecting.
-            Xply describes social feedback workflows. VibeLeads focuses on
-            finding and qualifying prospects for your offer.
+            The open-source parts are the MIT-licensed connector and agent
+            playbooks. Use them with hosted Apify tools for list building and
+            contact enrichment, workflows also offered by Apollo and Clay.
+            VibeLeads is an alternative for list building, enrichment, signal
+            research and scoring when those are the workflows you need.
+            GojiBerry overlaps on signal-based prospecting. Xply describes
+            social feedback workflows. VibeLeads focuses on finding and
+            qualifying prospects for your offer.
           </p>
         </details>
       </main>

@@ -23,3 +23,6 @@ export const localConfig = (withKey: boolean) =>
     null,
     2,
   );
+
+export const skillsInstall =
+  "claude plugin marketplace add khadinakbarlabs/vibeleads\nclaude plugin install vibeleads@vibeleads-local --scope user";

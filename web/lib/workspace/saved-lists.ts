@@ -155,61 +155,72 @@ export async function savedPage(
         : null,
   };
 }
-const textFields = new Set([
-  "name",
-  "businessName",
-  "company",
-  "companyName",
-  "title",
-  "jobTitle",
-  "role",
-  "kind",
-  "category",
-  "industry",
-  "address",
-  "searchedCity",
-  "city",
-  "region",
-  "country",
-  "domain",
-  "phone",
-  "email",
-  "emailStatus",
-  "priority",
-  "score",
-  "rating",
-  "reviews",
-  "whyTheyNeedYou",
-  "source",
-  "pitch",
-  "scoreWhy",
-]);
+const textFields = new Set(
+  "name businessName company companyName title jobTitle role kind category industry address searchedCity city region country domain phone email workEmail emailStatus priority score rating reviews whyTheyNeedYou source pitch scoreWhy description staffRange employeeCount revenueRange foundedYear fundingStage totalFunding firstName lastName seniority department companyDomain location headline daysInRole followers following posts avgViews engagementRate lastPostAt platform handle niche language accountType text author postedAt community checkedOn".split(
+    " ",
+  ),
+);
 const urlFields = new Set([
   "website",
   "sourceUrl",
   "linkedinUrl",
+  "companyLinkedinUrl",
   "googleMapsUrl",
   "profileUrl",
+  "authorUrl",
+  "url",
+  "linkInBio",
 ]);
+const listFields = new Set([
+  "sources",
+  "skills",
+  "investors",
+  "techUsed",
+  "matchedWords",
+  "whyTheyNeedYou",
+]);
+function safeUrl(value: unknown) {
+  if (typeof value !== "string") return null;
+  try {
+    const u = new URL(value);
+    if (["https:", "http:"].includes(u.protocol) && !u.username && !u.password)
+      return u.href;
+  } catch {}
+  return null;
+}
+function identifiable(r: Dict) {
+  if (r.kind === "post")
+    return Boolean(str(r.text) && (safeUrl(r.url) || str(r.author)));
+  if (r.kind === "creator" && str(r.handle)) return true;
+  return [
+    "name",
+    "firstName",
+    "businessName",
+    "company",
+    "companyName",
+    "domain",
+    "website",
+    "email",
+    "workEmail",
+    "profileUrl",
+  ].some((k) => str(r[k]));
+}
 export function savedProspects(input: unknown): DataRow[] {
   if (!Array.isArray(input)) throw Error("Saved result is not a list");
   return input.flatMap((value) => {
     const r = obj(value);
     if (
-      "tool" in r ||
-      "ok" in r ||
-      "result" in r ||
-      "error" in r ||
-      ![
-        "name",
-        "businessName",
-        "company",
-        "companyName",
-        "domain",
-        "website",
-        "email",
-        "profileUrl",
-      ].some((k) => str(r[k]))
+      [
+        "tool",
+        "ok",
+        "result",
+        "error",
+        "quoteId",
+        "estimate",
+        "nextCall",
+        "nextCalls",
+      ].some((k) => k in r) ||
+      !identifiable(r)
     )
       return [];
     const out: DataRow = {};
@@ -218,21 +229,36 @@ export function savedProspects(input: unknown): DataRow[] {
         textFields.has(k) &&
         ((typeof v === "number" && Number.isFinite(v)) || typeof v === "string")
       )
-        out[k] = typeof v === "string" ? v.slice(0, 2400) : v;
-      if (urlFields.has(k) && typeof v === "string") {
-        try {
-          const u = new URL(v);
-          if (
-            ["https:", "http:"].includes(u.protocol) &&
-            !u.username &&
-            !u.password
-          )
-            out[k] = u.href;
-        } catch {
-          /* A malformed source link has no usable target. */
-        }
+        out[k] = typeof v === "string" ? v.slice(0, 4200) : v;
+      if (urlFields.has(k)) {
+        const u = safeUrl(v);
+        if (u) out[k] = u;
       }
+      if (listFields.has(k) && Array.isArray(v))
+        out[k] = v
+          .filter((x): x is string => typeof x === "string")
+          .slice(0, 25)
+          .map((x) => x.slice(0, 500))
+          .join(" · ");
+      if (k === "whyNow" && Array.isArray(v))
+        out.whyNow = v
+          .slice(0, 25)
+          .map(obj)
+          .filter((x) => str(x.label))
+          .map((x) =>
+            [
+              str(x.label),
+              typeof x.proof === "string" ? x.proof.slice(0, 500) : "",
+            ]
+              .filter(Boolean)
+              .join(": "),
+          )
+          .join("\n");
+      if (["verified", "recentJobChange"].includes(k) && typeof v === "boolean")
+        out[k] = v;
     }
+    if (r.kind === "person" && str(r.workEmail) && !str(out.email))
+      out.email = str(r.workEmail);
     return Object.keys(out).length ? [out] : [];
   });
 }

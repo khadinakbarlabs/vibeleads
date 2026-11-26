@@ -1,6 +1,6 @@
 # VibeLeads
 
-Find and qualify businesses from a seller’s offer and target market. This repository contains the installable VibeLeads connector, the B2B skills package and the source for the VibeLeads web app.
+VibeLeads is an open-source prospecting agent for your AI assistant. Describe what you sell and who you want to reach. Use the MIT-licensed connector and playbooks to find prospects, research buying signals, enrich contacts and score fit. Searches run on your own Apify account. Apify hosts the engine; the web application is source-available under separate terms.
 
 ## Connect to the hosted Actor
 
@@ -22,7 +22,7 @@ claude mcp add --scope user --transport stdio vibeleads -- npx --yes mcp-remote@
 
 For another desktop stdio client set the command to `npx` and the arguments to `["--yes","mcp-remote@0.16.7","https://mcp.apify.com/?tools=khadinakbar/vibeleads"]`. If browser authorization is unavailable, set `APIFY_TOKEN` in the local client's secret environment and append `["--header","Authorization: Bearer ${APIFY_TOKEN}"]` to those arguments. The bridge expands the literal variable internally. Keep the token out of chat, URLs and checked-in configuration. [Bridge documentation](https://github.com/punkpeye/mcp-remote) · [Copy the setup prompt or client configuration](https://vibeleads.app/connect)
 
-ChatGPT users can open **Plugins → + → Add custom MCP server**, paste the hosted URL above and choose OAuth. In Claude, use **Settings → Connectors → Add custom connector**. Use the same Apify identity in the assistant and the [results dashboard](https://vibeleads.app/workspace). The dashboard reads your saved prospect lists and Actor-run datasets. Open a list for contact coverage, filtering and CSV export. This works with either connection method.
+ChatGPT users can open **Plugins → + → Add custom MCP server**, paste the hosted URL above and choose OAuth. In Claude, use **Settings → Connectors → Add custom connector**. Use the same Apify identity in the assistant and the [results dashboard](https://vibeleads.app/workspace). The dashboard reads your saved prospect lists and Actor-run datasets. Open a list for contact coverage, filtering and CSV export. This works with either connection method. In chat, use `lead_search_status` with a list ID, offset and limit for prospecting or enrichment lists. For local lists use `get_leads` or `export_leads`. Some saved data is cleaned up after about 30 days. Export a CSV to retain a copy.
 
 ## Install in your assistant
 
@@ -43,7 +43,7 @@ The Next.js web client lives in `web/`. It includes account authentication, bill
 
 ## Where it fits
 
-The MIT-licensed connector and playbooks support prospecting, signal research, enrichment and qualification via hosted Apify tools. Apollo and Clay overlap on list building and enrichment. GojiBerry overlaps on buying-signal prospecting. Xply describes social feedback workflows; that comparison is limited to signals. The web app has separate source-available terms. [Apollo](https://www.apollo.io/) · [Clay](https://www.clay.com/) · [GojiBerry](https://www.gojiberry.ai/) · [Xply](https://xply.com/) · [License scope](LICENSE)
+VibeLeads is an alternative for teams using these products for prospecting, signal research, enrichment or fit scoring. Apollo and Clay overlap on list building and enrichment. GojiBerry overlaps on buying-signal prospecting. Xply describes social feedback workflows; that comparison is limited to signals. The web app has separate source-available terms. [Apollo](https://www.apollo.io/) · [Clay](https://www.clay.com/) · [GojiBerry](https://www.gojiberry.ai/) · [Xply](https://xply.com/) · [License scope](LICENSE)
 
 ## Release archives
 
