@@ -54,12 +54,10 @@ export default async function Home() {
           </div>
           <aside className="sample-brief">
             <span>Example prospecting brief</span>
-            <blockquote>
-              “I am a video editor.”
-            </blockquote>
+            <blockquote>“I am a video editor.”</blockquote>
             <p>
-              The plugin suggests who could buy your work and where to find them.
-              Review the price before approving a paid search.
+              The plugin suggests who could buy your work and where to find
+              them. Review the price before approving a paid search.
             </p>
           </aside>
         </section>
