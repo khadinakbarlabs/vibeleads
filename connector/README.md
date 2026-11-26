@@ -30,8 +30,8 @@ Slash commands: `/find-leads`, `/lead-playbooks`, `/build-workflow`, `/check-web
 
 **Claude Code**
 
-1. Add this folder as a local marketplace: `/plugin marketplace add <path to this folder>`
-2. Install the plugin: `/plugin install vibeleads@vibeleads`
+1. Add the published marketplace with `/plugin marketplace add khadinakbarlabs/vibeleads`. For a checkout, use the repository root as the marketplace path
+2. Install the plugin: `/plugin install vibeleads@vibeleads-local`
 3. Type `/mcp`, pick `vibeleads`, and sign in.
 
 **Claude Cowork and the Claude desktop app**
@@ -50,7 +50,7 @@ The plugin connects to one address:
 https://mcp.apify.com/?tools=khadinakbar/vibeleads
 ```
 
-You sign in with your Apify account in the browser and press Allow. There is no key to copy or paste. You need a free Apify account.
+Sign in with your Apify account in the browser and approve access. For a local client that needs an API token, use the [stdio setup and secret-environment fallback](../README.md#install-a-local-connection).
 
 This address gives your assistant one VibeLeads tool, plus four helpers that only read results or stop a run.
 
