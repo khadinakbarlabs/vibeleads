@@ -333,3 +333,57 @@ export async function savedDownload(
     },
   });
 }
+
+export function salesSummary(rows: DataRow[]) {
+  const prospects = rows.filter((r) => r.kind !== "post");
+  const emailOnFile = prospects.filter(
+    (r) =>
+      typeof r.email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email),
+  );
+  const reportedPriority = { hot: 0, warm: 0, cold: 0 };
+  const scoreBands = [0, 0, 0];
+  let scores = 0;
+  for (const row of prospects) {
+    const priority =
+      typeof row.priority === "string" ? row.priority.toLowerCase() : "";
+    if (Object.hasOwn(reportedPriority, priority))
+      reportedPriority[priority as keyof typeof reportedPriority]++;
+    if (
+      typeof row.score === "number" &&
+      Number.isFinite(row.score) &&
+      row.score >= 0 &&
+      row.score <= 100
+    ) {
+      scores++;
+      scoreBands[row.score >= 70 ? 0 : row.score >= 45 ? 1 : 2]++;
+    }
+  }
+  const priorities = Object.values(reportedPriority).reduce(
+    (n, count) => n + count,
+    0,
+  );
+  const groups = priorities
+    ? ([
+        ["High priority", reportedPriority.hot],
+        ["Medium priority", reportedPriority.warm],
+        ["Low priority", reportedPriority.cold],
+      ] as const)
+    : scores
+      ? ([
+          ["Score 70–100", scoreBands[0]],
+          ["Score 45–69", scoreBands[1]],
+          ["Score below 45", scoreBands[2]],
+        ] as const)
+      : [];
+  return {
+    groups,
+    ranked: priorities || scores,
+    prospects: prospects.length,
+    emailOnFile: emailOnFile.length,
+    passedEmailCheck: emailOnFile.filter((r) => r.emailStatus === "verified")
+      .length,
+    withRecordedCheck: emailOnFile.some(
+      (r) => typeof r.emailStatus === "string" && r.emailStatus.trim() !== "",
+    ),
+  };
+}

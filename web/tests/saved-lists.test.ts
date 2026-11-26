@@ -197,3 +197,38 @@ test("oversize lists stream the exact selected JSON only after checking storage 
   );
   assert.equal(oversize?.rows, null);
 });
+
+test("reported fit and checked mail never promote unscored records, signals or catch-all mailboxes", async () => {
+  const { salesSummary } = await import("../lib/workspace/saved-lists");
+  const s = salesSummary([
+    {
+      kind: "person",
+      email: "buyer@example.org",
+      emailStatus: "verified",
+      priority: "hot",
+    },
+    { email: "catch@example.org", emailStatus: "catch_all", priority: "warm" },
+    { email: "unknown@example.org", emailStatus: "unknown" },
+    {
+      kind: "post",
+      email: "poster@example.org",
+      emailStatus: "verified",
+      priority: "hot",
+    },
+    { name: "No score or email" },
+  ]);
+  assert.equal(s.emailOnFile, 3);
+  assert.equal(s.passedEmailCheck, 1);
+  assert.deepEqual(
+    s.groups.map((x) => x[1]),
+    [1, 1, 0],
+  );
+  assert.equal(s.ranked, 2);
+  assert.deepEqual(
+    salesSummary([{ score: 71 }, { score: 45 }, { score: -1 }]).groups.map(
+      (x) => x[1],
+    ),
+    [1, 1, 0],
+  );
+  assert.deepEqual(salesSummary([{ name: "Unknown" }]).groups, []);
+});

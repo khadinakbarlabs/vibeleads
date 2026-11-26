@@ -3,7 +3,12 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { workspaceAccount } from "@/lib/workspace/auth";
 import { request, ApifyRequestError } from "@/lib/workspace/apify";
-import { isCollection, listId, savedList } from "@/lib/workspace/saved-lists";
+import {
+  isCollection,
+  listId,
+  savedList,
+  salesSummary,
+} from "@/lib/workspace/saved-lists";
 import { WorkspaceShell } from "@/components/workspace/WorkspaceShell";
 import { LeadTable } from "@/components/workspace/LeadTable";
 import { contactSummary } from "@/lib/workspace/table";
@@ -42,6 +47,7 @@ export default async function Saved({
     counts = rows
       ? contactSummary(rows.filter((row) => row.kind !== "post"))
       : null;
+  const sales = rows ? salesSummary(rows) : null;
   const posts = rows?.filter((row) => row.kind === "post").length ?? 0;
   return (
     <WorkspaceShell name={a.username}>
@@ -104,6 +110,37 @@ export default async function Saved({
               </ul>
             )}
           </section>
+          {sales && sales.emailOnFile > 0 && (
+            <p className="rd-card contact-coverage">
+              {sales.withRecordedCheck
+                ? `${sales.passedEmailCheck} of ${sales.emailOnFile} addresses on file were reported verified by the saved email check.`
+                : "Email-check status is unknown for these addresses."}
+            </p>
+          )}
+          {sales && sales.ranked > 0 && (
+            <section className="rd-card contact-coverage">
+              <h2>Who to contact first</h2>
+              <p>
+                {sales.ranked} of {sales.prospects} prospect records have a
+                saved priority or score in this breakdown. Review the reason
+                beside each prospect before reaching out.
+              </p>
+              <ul>
+                {sales.groups.map(([label, count]) => (
+                  <li key={label}>
+                    <span>{label}</span>
+                    <meter
+                      min={0}
+                      max={sales.ranked}
+                      value={count}
+                      aria-label={label}
+                    />
+                    <strong>{count}</strong>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <LeadTable filename={"vibeleads-" + id} rows={rows} />
         </>
       )}
