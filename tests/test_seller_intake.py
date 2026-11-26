@@ -82,3 +82,29 @@ class SellerIntakeTests(unittest.TestCase):
         plan = planner.build("I am a video editor. Skip Reddit.")
         self.assertNotIn("reddit.com", str(action(plan, "public-request")))
         self.assertIn("site:x.com", action(plan, "public-request")["query"])
+
+    def test_raw_product_buyer_and_software_query(self):
+        plan = planner.build("I sell inventory software to independent bicycle shops")
+        self.assertEqual(plan["buyerHypotheses"], ["independent bicycle shops"])
+        self.assertEqual(plan["saleType"], "software")
+        self.assertEqual(plan["offer"], "inventory software")
+        self.assertIn("inventory software", action(plan, "public-request")["query"])
+        self.assertNotIn("freelance", action(plan, "public-request")["query"])
+        self.assertEqual(action(plan, "business-fit")["arguments"]["filters"], {"keywords": "independent bicycle shops"})
+
+    def test_raw_service_buyer_market_with_restricted_source(self):
+        plan = planner.build("I design websites for independent dentists in Toronto, Canada. Skip Reddit.")
+        self.assertEqual(plan["buyerHypotheses"], ["independent dentists"])
+        self.assertEqual(action(plan, "maps-site")["arguments"]["locations"], ["Toronto, Canada"])
+        self.assertEqual(action(plan, "business-fit")["arguments"]["filters"]["location"], "Toronto, Canada")
+        self.assertNotIn("reddit.com", str(action(plan, "public-request")))
+        self.assertIn("site:x.com", action(plan, "public-request")["query"])
+
+    def test_supplier_and_service_preposition_holdouts(self):
+        plan = planner.build("We supply refillable bottles to boutique hotels in Bristol.")
+        self.assertEqual(plan["buyerHypotheses"], ["boutique hotels"])
+        self.assertEqual(plan["saleType"], "product")
+        self.assertIn("refillable bottles", action(plan, "public-request")["query"])
+        plan = planner.build("I translate manuals for equipment exporters in Japan.")
+        self.assertEqual(plan["buyerHypotheses"], ["equipment exporters"])
+        self.assertEqual(action(plan, "business-fit")["arguments"]["filters"]["location"], "Japan")

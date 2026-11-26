@@ -35,6 +35,25 @@ def infer_intent(brief):
     return "sell"
 
 
+def offer_clause(brief):
+    """Split a plain seller sentence without turning the buyer or geography into a product."""
+    opening = re.split(r"[.!?;]", brief, maxsplit=1)[0].strip()
+    match = re.match(r"(?:i|we)\s+(sell|supply|make|offer|provide|build|design|translate|edit|produce|create)"
+                     r"\s+(.+?)\s+(?:to|for)\s+(.+)$", opening, re.I)
+    if not match:
+        return "", "", "", ""
+    verb, item, audience = match.groups()
+    if re.match(r"(?:make|build|improve|sell|edit|help|hire)\b", audience, re.I):
+        return "", "", "", ""
+    group, _, place = re.sub(r"\s+in\s+", " | ", audience, flags=re.I, count=1).partition(" | ")
+    software = re.search(r"\b(?:software|saas|app|platform)\b", item, re.I)
+    sale_type = "software" if software else "product" if verb.lower() in {"sell", "supply", "make"} else "service"
+    if re.search(r"\b(?:services?|consulting|coaching|training|support|design|translation|photography)\b", item, re.I):
+        sale_type = "service"
+    deliverable = item if verb.lower() in {"sell", "supply", "offer", "provide", "make"} else verb + " " + item
+    return deliverable.strip(), group.strip(), place.strip(), sale_type
+
+
 def buyer_target(brief):
     """Capture a stated target and place. The assistant can supply more complex constraints."""
     match = re.search(r"\b(?:only pitch|i pitch|targeting|my customers are|my buyers are|find)\s+([^.!?;]+)", brief, re.I)
@@ -117,13 +136,17 @@ def build(brief, answers=None, catalog=None):
     if profile == catalog["fallback"] and not answers.get("offer") and (len(bare) < 3 or bare.casefold() in OPAQUE):
         return {"intent": "clarify_offer", "brief": raw,
                 "question": "What do clients pay you to make, supply or improve?", "methods": []}
-    offer = answers.get("offer") or profile.get("offer") or bare
+    deliverable, audience, area, sale_type = offer_clause(raw)
+    offer = answers.get("offer") or deliverable or profile.get("offer") or bare
     target, place = buyer_target(raw)
+    target, place = target or audience, place or area
     segments = answers.get("segments") or profile.get("segments", [])
     if answers.get("segment") or target:
         segments = [answers.get("segment") or target]
-    service = answers.get("serviceTerm") or profile.get("serviceTerm") or bare
-    sale = answers.get("saleType") or profile.get("saleType") or "service"
+    service = answers.get("serviceTerm") or (
+        deliverable if sale_type in {"software", "product"} else profile.get("serviceTerm")
+    ) or deliverable or bare
+    sale = answers.get("saleType") or sale_type or profile.get("saleType") or "service"
     if sale not in catalog["requestQueries"]:
         raise ValueError("Choose service, product or software.")
     role = answers.get("role") or profile.get("role", "")
