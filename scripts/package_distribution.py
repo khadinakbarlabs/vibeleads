@@ -1,6 +1,7 @@
 """Build both installable plugin layouts and a combined SHA256SUMS.txt."""
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import subprocess
 import zipfile
@@ -18,6 +19,10 @@ def write_connector(output):
         ".mcp.json", ".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
         ".codex-plugin/plugin.json", ".cursor-plugin/plugin.json", "LICENSE", "README.md", "TOOL-MAP.md",
     ]
+    skill = "skills/vibeleads-core"
+    names.extend([f"{skill}/references/seller-methods.json", f"{skill}/references/seller-intake.md",
+                  f"{skill}/scripts/seller_plan.py"])
+    version = json.loads((CONNECTOR / ".claude-plugin/plugin.json").read_text())["version"]
     for pattern in ("commands/*.md", "skills/*/SKILL.md"):
         names.extend(path.relative_to(CONNECTOR).as_posix() for path in CONNECTOR.glob(pattern))
     files = {}
@@ -28,7 +33,7 @@ def write_connector(output):
         files[name] = path.read_bytes()
     paths = []
     for layout, prefix in (("root", ""), ("portable", "vibeleads/")):
-        path = output / f"vibeleads-1.2.0-{layout}.zip"
+        path = output / f"vibeleads-{version}-{layout}.zip"
         with zipfile.ZipFile(path, "w") as archive:
             for name, data in files.items():
                 entry = zipfile.ZipInfo(prefix + name, (2026, 10, 5, 0, 0, 0))

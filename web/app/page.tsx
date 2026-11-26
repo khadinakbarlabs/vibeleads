@@ -34,8 +34,8 @@ export default async function Home() {
           <div>
             <h1>Find the businesses that need what you sell.</h1>
             <p>
-              An open-source prospecting agent for your AI assistant. Describe
-              your ideal customer and run searches on your own Apify account.
+              An open-source prospecting agent for your AI assistant. Start with
+              what you sell and run searches on your own Apify account.
               VibeLeads finds prospects, checks buying signals, enriches contact
               details and scores the fit.
             </p>
@@ -54,13 +54,10 @@ export default async function Home() {
           </div>
           <aside className="sample-brief">
             <span>Example prospecting brief</span>
-            <blockquote>
-              “I build websites for dental practices. Find dentists in Austin
-              whose sites are slow on mobile.”
-            </blockquote>
+            <blockquote>“I am a video editor.”</blockquote>
             <p>
-              Review the plan and price before approving a search. Open the
-              saved prospects in your dashboard.
+              The plugin suggests who could buy your work and where to find
+              them. Review the price before approving a paid search.
             </p>
           </aside>
         </section>

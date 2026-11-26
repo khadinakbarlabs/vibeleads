@@ -1,19 +1,23 @@
 ---
 name: vibeleads-core
-description: Shared rules for every VibeLeads request. Use whenever the user wants local business leads, a lead list, website checks on leads, lead exports, weekly lead automations, or anything else done with VibeLeads. Covers the one allowed tool, the call shape, the price quote and approval step, how to read results, saved lists, and error handling. Read this before any other VibeLeads skill.
+description: Activate for seller introductions in a client-finding context, including “I am a web designer”, “I am a video editor” or “I am XYZ”. Turn what they sell into client discovery. Shared rules for every VibeLeads request. Use whenever the user wants local business leads, a lead list, website checks on leads, lead exports, weekly lead automations, or anything else done with VibeLeads. Covers the one allowed tool, the call shape, the price quote and approval step, how to read results, saved lists, and error handling. Read this before any other VibeLeads skill.
 ---
 
 # VibeLeads core rules
 
 These rules apply to every VibeLeads skill and command. Follow them first.
 
+## Start from the seller’s offer
+
+When the seller introduces their profession or asks where to find clients, use [seller intake and discovery](references/seller-intake.md) and its method map before choosing a local playbook. Do not require a city or company name just to begin.
+
 ## 1. Work through VibeLeads
 
-- The only tool that does work is the VibeLeads tool from the `vibeleads` connector. Its name looks like `khadinakbar--vibeleads`.
+- The only tool that starts Actor work is the VibeLeads tool from the `vibeleads` connector. Its name looks like `khadinakbar--vibeleads`.
 - The connector also gives four read helpers: `get-actor-run`, `get-dataset-items`, `get-key-value-store-record`, `abort-actor-run`. Use them only on runs that VibeLeads started.
-- VibeLeads covers finding, checking, scoring and exporting leads, so do this work with the VibeLeads tool.
-- If VibeLeads cannot do something, say so in plain words and offer the closest thing it can do. Do not work around it.
-- Never invent leads, emails, phone numbers, ratings, or website findings. Every fact you show must come from a VibeLeads result.
+- Use VibeLeads for native finding, checking, scoring and exporting. The seller method map also describes a host-assisted public search.
+- If VibeLeads cannot do something, say so in plain words and offer the closest thing it can do. When the method map calls for host-assisted public search and the user allows it, the host may read ranked public originals without a new fee. Otherwise advance a supported Actor route.
+- Never invent leads, emails, phone numbers, ratings, or website findings. Attribute Actor results to their actual dataset or list. Attribute host-reviewed findings to the original public URL, date and author; never mix these origins or claim deliverability from a public invitation.
 
 ## 2. Call shape
 
@@ -23,7 +27,7 @@ Every call is one normal run. Send this input to the VibeLeads tool:
 { "tool": "plan_leads", "arguments": { "niche": "dentists", "locations": ["Austin, TX"], "count": 30 } }
 ```
 
-`tool` is one of the fixed names below. `arguments` is one object.
+`tool` is a released action from the live tool schema. The table covers the local playbooks; seller discovery uses the additional registered actions in the method map. `arguments` is one object.
 
 | Tool | What it does | Cost |
 |---|---|---|

@@ -1,9 +1,11 @@
 ---
 name: lead-engine
-description: Find and qualify B2B prospects from an offer, plan a company search, or coordinate discovery and enrichment into an evidence-backed lead list. Use for end-to-end prospecting; cleanup, reports and resuming a known lead task have focused routes.
+description: Use for seller introductions such as “I am a web designer” or “I am a video editor” when the user wants clients. Find and qualify B2B prospects from an offer, plan a company search, or coordinate discovery and enrichment into an evidence-backed lead list. Use for end-to-end prospecting; cleanup, reports and resuming a known lead task have focused routes.
 ---
 
 # VibeLeads Lead Engine
+
+For an offer or plain seller identity, follow [seller intake and discovery](references/seller-intake.md). Use its ranked methods and the access already available. This skills-only package can run the offline method helper; live Actor calls require a connected integration.
 
 
 Start with the user's requested result and available business context. Choose the shortest route below; a file report does not require connection onboarding, a new ICP, or a paid pilot. “Continue” needs a known prospecting task; generic code, release or writing work belongs to the relevant product workflow. Preserve all public skill IDs.
