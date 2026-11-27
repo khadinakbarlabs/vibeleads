@@ -6,6 +6,7 @@ Every call goes to the one VibeLeads tool (`khadinakbar--vibeleads`) with input 
 
 | The user asks for | Skill | VibeLeads tool and main arguments | Work done by |
 |---|---|---|---|
+| A seller website, brand or returning project | vibeleads-core | `seller_project` for the brand, website, preferences, next action, all-source costs and dated buyer inbox | Included public originals, connected databases, or separately quoted source runs |
 | "What can you do?", saved lists | vibeleads-core | `start` | VibeLeads itself |
 | Any business type in a city | find-local-leads | `plan_leads` then `find_leads`: `niche`, `location` or `locations`, `count`, `onlyWithEmail`, `minScore`, `minRating`, `maxRating`, `minReviews`, `maxReviews`, `websiteStatus`, `priority`, `listName`, `approved`, `maxSpendUsd` | khadinakbar/google-maps-leads-scraper, khadinakbar/email-address-validator, khadinakbar/website-uptime-monitor |
 | No website, slow or broken site | no-website-or-slow-site-leads | Playbook `no-website-finder`, `slow-website-finder` or `website-redesign-pitch`; or `plan_leads` then `find_leads` with `websiteStatus` (none, has, none_or_down); or `get_leads` with `onlyWithProblem` | Same three as above; speed playbooks add khadinakbar/google-pagespeed-insights and khadinakbar/bulk-whois-lookup |

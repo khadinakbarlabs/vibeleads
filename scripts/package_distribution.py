@@ -21,7 +21,7 @@ def write_connector(output):
     ]
     skill = "skills/vibeleads-core"
     names.extend([f"{skill}/references/seller-methods.json", f"{skill}/references/seller-intake.md",
-                  f"{skill}/scripts/seller_plan.py"])
+                  f"{skill}/references/seller-projects.md", f"{skill}/scripts/seller_plan.py"])
     version = json.loads((CONNECTOR / ".claude-plugin/plugin.json").read_text())["version"]
     for pattern in ("commands/*.md", "skills/*/SKILL.md"):
         names.extend(path.relative_to(CONNECTOR).as_posix() for path in CONNECTOR.glob(pattern))

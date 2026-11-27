@@ -5,6 +5,8 @@ description: Use for seller introductions such as “I am a web designer” or �
 
 # VibeLeads Lead Engine
 
+For a seller website, product, service, or returning brand, follow [seller projects and buyer intent](references/seller-projects.md). Use the connected project tool when available and call `decide` for returning projects and new profiles, then follow its check or search. Show original evidence, the next step and the project’s cost per usable opportunity. Label any current-chat-only fallback.
+
 For an offer or plain seller identity, follow [seller intake and discovery](references/seller-intake.md). Use its ranked methods and the access already available. This skills-only package can run the offline method helper; live Actor calls require a connected integration.
 
 

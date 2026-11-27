@@ -1,5 +1,7 @@
 # A seller has introduced themselves
 
+Start with [the seller’s website, saved brand and buyer intent](seller-projects.md) for a new or returning seller. Reuse this intake and its ranked routes for client discovery and on a host without project storage.
+
 In a VibeLeads conversation, “I am a video editor” means the seller wants buyers of editing. An employer hiring an editor wants candidates. An explicit request to hire, enrich an existing list or target a particular ICP takes precedence. “Find me editors” by itself merits one question about hiring versus finding clients. If the conversation has another purpose, a profession alone is insufficient reason to start prospecting.
 
 1. Extract the paid outcome, buyer, role, geography, exclusions, signals, requested contacts, quantity and spending decision from the conversation. Keep all explicit requirements. Treat inferred segments as hypotheses. For an unfamiliar but understandable profession, reason from who pays for the deliverable and what observable event creates need. For an opaque title like XYZ, ask only what customers pay them to deliver. If geography is missing, start a location-independent route while a local plan awaits a market. Don't assume the seller's language establishes a country.

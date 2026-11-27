@@ -47,4 +47,6 @@ VibeLeads is an alternative for teams using these products for prospecting, sign
 
 ## Release archives
 
-The current release contains the connected VibeLeads 1.3.1 plugin and VibeLeads B2B skills 0.4.1. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.
+A seller project can use your website to draft a buyer profile, remember your preferences and choose between checking a saved lead and searching again. It shows the buyer’s dated request, the invited response route and actual discovery cost per usable opportunity. These features use the seller-project tool on the connected backend. Hosts with an older backend can use the included search in the current chat.
+
+The current release contains the connected VibeLeads 1.4.0 plugin and VibeLeads B2B skills 0.5.0. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.

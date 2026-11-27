@@ -210,7 +210,8 @@ def build(brief, answers=None, catalog=None):
             if "maxChannels" in arguments:
                 arguments["maxChannels"] = min(10, answers["count"])
         methods.append({**method, "action": action, "missing": missing})
-    return {"intent": "sell", "brief": raw, "profile": profile["id"], "offer": offer,
+    return {"sellerWorkspace": {"tool": "seller_project", "arguments": {"operation": {"action": "list"}}},
+            "intent": "sell", "brief": raw, "profile": profile["id"], "offer": offer,
             "saleType": sale, "buyerHypotheses": segments, "role": role,
             "assistantInference": "" if segments else catalog["fallback"]["requiresInference"],
             "explicitConstraints": answers.get("constraints") or raw, "methods": methods}

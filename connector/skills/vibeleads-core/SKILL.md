@@ -9,6 +9,8 @@ These rules apply to every VibeLeads skill and command. Follow them first.
 
 ## Start from the seller’s offer
 
+For a seller website, product, service, or returning brand, open [seller projects and buyer intent](references/seller-projects.md). Ask once for an optional website and infer the buyer profile yourself. Call `decide` when the profile is ready or a seller returns. Follow its saved-lead check or search, carry `sellerTracking` into source calls, and report the buyer evidence, next step and actual cost per usable opportunity.
+
 When the seller introduces their profession or asks where to find clients, use [seller intake and discovery](references/seller-intake.md) and its method map before choosing a local playbook. Do not require a city or company name just to begin.
 
 ## 1. Work through VibeLeads
@@ -32,6 +34,7 @@ Every call is one normal run. Send this input to the VibeLeads tool:
 | Tool | What it does | Cost |
 |---|---|---|
 | `start` | Explains VibeLeads, lists saved lead lists and automations | Free |
+| `seller_project` | Saves a private brand, reads its website, learns preferences and reviews dated buyer requests | Project operations have no separate result fee. Native social discovery needs its own quote and approval. |
 | `list_playbooks` | Lists ready-made lead recipes | Free |
 | `plan_playbook` | Price quote for a playbook | Free |
 | `run_playbook` | Runs a playbook | Paid, needs approval |

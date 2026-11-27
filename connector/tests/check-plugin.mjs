@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STRICT_URL = 'https://mcp.apify.com/?tools=khadinakbar/vibeleads';
-const TOOLS = new Set(['start', 'list_playbooks', 'plan_playbook', 'run_playbook', 'plan_leads', 'find_leads', 'lead_status', 'get_leads', 'analyze_website', 'mark_lead', 'clean_list', 'export_leads', 'schedule_leads', 'manage_schedules', 'suggest_workflow', 'list_nodes', 'plan_workflow', 'run_workflow']);
+const TOOLS = new Set(['seller_project', 'start', 'list_playbooks', 'plan_playbook', 'run_playbook', 'plan_leads', 'find_leads', 'lead_status', 'get_leads', 'analyze_website', 'mark_lead', 'clean_list', 'export_leads', 'schedule_leads', 'manage_schedules', 'suggest_workflow', 'list_nodes', 'plan_workflow', 'run_workflow']);
 // Workflow step ids (nodes) from list_nodes; they appear in backticks in the workflow skills.
 const NODES = new Set(['find_places', 'filter_rating', 'filter_reviews', 'filter_website_status', 'filter_new', 'filter_priority', 'collect_contacts', 'validate_email', 'verify_email_premium', 'check_site_up', 'check_speed', 'check_domain_age', 'check_broken_links', 'seo_audit', 'check_social', 'ai_visibility', 'check_email_setup', 'detect_tech_stack', 'watch_site_changes', 'score_and_pitch', 'dedupe_against_list', 'save_list', 'export']);
 // Argument and field names written in backticks.
@@ -51,11 +51,11 @@ check(servers.vibeleads?.type === 'http', '.mcp.json: type must be "http"');
 const manifest = parsed['.claude-plugin/plugin.json'] || {};
 check(manifest.name === 'vibeleads', 'plugin.json: name must be "vibeleads"');
 check(manifest.displayName === 'VibeLeads', 'plugin.json: displayName must be "VibeLeads"');
-check(manifest.version === '1.3.1', 'plugin.json: version must be 1.3.1');
+check(manifest.version === '1.4.0', 'plugin.json: version must be 1.4.0');
 const market = parsed['.claude-plugin/marketplace.json'] || {};
-check(market.metadata?.version === '1.3.1', 'marketplace.json: metadata version must be 1.3.1');
-check(parsed['.cursor-plugin/plugin.json']?.version === '1.3.1', 'cursor plugin.json: version must be 1.3.1');
-check(parsed['.codex-plugin/plugin.json']?.version === '1.3.1', 'codex plugin.json: version must be 1.3.1');
+check(market.metadata?.version === '1.4.0', 'marketplace.json: metadata version must be 1.4.0');
+check(parsed['.cursor-plugin/plugin.json']?.version === '1.4.0', 'cursor plugin.json: version must be 1.4.0');
+check(parsed['.codex-plugin/plugin.json']?.version === '1.4.0', 'codex plugin.json: version must be 1.4.0');
 check(Array.isArray(market.plugins) && market.plugins.some((p) => p.name === 'vibeleads' && p.source === './'), 'marketplace.json: must list the vibeleads plugin with source "./"');
 for (const rel of ['README.md', 'LICENSE', 'TOOL-MAP.md']) check(existsSync(join(ROOT, rel)), `${rel}: missing`);
 

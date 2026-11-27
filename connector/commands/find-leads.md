@@ -8,7 +8,7 @@ argument-hint: "[seller introduction or target], e.g. I am a video editor"
 Request: $ARGUMENTS
 
 1. Read the `vibeleads-core` skill and follow it.
-2. For a seller introduction or an offer, follow [seller intake](../skills/vibeleads-core/references/seller-intake.md) now. Start a feasible route and keep an explicit ICP. For a specifically local lead search, pick the matching skill:
+2. For a seller website or brand, use [the seller project](../skills/vibeleads-core/references/seller-projects.md). Read a supplied site, infer the buyer profile, then call `decide` to check a saved lead or search again. Show the original, invitation, cost and next action. For a seller introduction or an offer, follow [seller intake](../skills/vibeleads-core/references/seller-intake.md) now. Start a feasible route and keep an explicit ICP. For a specifically local lead search, pick the matching skill:
    - no website, slow or broken website → `no-website-or-slow-site-leads`
    - weak SEO → `weak-seo-leads`
    - under N stars, low rating → `low-rating-leads`
