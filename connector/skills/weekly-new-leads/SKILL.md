@@ -13,7 +13,7 @@ An automation runs the same search on a timer in the user's own Apify account. I
 
 1. Collect: business type, area, how many per run, daily or weekly. Default is weekly.
 2. Pick a list name (lowercase letters, numbers, dashes), for example `london-salons`. The list name is what makes runs deliver only new businesses.
-3. Free quote for one run with `plan_leads` (same niche, locations, count and filters). If the user wants a playbook on a timer, quote with `plan_playbook` instead.
+3. Source quote for one run with `plan_leads` (same niche, locations, count and filters). If the user wants a playbook on a timer, quote with `plan_playbook` instead.
 4. Tell the user: the cost per run, the rough cost per month (weekly is about 4 runs, daily about 30), that it runs at 08:00 UTC (weekly on Mondays), and that only businesses not already delivered to this list are sent. Ask for a yes.
 5. After a yes:
 
@@ -44,4 +44,4 @@ Each run saves its leads in that run's dataset in the user's Apify account. The 
 - Only daily and weekly are offered.
 - A custom workflow cannot be put on a timer yet. Schedule a playbook or a plain search instead.
 - When an area runs dry, runs bring few or no new leads. Say so and suggest adding nearby cities.
-- If a run would cost more than the cap, it is skipped, not charged.
+- If the quoted source events exceed the per-run budget, the scheduler skips that source start. The hosted scheduling call may incur platform usage.

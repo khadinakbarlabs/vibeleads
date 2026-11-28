@@ -72,9 +72,21 @@ Scheduled research uses the host’s supported scheduler with explicit scope, ti
 
 ## Install from the same repository
 
-Claude Code: install from GitHub with `/plugin marketplace add khadinakbarlabs/vibeleads-plugin`, then `/plugin install vibeleads-b2b@vibeleads-local`. For local development, test with `claude --plugin-dir /absolute/path/to/vibeleads/plugin`, then use `/vibeleads-b2b:lead-engine` or natural language. For a local marketplace, run `/plugin marketplace add /absolute/path/to/vibeleads` followed by `/plugin install vibeleads-b2b@vibeleads-local` in Claude Code.
+**Install from GitHub.** In Claude Code use `claude plugin marketplace add khadinakbarlabs/vibeleads` followed by `claude plugin install vibeleads-b2b@vibeleads-local`. Codex users can clone the repository, run `codex plugin marketplace add /absolute/path/to/vibeleads`, then `codex plugin add vibeleads-b2b@vibeleads-local`.
 
-Codex/OpenAI: use the portable package with the host’s supported installation flow. Repository users can add its local marketplace with `codex plugin marketplace add /absolute/path/to/vibeleads`, then `codex plugin add vibeleads-b2b@vibeleads-local`. Restart/reload the host and verify component exposure. The package cannot make a local executable available to a cloud chat that lacks shell access.
+**Install from a downloaded ZIP.** Extract a root ZIP into its own folder, or open the vibeleads-b2b folder from a portable ZIP. Change to the folder containing this README. Run the pair for your client.
+
+```sh
+claude plugin marketplace add "$PWD"
+claude plugin install vibeleads-b2b@vibeleads-b2b
+```
+
+```sh
+codex plugin marketplace add "$PWD"
+codex plugin add vibeleads-b2b@vibeleads-b2b
+```
+
+Reload your client. Try “Find buyers for my product” or invoke the lead-engine skill. The B2B skills reuse your existing Apify connection. A cloud chat also needs support for the capabilities you intend to use.
 
 Cursor: copy the whole plugin into `~/.cursor/plugins/local/vibeleads-b2b`, reload the window and verify its 26 skills in Customize. A same-name marketplace edition takes precedence; external symlinks are unsupported. Other Agent Skills hosts can discover the shared `skills/` directory; keep the whole directory together because the skills share resources.
 

@@ -1,25 +1,34 @@
 {
   "name": "vibeleads",
-  "version": "1.4.0",
-  "description": "Find local business leads in plain words, check their websites, and draft outreach. Uses VibeLeads for Actor searches, with a price quote and your yes before anything is spent.",
+  "version": "1.4.1",
+  "description": "Find current buyers for your product or service, save projects and prepare evidence-backed next steps. Hosted calls can incur Apify usage. Paid source searches require your approval.",
   "author": {
     "name": "Khadin Akbar"
   },
   "license": "MIT",
-  "keywords": ["leads", "local-business", "lead-generation", "agency", "outreach"],
+  "keywords": [
+    "leads",
+    "local-business",
+    "lead-generation",
+    "agency",
+    "outreach"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "VibeLeads",
-    "shortDescription": "Find local business leads that need your service",
-    "longDescription": "Ask for leads in plain words, for example dentists in Austin with no website. VibeLeads finds the businesses, checks emails and websites, scores each lead and explains why they need you. It always shows the price first and asks before spending. It drafts outreach but never sends anything.",
+    "shortDescription": "Find buyer requests and suitable businesses",
+    "longDescription": "Share your offer or website. Review buyer requests, their dates and how to reply. Save project preferences, update lead outcomes and approve paid source searches or recurring searches when needed.",
     "developerName": "Khadin Akbar",
     "category": "Productivity",
-    "capabilities": ["Read"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "defaultPrompt": [
-      "I am a web designer.",
-      "Find med spas in Austin, hot leads only.",
-      "Find salons in London every week, only new ones."
+      "I am a video editor.",
+      "Check my saved opportunities and show me where I can apply today.",
+      "Show what I spent per usable opportunity."
     ]
   }
 }

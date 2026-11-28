@@ -17,7 +17,7 @@ Both are limited to the top 10 sites per run.
 ## On a saved list
 
 1. Get the `listId` (call `start` if needed).
-2. Free quote:
+2. Source quote:
 
 ```json
 { "tool": "analyze_website", "arguments": { "listId": "<listId>", "checks": ["seo", "links"], "topN": 10 } }

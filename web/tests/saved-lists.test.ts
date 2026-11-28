@@ -6,7 +6,7 @@ import {
   savedProspects,
   listId,
 } from "../lib/workspace/saved-lists";
-import { dashboardDestination } from "../lib/workspace/config";
+import { dashboardDestination, workspaceOrigin } from "../lib/workspace/config";
 import { localConfig, setupPrompt } from "../lib/workspace/setup";
 const id = "c6aede99-e28c-4f6d-91fa-2cc069c371ac",
   sid = "0123456789abcdefg";
@@ -142,14 +142,18 @@ test("saved people retain work address and status, signals retain publisher evid
     { kind: "post", text: "No source or author" },
     { name: "Control", quoteId: "q" },
   ];
-  const get = async (p: string) =>
-    p.includes("~")
-      ? json({
-          data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
-        })
-      : p.includes("records/lsleads.")
-        ? json(response)
-        : json({ id });
+  const get = async (p: string) => {
+    if(p.endsWith("~vibeleads-mcp-state-2"))throw Object.assign(new Error("Missing extra store"),{status:404});
+    if (p.includes("~"))
+      return json({
+        data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
+      });
+    if (p.includes("/keys?"))
+      return json({ data: { items: [], isTruncated: false } });
+    if (p.includes("records/lsleads.")) return json(response);
+    if (p.includes("records/lsearch.")) return json({ id });
+    throw Object.assign(new Error("Missing fixture record"), { status: 404 });
+  };
   const loaded = await savedList(get, a, "prospecting", id);
   const rows = loaded?.rows ?? [];
   assert.equal(rows.length, 4);
@@ -173,19 +177,20 @@ test("oversize lists stream the exact selected JSON only after checking storage 
   const body = '[{"name":"One exact record"}]';
   const get = async (p: string) => {
     paths.push(p);
-    return p.includes("~")
-      ? json({
-          data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
-        })
-      : new Response(body);
+    if(p.endsWith("~vibeleads-mcp-state-2"))throw Object.assign(new Error("Missing extra store"),{status:404});
+    if (p.includes("~"))
+      return json({
+        data: { id: sid, name: "vibeleads-mcp-state", userId: "owner" },
+      });
+    if (p.includes("/keys?"))
+      return json({ data: { items: [], isTruncated: false } });
+    if (p.includes("records/leads.")) return new Response(body);
+    throw Object.assign(new Error("Missing fixture record"), { status: 404 });
   };
   const res = await savedDownload(get, a, "local", id);
   assert.match(res!.headers.get("content-disposition")!, /attachment/);
   assert.equal(await res!.text(), body);
-  assert.equal(
-    paths.at(-1),
-    "key-value-stores/" + sid + "/records/leads." + id,
-  );
+  assert.ok(paths.includes("key-value-stores/" + sid + "/records/leads." + id));
   const oversize = await savedList(
     async (p) =>
       p.includes("/records/leads.")
@@ -260,4 +265,22 @@ test("the saved check chart accepts explicit deliverable synonyms but excludes s
     emailStatus: "valid",
   });
   assert.equal(salesSummary(rows).passedEmailCheck, 5);
+});
+
+test("the default workspace sign-in remains on the public domain", () => {
+  const previous = process.env.APIFY_OAUTH_ORIGIN;
+  delete process.env.APIFY_OAUTH_ORIGIN;
+  try {
+    assert.equal(workspaceOrigin().origin, "https://www.vibeleads.app");
+    assert.equal(
+      dashboardDestination(new URL("https://www.vibeleads.app/workspace")),
+      null,
+    );
+    assert.equal(
+      dashboardDestination(new URL("https://vibeleads.app/workspace"))?.origin,
+      "https://www.vibeleads.app",
+    );
+  } finally {
+    if (previous !== undefined) process.env.APIFY_OAUTH_ORIGIN = previous;
+  }
 });

@@ -12,7 +12,7 @@ The speed check tests each site the way a phone visitor sees it. It also reports
 ## On a saved list
 
 1. You need the `listId`. If you do not have it, call `start` and let the user pick a list.
-2. Free quote (no `approved`):
+2. Source quote (no `approved`):
 
 ```json
 { "tool": "analyze_website", "arguments": { "listId": "<listId>", "checks": ["speed", "domain"], "topN": 10 } }

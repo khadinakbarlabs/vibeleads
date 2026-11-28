@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import tempfile
 import zipfile
 
 from package_release import package
@@ -16,7 +17,7 @@ CONNECTOR = REPO / "connector"
 def write_connector(output):
     subprocess.run(["node", CONNECTOR / "tests/check-plugin.mjs"], check=True)
     names = [
-        ".mcp.json", ".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
+        "tests/check-plugin.mjs", ".mcp.json", ".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
         ".codex-plugin/plugin.json", ".cursor-plugin/plugin.json", "LICENSE", "README.md", "TOOL-MAP.md",
     ]
     skill = "skills/vibeleads-core"
@@ -45,6 +46,11 @@ def write_connector(output):
                 raise ValueError("Archive file list differs from the connector.")
             if any(archive.read(prefix + name) != data for name, data in files.items()):
                 raise ValueError("Archived connector differs from source.")
+        with tempfile.TemporaryDirectory(prefix="vibeleads-connector-") as scratch:
+            with zipfile.ZipFile(path) as archive:
+                archive.extractall(scratch)
+            root = Path(scratch) / prefix
+            subprocess.run(["node", "tests/check-plugin.mjs"], cwd=root, check=True)
         paths.append(path)
     return paths
 

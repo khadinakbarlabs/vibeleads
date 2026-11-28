@@ -19,7 +19,7 @@ Each lead's `scoreWhy` shows how its points add up. Read it out when the user as
 
 ## If the user already has a list
 
-Read only the hot ones, for free:
+Read only the hot ones:
 
 ```json
 { "tool": "get_leads", "arguments": { "listId": "<listId>", "priority": "hot", "limit": 25 } }

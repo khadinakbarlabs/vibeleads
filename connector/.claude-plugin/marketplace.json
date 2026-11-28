@@ -4,13 +4,13 @@
     "name": "Khadin Akbar"
   },
   "metadata": {
-    "description": "VibeLeads: find local and B2B leads that need your service, from inside your AI assistant.",
-    "version": "1.4.0"
+    "description": "Find and review buyer requests and suitable businesses in your assistant.",
+    "version": "1.4.1"
   },
   "plugins": [
     {
       "name": "vibeleads",
-      "description": "Find local and B2B leads in plain words, check their websites, and draft outreach through the VibeLeads MCP server, with a price quote and your yes before anything is spent.",
+      "description": "Find current buyers for your product or service, save projects and prepare evidence-backed next steps. Hosted calls can incur Apify usage. Paid source searches require your approval.",
       "source": "./"
     }
   ]

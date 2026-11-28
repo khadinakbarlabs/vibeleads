@@ -4,9 +4,10 @@ import {
   isCollection,
   listId,
   savedDownload,
+  savedList,
 } from "@/lib/workspace/saved-lists";
 export async function GET(
-  _request: Request,
+  httpRequest: Request,
   { params }: { params: Promise<{ family: string; id: string }> },
 ) {
   const account = await workspaceAccount();
@@ -20,6 +21,15 @@ export async function GET(
   if (!isCollection(family) || !listId(id))
     return error(404, "List not found.");
   try {
+    if (new URL(httpRequest.url).searchParams.get("view") === "results") {
+      const page = await savedList(request, account, family, id);
+      if (!page) return error(404, "List not found.");
+      if (!page.rows)
+        return error(413, "Use the full list download for this list.");
+      return Response.json(page.rows, {
+        headers: { "Cache-Control": "private, no-store" },
+      });
+    }
     return (
       (await savedDownload(
         (path, token) => request(path, token, 120_000),

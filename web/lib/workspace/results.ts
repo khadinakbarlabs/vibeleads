@@ -51,6 +51,10 @@ const collections = [
   "results",
   "contacts",
   "companies",
+  "opportunities",
+  "candidates",
+  "creators",
+  "destinations",
 ];
 // For control responses surface only customer-facing outcome fields. Lead rows retain their business data.
 const jobStatus: Record<string, string> = {
@@ -101,6 +105,46 @@ export function mapResults(rows: DataRow[]): DataRow[] {
     if (isJobsEnvelope(row)) return [jobsSummary(row)];
     if (typeof row.tool !== "string") return [row];
     const result = record(row.result) ? row.result : {};
+    if (row.tool === "seller_project" && record(result.costs)) {
+      const summary: DataRow = {
+        workflow: "Seller project costs at the time of this run",
+        projectId: result.projectId,
+        costsAtRun: result.costs,
+      };
+      if (record(result.businessResults))
+        summary.businessResultsAtRun = result.businessResults;
+      const next = record(result.sellerNext) ? result.sellerNext : {};
+      if (typeof next.kind === "string" && next.kind !== "respond")
+        summary.decisionAtRun = {
+          kind: next.kind,
+          reason: next.reason,
+          retryAt: next.retryAt,
+        };
+      if (Array.isArray(result.lines))
+        return [
+          summary,
+          ...result.lines.filter(record).map((line) => ({
+            workflow: "Discovery cost recorded in this run",
+            ...line,
+          })),
+        ];
+      if (Array.isArray(result.rows))
+        return [...result.rows.filter(record), summary];
+      if (record(next.card))
+        return [
+          {
+            evidence: next.card,
+            status: next.card.status,
+            original: {
+              url: next.card.originalUrl,
+              checkedAt: next.card.checkedAt,
+              route: next.card.route,
+            },
+          },
+          summary,
+        ];
+      return [summary];
+    }
     if (row.tool === "export_leads" && typeof result.csv === "string") {
       try {
         return parse(result.csv, {
@@ -114,7 +158,14 @@ export function mapResults(rows: DataRow[]): DataRow[] {
     }
     for (const key of collections) {
       const list = result[key];
-      if (Array.isArray(list) && list.every(record)) return list;
+      if (Array.isArray(list) && list.every(record)) {
+        if (row.tool === "prepare_backlink_campaign" && key === "opportunities")
+          return list.map((item) => ({
+            ...item,
+            prospectType: "Publisher to review for a pitch",
+          }));
+        return list;
+      }
     }
     const item: DataRow = { workflow: workflowName(row.tool) };
     for (const key of [

@@ -18,6 +18,7 @@ import {
   cellText,
   CONTACT_KEYS,
   contactSummary,
+  currentSelection,
   defaultVisible,
   emptyView,
   facets,
@@ -104,9 +105,11 @@ function Detail({ row }: { row: DataRow }) {
 export function LeadTable({
   rows,
   filename,
+  currentRowsUrl,
 }: {
   rows: DataRow[];
   filename: string;
+  currentRowsUrl: string;
 }) {
   const columns = useMemo(() => tableColumns(rows), [rows]);
   const filters = useMemo(
@@ -126,6 +129,8 @@ export function LeadTable({
   const [pageSize, setPageSize] = useState(50);
   const [page, setPage] = useState(1);
   const [copied, setCopied] = useState(false);
+  const [exportError, setExportError] = useState("");
+  const [exporting, setExporting] = useState(false);
 
   const shown = useMemo(() => applyView(rows, view), [rows, view]);
   const pages = Math.max(1, Math.ceil(shown.length / pageSize));
@@ -153,6 +158,51 @@ export function LeadTable({
   const emails = [
     ...new Set(target.map((r) => cellText(r.email).trim()).filter(Boolean)),
   ];
+  async function exportCurrent(format: "csv" | "columns" | "json" | "emails") {
+    setExportError("");
+    setExporting(true);
+    try {
+      const response = await fetch(currentRowsUrl, { cache: "no-store" });
+      if (!response.ok)
+        throw Error("Could not check current results. Reload and try again.");
+      const current = currentSelection(await response.json(), view, selected);
+      if (!current.length)
+        throw Error("No rows in this selection are currently available.");
+      if (format === "emails") {
+        const addresses = [
+          ...new Set(
+            current.map((r) => cellText(r.email).trim()).filter(Boolean),
+          ),
+        ];
+        if (!addresses.length)
+          throw Error("No email addresses remain in this selection.");
+        await navigator.clipboard.writeText(addresses.join("\n"));
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1600);
+      } else if (format === "json") {
+        download(
+          filename + ".json",
+          "application/json",
+          JSON.stringify(current, null, 2),
+        );
+      } else {
+        const subset = format === "columns";
+        download(
+          filename + (subset ? ".csv" : "-all-fields.csv"),
+          "text/csv",
+          datasetCsv(subset ? pickColumns(current, visible) : current),
+        );
+      }
+    } catch (error) {
+      setExportError(
+        error instanceof Error
+          ? error.message
+          : "Export unavailable. Reload and try again.",
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
 
   return (
     <section className="lt" aria-label="Results table">
@@ -296,53 +346,36 @@ export function LeadTable({
               </p>
               <button
                 type="button"
-                onClick={() =>
-                  download(
-                    filename + ".csv",
-                    "text/csv",
-                    datasetCsv(pickColumns(target, visible)),
-                  )
-                }
+                disabled={exporting}
+                onClick={() => exportCurrent("columns")}
               >
                 CSV, visible columns
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  download(
-                    filename + "-all-fields.csv",
-                    "text/csv",
-                    datasetCsv(target),
-                  )
-                }
+                disabled={exporting}
+                onClick={() => exportCurrent("csv")}
               >
                 CSV, all fields
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  download(
-                    filename + ".json",
-                    "application/json",
-                    JSON.stringify(target, null, 2),
-                  )
-                }
+                disabled={exporting}
+                onClick={() => exportCurrent("json")}
               >
                 JSON, all fields
               </button>
               {emails.length > 0 && (
                 <button
                   type="button"
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(emails.join("\n"));
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 1600);
-                  }}
+                  disabled={exporting}
+                  onClick={() => exportCurrent("emails")}
                 >
                   <Copy size={14} aria-hidden />
                   {copied ? "Copied" : `Copy ${emails.length} emails`}
                 </button>
               )}
+              {exportError && <p role="alert">{exportError}</p>}
             </div>
           </details>
         </div>

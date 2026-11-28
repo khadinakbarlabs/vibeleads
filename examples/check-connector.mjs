@@ -76,10 +76,33 @@ const init = await send(
 );
 headers["mcp-protocol-version"] = init.protocolVersion;
 await send("notifications/initialized", {});
-const { tools } = await send("tools/list", {}, 2);
-if (!tools.some((t) => /vibeleads/i.test(t.name)))
-  throw new Error("VibeLeads is missing from the gateway.");
-console.log(
-  `${init.serverInfo.name} ${init.serverInfo.version} · MCP ${init.protocolVersion}`,
-);
-console.log(tools.map((t) => t.name).join("\n"));
+const tools = [];
+const cursors = new Set();
+let cursor;
+let requestId = 2;
+do {
+  const page = await send("tools/list", cursor ? { cursor } : {}, requestId++);
+  tools.push(...page.tools);
+  cursor = page.nextCursor;
+  if (cursor && cursors.has(cursor)) throw new Error("Gateway returned a repeated tools cursor.");
+  if (cursor) cursors.add(cursor);
+} while (cursor);
+
+const actor = tools.find((tool) => tool.name.replace(/[^a-z]/g, "") === "khadinakbarvibeleads");
+const actions = new Set(actor?.inputSchema?.properties?.tool?.enum ?? []);
+const required = [
+  ["buyer routing", actions.has("route_leads")],
+  ["project storage and opportunity review", actions.has("seller_project")],
+  ["B2B list readback", actions.has("lead_search_status")],
+  ["local CSV readback", actions.has("export_leads")],
+  ["dataset readback", tools.some((tool) => tool.name === "get-dataset-items")],
+  ["structured output readback", tools.some((tool) => tool.name === "get-key-value-store-record")],
+];
+console.log(`${init.serverInfo.name} ${init.serverInfo.version} · MCP ${init.protocolVersion}`);
+for (const [feature, available] of required) {
+  console.log(`${available ? "Advertised" : "Missing"} — ${feature}`);
+}
+if (required.some(([, available]) => !available)) {
+  console.error("Refresh or reconnect the VibeLeads MCP server and reselect it in your chat. If project tools remain unavailable, use the included search and keep results in this chat.");
+  process.exitCode = 1;
+}

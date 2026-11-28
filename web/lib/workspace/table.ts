@@ -156,6 +156,25 @@ function compare(a: unknown, b: unknown) {
   return cellText(a).localeCompare(cellText(b), undefined, { numeric: true });
 }
 
+export function currentSelection(
+  rows: DataRow[],
+  view: TableView,
+  selected: Set<DataRow>,
+) {
+  const filtered = applyView(rows, view);
+  if (!selected.size) return filtered;
+  const identity = (row: DataRow) =>
+    typeof row.leadId === "string" && row.leadId
+      ? "id:" + row.leadId
+      : JSON.stringify(
+          Object.entries(row)
+            .filter(([key]) => !["status", "note", "at"].includes(key))
+            .sort(([a], [b]) => a.localeCompare(b)),
+        );
+  const allowed = new Set([...selected].map(identity));
+  return filtered.filter((row) => allowed.has(identity(row)));
+}
+
 export function applyView(rows: DataRow[], view: TableView): DataRow[] {
   const query = view.query.trim().toLowerCase();
   const result = rows.filter((row) => {

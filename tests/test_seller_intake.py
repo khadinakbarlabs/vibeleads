@@ -16,6 +16,67 @@ def action(plan, key):
 
 
 class SellerIntakeTests(unittest.TestCase):
+    def test_included_buyer_posts_and_separately_approved_native_sources(self):
+        method = next(m for m in planner.build("I am a video editor. Free sources only.")["methods"] if m["id"] == "public-request")
+        self.assertEqual(method["action"]["mode"], "host_public_search")
+        self.assertIn("included public search", method["requires"])
+        self.assertIn("Paid native Reddit or X searches require their own quote and seller approval", method["requires"])
+        self.assertNotIn("later wave", method["requires"])
+    def test_seller_asking_for_a_list_and_employer_asking_for_a_worker(self):
+        self.assertEqual(planner.build("I need a list of prospects for my design agency.")["intent"], "sell")
+        self.assertEqual(planner.build("I need a video editor for my team.")["intent"], "hire")
+        self.assertEqual(planner.build("I need a video editor for my clients.")["intent"], "hire")
+
+    def test_generic_call_to_action_preserves_explicit_business_audience(self):
+        plan = planner.build("We sell dental scheduling software to clinics. Find me clients.")
+        self.assertEqual(plan["buyerHypotheses"], ["clinics"])
+        self.assertIn("clinics", action(plan, "public-request")["query"])
+
+    def test_commercial_offers_without_a_buyer_and_product_descriptions(self):
+        for brief, kind, term in [
+                ("I sell headphones.", "product", "headphones"),
+                ("Our product is invoicing software for architects.", "software", "invoicing software"),
+                ("I sell bookkeeping.", "service", "bookkeeping"),
+                ("I make promotional videos for restaurants.", "service", "promotional videos")]:
+            with self.subTest(brief=brief):
+                plan = planner.build(brief)
+                self.assertEqual(plan["saleType"], kind)
+                self.assertIn(term, action(plan, "public-request")["query"])
+
+    def test_named_source_limits_and_unknown_platform(self):
+        for instruction, domain in [("TikTok only.", "tiktok.com"), ("Search only on Vimeo.", "vimeo.com")]:
+            with self.subTest(instruction=instruction):
+                plan = planner.build("I am a video editor. " + instruction)
+                self.assertEqual([method["id"] for method in plan["methods"]], ["public-request"])
+                self.assertIn("site:" + domain, action(plan, "public-request")["query"])
+                self.assertIsNone(plan["methods"][0]["fallback"])
+        self.assertEqual(planner.build("I am a video editor. Search only on VideoBazaar.")["methods"], [])
+        excluded = action(planner.build("I am a video editor. No social media."), "public-request")["query"]
+        for domain in ("reddit.com", "tiktok.com", "facebook.com"):
+            self.assertIn("-site:" + domain, excluded)
+        free = planner.build("I am a video editor. Free sources only.")
+        self.assertEqual([m["action"]["mode"] for m in free["methods"]], ["host_public_search"])
+        self.assertIsNone(free["methods"][0]["fallback"])
+
+    def test_negative_specialty_preserves_occupation_and_audience(self):
+        plan = planner.build("I am a podcast editor for dance studios. No video work.")
+        self.assertEqual(plan["buyerHypotheses"], ["dance studios"])
+        self.assertNotIn("video editor", action(plan, "public-request")["query"])
+
+    def test_successive_explicit_limits_survive_actor_handoffs(self):
+        brief = "I am a web designer. Find 8 clinics in Paris."
+        plan = planner.build(brief)
+        self.assertEqual(action(plan, "business-fit")["arguments"]["filters"]["count"], 8)
+        for invalid in (0, 1001, 30000):
+            plan = planner.build(f"I am a web designer. Find {invalid} clinics in Berlin.")
+            self.assertEqual(plan["methods"], [])
+            self.assertIn("count", plan["next"].lower())
+        plan = planner.build("I am a video editor. YouTube only. Find 24 channels.", {
+            "country": "CA", "language": "en", "channelTopic": "cooking"})
+        self.assertEqual(action(plan, "channel-fit")["arguments"]["maxChannels"], 24)
+        plan = planner.build("I am a web designer. Find 2 clinics in Berlin.", {"country": "DE", "language": "de"})
+        self.assertEqual(action(plan, "organic-fit")["arguments"]["maxResults"], 2)
+
     def test_installed_method_contract(self):
         for name in ("scripts/seller_plan.py", "references/seller-methods.json", "references/seller-intake.md"):
             self.assertEqual((CONNECTED / name).read_bytes(), (B2B / name).read_bytes())
@@ -48,7 +109,8 @@ class SellerIntakeTests(unittest.TestCase):
         plan = planner.build("I am a web designer. I only pitch independent dental practices in Toronto. No social media. Budget $0.10")
         self.assertEqual(action(plan, "business-fit")["arguments"]["filters"],
                          {"keywords": "independent dental practices", "location": "Toronto"})
-        self.assertFalse(any(m["id"] == "public-request" for m in plan["methods"]))
+        self.assertIn("-site:reddit.com", action(plan, "public-request")["query"])
+        self.assertIn("-site:linkedin.com", action(plan, "public-request")["query"])
         self.assertIn("$0.10", plan["explicitConstraints"])
         plan = planner.build("I am a video editor. Freelance roles only.", {"market": "Toronto"})
         self.assertEqual(action(plan, "hiring-signal")["arguments"]["filters"],
@@ -80,8 +142,8 @@ class SellerIntakeTests(unittest.TestCase):
         self.assertEqual([m["id"] for m in plan["methods"]], ["channel-fit"])
         self.assertIn("site:youtube.com", action(plan, "channel-fit")["query"])
         plan = planner.build("I am a video editor. Skip Reddit.")
-        self.assertNotIn("reddit.com", str(action(plan, "public-request")))
-        self.assertIn("site:x.com", action(plan, "public-request")["query"])
+        self.assertIn("-site:reddit.com", action(plan, "public-request")["query"])
+        self.assertNotIn("site:x.com", action(plan, "public-request")["query"])
 
     def test_raw_product_buyer_and_software_query(self):
         plan = planner.build("I sell inventory software to independent bicycle shops")
@@ -97,8 +159,8 @@ class SellerIntakeTests(unittest.TestCase):
         self.assertEqual(plan["buyerHypotheses"], ["independent dentists"])
         self.assertEqual(action(plan, "maps-site")["arguments"]["locations"], ["Toronto, Canada"])
         self.assertEqual(action(plan, "business-fit")["arguments"]["filters"]["location"], "Toronto, Canada")
-        self.assertNotIn("reddit.com", str(action(plan, "public-request")))
-        self.assertIn("site:x.com", action(plan, "public-request")["query"])
+        self.assertIn("-site:reddit.com", action(plan, "public-request")["query"])
+        self.assertNotIn("site:x.com", action(plan, "public-request")["query"])
 
     def test_supplier_and_service_preposition_holdouts(self):
         plan = planner.build("We supply refillable bottles to boutique hotels in Bristol.")

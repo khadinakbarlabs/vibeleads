@@ -18,7 +18,7 @@ Three checks read the businesses' own public websites. Each is billed per websit
 ## Steps
 
 1. Ask what the user sells. Weak email setup suits email deliverability and outreach help. Old technology suits web design and development.
-2. For email setup or technology, use the playbook. Quote with `plan_playbook` (free), show the cost, and wait for a yes:
+2. For email setup or technology, use the playbook. Quote with `plan_playbook`, show the cost, and wait for a yes:
 
 ```json
 { "tool": "plan_playbook", "arguments": { "playbook": "email-setup-pitch", "niche": "dentists", "location": "Austin, TX", "count": 10 } }

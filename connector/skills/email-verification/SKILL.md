@@ -13,7 +13,7 @@ There are two levels. Say which one you are using.
 
 Every search and playbook runs the basic check on each email it finds. It costs about 0.09 cents per email. It looks at the address format, the mail server and known throwaway domains. It does not send a test message. Each lead shows `emailStatus`. The safest are `verified` and `shared-inbox`; `unconfirmed` may not reach anyone.
 
-To clean the emails on a list you already have, use `clean_list` (see [clean-and-export-leads](../clean-and-export-leads/SKILL.md)). Without `approved` it returns a free quote; with `"checkEmails": true` and `"approved": true` it checks each unique email once.
+To clean the emails on a list you already have, use `clean_list` (see [clean-and-export-leads](../clean-and-export-leads/SKILL.md)). Without `approved` it returns a source quote; with `"checkEmails": true` and `"approved": true` it checks each unique email once.
 
 ## Level 2: premium verification (optional, only when asked)
 

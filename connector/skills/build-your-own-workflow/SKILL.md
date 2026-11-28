@@ -12,15 +12,15 @@ A workflow is a chain of steps (called nodes) that run in order: find businesses
 ## Steps
 
 1. Ask what the user sells and what the leads must have, one question at a time. Also get the business type, the area and how many.
-2. Call `suggest_workflow` (free). It answers from a fixed table of rules and returns a chain with the reason for each step and ready `planArguments`.
+2. Call `suggest_workflow`. It answers from a fixed table of rules and returns a chain with the reason for each step and ready `planArguments`.
 
 ```json
 { "tool": "suggest_workflow", "arguments": { "sells": "web design", "needs": ["no_website", "contacts"], "niche": "roofers", "locations": ["Dallas, TX", "Houston, TX"], "count": 50 } }
 ```
 
    `sells` is one of: web design, web development, SEO, local SEO, website optimization, ads, social media, email outreach, other. `needs` is any of: contacts, no_website, slow_website, weak_seo, low_rating, new_businesses, hot_only, verified_emails, ai_visibility, email_setup, outdated_tech, site_changes. `sells` also accepts email deliverability. An unknown `sells` is treated as other; unknown `needs` are named and ignored.
-3. To see every step and its live price, call `list_nodes` (free).
-4. Check and price the chain with `plan_workflow` (free). Pass the returned `planArguments`, or your own `nodes`:
+3. To see every step and its live price, call `list_nodes`.
+4. Check and price the chain with `plan_workflow`. Pass the returned `planArguments`, or your own `nodes`:
 
 ```json
 { "tool": "plan_workflow", "arguments": { "nodes": [ { "node": "find_places" }, { "node": "filter_website_status", "options": { "status": "none" } }, { "node": "collect_contacts" }, { "node": "validate_email" }, { "node": "score_and_pitch" }, { "node": "save_list" } ], "niche": "roofers", "locations": ["Dallas, TX"], "count": 50 } }
@@ -37,9 +37,9 @@ A workflow is a chain of steps (called nodes) that run in order: find businesses
 | Node | What it does | Price per unit |
 |---|---|---|
 | `find_places` | Finds businesses on Google Maps. Always first | about 0.4 cents per business |
-| `filter_rating`, `filter_reviews` | Keep by stars or review count (`min`, `max`) | free |
-| `filter_website_status` | `status`: none, has, none_or_down | free |
-| `filter_new` | Looks new: few reviews (`maxReviews`, default 10) | free |
+| `filter_rating`, `filter_reviews` | Keep by stars or review count (`min`, `max`) | No separate event fee |
+| `filter_website_status` | `status`: none, has, none_or_down | No separate event fee |
+| `filter_new` | Looks new: few reviews (`maxReviews`, default 10) | No separate event fee |
 | `collect_contacts` | Reads the business's own website for phone and email | about 0.3 cents per website |
 | `validate_email` | Basic email check | about 0.09 cents per email |
 | `verify_email_premium` | Optional paid email check | about 3.6 cents per email |
@@ -51,10 +51,10 @@ A workflow is a chain of steps (called nodes) that run in order: find businesses
 | `check_email_setup` | Email setup grade A to F (fake-mail protection, blocklists), top 25 sites | about 0.2 cents per website |
 | `detect_tech_stack` | Platform, tools and old or missing technology, top 25 sites | about 0.25 cents per website |
 | `watch_site_changes` | Saves each website now; reports real changes on later runs. Needs option `watchlist` | about 1 cent per website at most |
-| `score_and_pitch` | Score, priority, reason and pitch line | free |
-| `filter_priority` | Keep hot, warm or cold, after scoring | free |
-| `dedupe_against_list` | Skip businesses a named list already delivered | free |
-| `save_list`, `export` | Save the list, CSV text | free |
+| `score_and_pitch` | Score, priority, reason and pitch line | No separate event fee |
+| `filter_priority` | Keep hot, warm or cold, after scoring | No separate event fee |
+| `dedupe_against_list` | Skip businesses a named list already delivered | No separate event fee |
+| `save_list`, `export` | Save the list, CSV text | No separate event fee |
 
 Order rules: `find_places` first; `check_site_up` before deeper website checks (including `check_email_setup`, `detect_tech_stack` and `watch_site_changes`); `watch_site_changes` cannot be combined with `dedupe_against_list`; `validate_email` before `verify_email_premium`; `score_and_pitch` before `filter_priority` and `save_list`; `save_list` last (only `export` may follow). Always take prices from the live quote, not from this table.
 

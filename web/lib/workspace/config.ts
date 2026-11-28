@@ -6,7 +6,7 @@ export const OAUTH_CLIENT_METADATA = "/.well-known/apify-oauth-client.json";
 
 export function workspaceOrigin(): URL {
   const origin = new URL(
-    process.env.APIFY_OAUTH_ORIGIN || "https://vibeleads-ten.vercel.app",
+    process.env.APIFY_OAUTH_ORIGIN || "https://www.vibeleads.app",
   );
   if (
     origin.protocol !== "https:" ||

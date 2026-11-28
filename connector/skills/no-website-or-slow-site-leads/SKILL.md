@@ -19,7 +19,7 @@ If the user asks for "no website or slow website" together, use `website-redesig
 
 ## By hand: search with a website filter
 
-1. Free quote with `plan_leads`. Add `websiteStatus`:
+1. Source quote with `plan_leads`. Add `websiteStatus`:
    - `"none"`: no website listed
    - `"none_or_down"`: no website, or a website that does not load
    - `"has"`: has a website (use this before speed checks)

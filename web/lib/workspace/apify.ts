@@ -1,5 +1,7 @@
 import "server-only";
-import { isJobsEnvelope, workflowName } from "./results";
+import { isJobsEnvelope, resultTitle, workflowName } from "./results";
+import { sellerRunResults } from "./run-results";
+import type { Account } from "./saved-lists";
 import { z } from "zod";
 import { ACTOR_ID } from "./config";
 import { historyStatus, isOwnedRun, type DataRow } from "./data-view";
@@ -14,6 +16,7 @@ const runSchema = z.object({
   finishedAt: z.string().nullish(),
   buildNumber: z.string().nullish(),
   defaultDatasetId: objectId.nullish(),
+  defaultKeyValueStoreId: objectId.nullish(),
 });
 
 export type WorkspaceRun = z.infer<typeof runSchema>;
@@ -143,6 +146,25 @@ export async function workspaceDataset(
       return { rows: [], total: 0 };
     throw error;
   }
+}
+
+export async function workspaceSellerDataset(
+  account: Account,
+  run: WorkspaceRun,
+  page: number,
+) {
+  if (!isOwnedRun(run, ACTOR_ID, account.accountId))
+    throw Error("Run unavailable");
+  const { rows, total } = await workspaceDataset(
+    account.accessToken,
+    run,
+    page,
+  );
+  return {
+    rows: await sellerRunResults(request, account, run, rows),
+    total,
+    title: resultTitle(rows),
+  };
 }
 
 export type ActivityRun = Pick<

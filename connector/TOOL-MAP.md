@@ -37,7 +37,9 @@ Every call goes to the one VibeLeads tool (`khadinakbar--vibeleads`) with input 
 
 ## Rule for every paid tool
 
-Quote first with the free tool (`plan_leads`, `plan_playbook`, `plan_workflow`; `analyze_website` and `clean_list` without `approved`). Show the cost. Run only after the user says yes: call the paid tool (`find_leads`, `run_playbook`, `run_workflow`, `schedule_leads`, `analyze_website`) with the same arguments plus `"approved": true` and `"maxSpendUsd"`.
+Hosted plans, exports and updates can incur platform usage. A source estimate limits estimated event charges. Show additional or unknown charges and respect an all-in limit.
+
+Quote first with the planning tool (`plan_leads`, `plan_playbook`, `plan_workflow`; `analyze_website` and `clean_list` without `approved`). Show the cost. Run only after the user says yes: call the paid tool (`find_leads`, `run_playbook`, `run_workflow`, `schedule_leads`, `analyze_website`) with the same arguments plus `"approved": true` and `"maxSpendUsd"`.
 
 ## Honest limits to repeat
 
@@ -46,7 +48,7 @@ Quote first with the free tool (`plan_leads`, `plan_playbook`, `plan_workflow`; 
 - A workflow cannot be scheduled yet; schedule a playbook or a plain search.
 - `watch_site_changes` shows nothing but a saved starting point on its first run. Use the same watchlist name and the same websites on every later run. A workflow with it cannot also use `dedupe_against_list`.
 
-## Read helpers (no work, no cost)
+## Read and cancellation helpers
 
 | Helper | Use |
 |---|---|
@@ -68,7 +70,7 @@ Quote first with the free tool (`plan_leads`, `plan_playbook`, `plan_workflow`; 
 
 ## Not supported
 
-- Checking a plain website address that is not in a saved list.
+- Technical prospect-site audits require a saved list. The project reader can analyze the seller’s own website to infer an ideal customer profile.
 - Sending emails or messages.
 - Review text, ad spend, private people, opening dates, Google rankings or traffic.
 - Any Actor outside VibeLeads' own fixed list.

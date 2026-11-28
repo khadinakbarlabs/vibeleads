@@ -1,3 +1,6 @@
+import {emailEvidence} from "./mailbox-evidence.js";
+import { contactPolicy, listPolicy, type RecordStore } from "./saved-list-policy";
+import { recordArray } from "./record-array";
 import type { DataRow } from "./data-view";
 
 export const collections = {
@@ -32,8 +35,8 @@ export const isCollection = (x: unknown): x is Collection =>
 export const listId = (x: unknown): x is string =>
   typeof x === "string" &&
   /^[a-f\d]{8}-(?:[a-f\d]{4}-){3}[a-f\d]{12}$/i.test(x);
-type Account = { username: string; accountId: string; accessToken: string };
-type Get = (path: string, token: string) => Promise<Response>;
+export type Account = { username: string; accountId: string; accessToken: string };
+export type Get = (path: string, token: string) => Promise<Response>;
 type Dict = Record<string, unknown>;
 const obj = (x: unknown): Dict =>
   x && typeof x === "object" && !Array.isArray(x) ? (x as Dict) : {};
@@ -65,6 +68,84 @@ async function storePath(get: Get, a: Account, c: Collection) {
   )
     throw Error("Cannot confirm saved-list ownership");
   return "key-value-stores/" + s.id;
+}
+function policyStore(get: Get, path: string, token: string): RecordStore {
+  return {
+    async get(key) {
+      const response = await optional(
+        get,
+        path + "/records/" + encodeURIComponent(key),
+        token,
+      );
+      return response ? response.json() : null;
+    },
+    async keys(prefix, limit, after) {
+      const found: string[] = [];
+      let cursor = after;
+      while (found.length < limit) {
+        const query = new URLSearchParams({
+          prefix,
+          limit: String(limit - found.length),
+        });
+        if (cursor) query.set("exclusiveStartKey", cursor);
+        const data = obj(
+          (await (await get(path + "/keys?" + query, token)).json()).data,
+        );
+        if (!Array.isArray(data.items))
+          throw Error("Saved list permissions unavailable");
+        const keys = data.items.map((item) => obj(item).key);
+        if (
+          !keys.every(
+            (key): key is string =>
+              typeof key === "string" &&
+              key.startsWith(prefix) &&
+              (!cursor || key > cursor),
+          )
+        )
+          throw Error("Invalid permission records");
+        found.push(...keys);
+        if (!data.isTruncated) break;
+        if (!keys.length || data.nextExclusiveStartKey !== keys.at(-1))
+          throw Error("Incomplete permission records");
+        cursor = keys.at(-1);
+      }
+      return found;
+    },
+  };
+}
+async function accountListPolicy(get:Get, account:Account, family:Collection, path:string, id:string) {
+  const alternate = family.endsWith("-secondary") ? "local" : "local-secondary";
+  const other = await storePath(get,account,alternate);
+  return listPolicy(policyStore(get,path,account.accessToken),id,other && other!==path ? policyStore(get,other,account.accessToken) : undefined);
+}
+export async function runContactPolicy(
+  get: Get,
+  account: Account,
+  id: unknown,
+  origin: unknown,
+) {
+  const stores = await Promise.all(
+    (["local", "local-secondary"] as const).map(async (family) => {
+      const name = collections[family].store;
+      const path = await storePath(get, account, family);
+      return path
+        ? { name, store: policyStore(get, path, account.accessToken) }
+        : null;
+    }),
+  );
+  const available = stores.filter((store) => !!store);
+  const knownOrigin = Object.values(collections).some(
+    (family) => family.store === origin,
+  );
+  const markStores = knownOrigin
+    ? available.filter((item) => item.name === origin)
+    : available;
+  return contactPolicy(
+    available.map((item) => item.store),
+    markStores.map((item) => item.store),
+    listId(id) ? id : undefined,
+    true,
+  );
 }
 async function title(
   get: Get,
@@ -156,7 +237,7 @@ export async function savedPage(
   };
 }
 const textFields = new Set(
-  "name businessName company companyName title jobTitle role kind category industry address searchedCity city region country domain phone email workEmail emailStatus priority score rating reviews whyTheyNeedYou source pitch scoreWhy description staffRange employeeCount revenueRange foundedYear fundingStage totalFunding firstName lastName seniority department companyDomain location headline daysInRole followers following posts avgViews engagementRate lastPostAt platform handle niche language accountType text author postedAt community checkedOn".split(
+  "leadId status note at providerEmailStatus mailboxType emailOwnership emailDeliverability name businessName company companyName title jobTitle role kind category industry address searchedCity city region country domain phone email workEmail emailStatus priority score rating reviews whyTheyNeedYou source pitch scoreWhy description staffRange employeeCount revenueRange foundedYear fundingStage totalFunding firstName lastName seniority department companyDomain location headline daysInRole followers following posts avgViews engagementRate lastPostAt platform handle niche language accountType text author postedAt community checkedOn".split(
     " ",
   ),
 );
@@ -205,12 +286,8 @@ function identifiable(r: Dict) {
     "profileUrl",
   ].some((k) => str(r[k]));
 }
-export function savedProspects(input: unknown): DataRow[] {
-  if (!Array.isArray(input)) throw Error("Saved result is not a list");
-  return input.flatMap((value) => {
-    const r = obj(value);
-    if (
-      [
+function eligible(row:Dict) {
+  return !([
         "tool",
         "ok",
         "result",
@@ -219,10 +296,19 @@ export function savedProspects(input: unknown): DataRow[] {
         "estimate",
         "nextCall",
         "nextCalls",
-      ].some((k) => k in r) ||
-      !identifiable(r)
-    )
-      return [];
+      ].some((k) => k in row) ||
+      !identifiable(row));
+}
+function withEmailEvidence(row:Dict){
+  if(!str(row.workEmail)&&!str(row.email))return row;
+  const evidence=emailEvidence(row);
+  return {...row,...evidence,emailStatus:evidence.emailStatus==="unconfirmed"?row.emailStatus||evidence.emailStatus:evidence.emailStatus};
+}
+export function savedProspects(input: unknown): DataRow[] {
+  if (!Array.isArray(input)) throw Error("Saved result is not a list");
+  return input.flatMap((value) => {
+    const r = withEmailEvidence(obj(value));
+    if (!eligible(r)) return [];
     const out: DataRow = {};
     for (const [k, v] of Object.entries(r)) {
       if (
@@ -301,9 +387,12 @@ export async function savedList(
     }
     body += decoder.decode(value, { stream: true });
   }
+  const policy = await accountListPolicy(get,a,family,path,id);
+  const raw: unknown = JSON.parse(body + decoder.decode());
+  if (!Array.isArray(raw)) throw Error("Saved result is not a list");
   return {
     ...meta,
-    rows: savedProspects(JSON.parse(body + decoder.decode())),
+    rows: savedProspects(raw.map((row) => policy(obj(row))).filter(Boolean)),
     storageUrl,
   };
 }
@@ -324,7 +413,39 @@ export async function savedDownload(
     a.accessToken,
   );
   if (!source) return null;
-  return new Response(source.body, {
+  if (!source.body) throw Error("List unavailable");
+  const policy = await accountListPolicy(get,a,family,path,id);
+  const records = recordArray(source.body);
+  const encoder = new TextEncoder();
+  let first = true;
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(encoder.encode("["));
+    },
+    async pull(controller) {
+      for (;;) {
+        const next = await records.next();
+        if (next.done) {
+          controller.enqueue(encoder.encode("]"));
+          controller.close();
+          return;
+        }
+        const row = policy(obj(next.value));
+        if (!row) continue;
+        if (!eligible(row)) continue;
+        const safe = withEmailEvidence(row);
+        controller.enqueue(
+          encoder.encode((first ? "" : ",") + JSON.stringify(safe)),
+        );
+        first = false;
+        return;
+      }
+    },
+    async cancel() {
+      await records.return(undefined);
+    },
+  });
+  return new Response(stream, {
     headers: {
       "content-type": "application/json; charset=utf-8",
       "content-disposition": `attachment; filename="vibeleads-${id}.json"`,
@@ -344,7 +465,7 @@ function passedAddressCheck(r: DataRow) {
   const status = str(r.emailStatus).toLowerCase();
   return (
     Boolean(address) &&
-    !roleMailboxes.has(address.split("@")[0].toLowerCase()) &&
+    !roleMailboxes.has(address.split("@")[0].toLowerCase().split("+")[0]) &&
     ["verified", "valid", "deliverable", "ok", "safe"].includes(status)
   );
 }

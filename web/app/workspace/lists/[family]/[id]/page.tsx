@@ -141,7 +141,11 @@ export default async function Saved({
               </ul>
             </section>
           )}
-          <LeadTable filename={"vibeleads-" + id} rows={rows} />
+          <LeadTable
+            filename={"vibeleads-" + id}
+            rows={rows}
+            currentRowsUrl={`/workspace/lists/${family}/${id}/download?view=results`}
+          />
         </>
       )}
     </WorkspaceShell>

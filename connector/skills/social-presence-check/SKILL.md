@@ -12,7 +12,7 @@ The social check finds each lead's Instagram and Facebook pages and reports miss
 ## Steps
 
 1. Get the `listId` (call `start` if needed).
-2. Free quote:
+2. Source quote:
 
 ```json
 { "tool": "analyze_website", "arguments": { "listId": "<listId>", "checks": ["social"], "topN": 20 } }

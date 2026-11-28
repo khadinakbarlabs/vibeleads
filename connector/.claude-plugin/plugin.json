@@ -1,11 +1,21 @@
 {
   "name": "vibeleads",
   "displayName": "VibeLeads",
-  "version": "1.4.0",
-  "description": "Find local and B2B leads in plain words through the VibeLeads MCP server: any business type in any city, plus startups, importers, hiring companies and advertisers, with checked emails, website problems, a 0-100 score and a reason to contact each one. Always shows the price and asks before spending.",
+  "version": "1.4.1",
+  "description": "Find current buyers for your product or service, save projects and prepare evidence-backed next steps. Hosted calls can incur Apify usage. Paid source searches require your approval.",
   "author": {
     "name": "Khadin Akbar"
   },
   "license": "MIT",
-  "keywords": ["leads", "local-business", "lead-generation", "web-design", "seo", "agency", "outreach", "apify", "mcp"]
+  "keywords": [
+    "leads",
+    "local-business",
+    "lead-generation",
+    "web-design",
+    "seo",
+    "agency",
+    "outreach",
+    "apify",
+    "mcp"
+  ]
 }

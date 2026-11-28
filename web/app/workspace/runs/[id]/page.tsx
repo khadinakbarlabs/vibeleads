@@ -1,11 +1,6 @@
 import { ResultExplorer } from "@/components/workspace/ResultExplorer";
 import { LeadTable } from "@/components/workspace/LeadTable";
-import {
-  mapResults,
-  resultTitle,
-  outcome,
-  duration,
-} from "@/lib/workspace/results";
+import { outcome, duration } from "@/lib/workspace/results";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -14,7 +9,7 @@ import { WorkspaceShell } from "@/components/workspace/WorkspaceShell";
 import {
   ApifyRequestError,
   DATA_PAGE_SIZE,
-  workspaceDataset,
+  workspaceSellerDataset,
   workspaceRun,
 } from "@/lib/workspace/apify";
 import { workspaceAccount } from "@/lib/workspace/auth";
@@ -46,18 +41,21 @@ export default async function RunPage({
     throw error;
   });
   if (!run) notFound();
-  let rows: DataRow[] = [];
+  let mapped: DataRow[] = [];
   let total = 0;
+  let title = "Workflow results";
   let failed = false;
   try {
-    ({ rows, total } = await workspaceDataset(session.accessToken, run, page));
+    ({
+      rows: mapped,
+      total,
+      title,
+    } = await workspaceSellerDataset(session, run, page));
   } catch (error) {
     if (error instanceof ApifyRequestError && error.status === 401)
       redirect("/connect?status=expired");
     failed = true;
   }
-  const mapped = mapResults(rows);
-  const title = resultTitle(rows);
   const href = "/workspace/runs/" + run.id;
   return (
     <WorkspaceShell name={session.username}>
@@ -72,6 +70,14 @@ export default async function RunPage({
             {outcome(run.status)} · {runDate(run.startedAt)} UTC · Duration{" "}
             {duration(run.startedAt, run.finishedAt)}
           </p>
+          <a
+            className="vl-text-link"
+            href={"https://console.apify.com/actors/runs/" + run.id}
+            rel="noreferrer"
+            target="_blank"
+          >
+            Historical run record in Apify
+          </a>
         </div>
       </header>
       {failed ? (
@@ -86,10 +92,11 @@ export default async function RunPage({
           <div className="rd-resultsbar">
             <span>
               {total > DATA_PAGE_SIZE
-                ? `Part ${page} of ${Math.ceil(total / DATA_PAGE_SIZE)} · ${total.toLocaleString()} rows in this run`
-                : "Original data from this run"}
+                ? `Part ${page} of ${Math.ceil(total / DATA_PAGE_SIZE)} · ${total.toLocaleString()} original rows`
+                : "Results from this run"}{" "}
+              · Current opt-outs applied
             </span>
-            {rows.length > 0 && (
+            {mapped.length > 0 && (
               <div className="vl-actions">
                 {["csv", "json"].map((format) => (
                   <a
@@ -104,7 +111,7 @@ export default async function RunPage({
                     }
                   >
                     <Download size={15} />
-                    Original {format.toUpperCase()}
+                    Download {format.toUpperCase()}
                   </a>
                 ))}
               </div>
@@ -113,6 +120,9 @@ export default async function RunPage({
           {mapped.length > 0 && mapped.every((r) => !r.workflow) ? (
             <LeadTable
               rows={mapped}
+              currentRowsUrl={
+                href + "/export?view=results&format=json&page=" + page
+              }
               key={page}
               filename={
                 "vibeleads-" + run.id + (page > 1 ? "-part-" + page : "")

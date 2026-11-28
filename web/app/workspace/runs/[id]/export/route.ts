@@ -1,6 +1,5 @@
-import { mapResults } from "@/lib/workspace/results";
 import type { NextRequest } from "next/server";
-import { workspaceDataset, workspaceRun } from "@/lib/workspace/apify";
+import { workspaceSellerDataset, workspaceRun } from "@/lib/workspace/apify";
 import { workspaceAccount } from "@/lib/workspace/auth";
 import { datasetCsv, pageNumber } from "@/lib/workspace/data-view";
 
@@ -26,6 +25,12 @@ export async function GET(
       headers: privateHeaders,
     });
   const page = pageNumber(request.nextUrl.searchParams.get("page"));
+  const view = request.nextUrl.searchParams.get("view");
+  if (view !== null && view !== "results")
+    return new Response(
+      "For historical evidence, open the original run in Apify.",
+      { status: 400, headers: privateHeaders },
+    );
   try {
     const { id } = await context.params;
     const run = await workspaceRun(session.accessToken, session.accountId, id);
@@ -34,15 +39,7 @@ export async function GET(
         status: 404,
         headers: privateHeaders,
       });
-    const { rows: source } = await workspaceDataset(
-      session.accessToken,
-      run,
-      page,
-    );
-    const rows =
-      request.nextUrl.searchParams.get("view") === "results"
-        ? mapResults(source)
-        : source;
+    const { rows } = await workspaceSellerDataset(session, run, page);
     return new Response(
       format === "csv" ? datasetCsv(rows) : JSON.stringify(rows, null, 2),
       {

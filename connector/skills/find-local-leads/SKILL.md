@@ -17,7 +17,7 @@ Ask only for what is missing, one question at a time.
 
 ## Steps
 
-1. Free quote. Call `plan_leads`:
+1. Source quote. Call `plan_leads`:
 
 ```json
 { "tool": "plan_leads", "arguments": { "niche": "roofers", "locations": ["Dallas, TX"], "count": 50 } }

@@ -34,10 +34,10 @@ export default async function Home() {
           <div>
             <h1>Find the businesses that need what you sell.</h1>
             <p>
-              An open-source prospecting agent for your AI assistant. Start with
-              what you sell and run searches on your own Apify account.
-              VibeLeads finds prospects, checks buying signals, enriches contact
-              details and scores the fit.
+              Tell your AI assistant what you sell. It can look for open buyer
+              requests with its included web search or quote a lead search on
+              your Apify account. VibeLeads can save prospects, check buying
+              signals and enrich contact details.
             </p>
             <div className="buyer-actions">
               <a
@@ -52,7 +52,7 @@ export default async function Home() {
               </a>
             </div>
           </div>
-          <aside className="sample-brief">
+          <aside id="preview" className="sample-brief">
             <span>Example prospecting brief</span>
             <blockquote>“I am a video editor.”</blockquote>
             <p>
@@ -69,7 +69,7 @@ export default async function Home() {
           </p>
           <AgentSetup />
         </section>
-        <details className="lp-wrap buyer-compare">
+        <details id="workflows" className="lp-wrap buyer-compare">
           <summary>How does VibeLeads compare?</summary>
           <p>
             The open-source parts are the MIT-licensed connector and agent

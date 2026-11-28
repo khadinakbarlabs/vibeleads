@@ -13,7 +13,7 @@ What it does: for each city in the list, VibeLeads asks one AI search assistant 
 ## Steps
 
 1. Get the `listId` (call `start` if needed).
-2. Free quote with the `ai` check:
+2. Source quote with the `ai` check:
 
 ```json
 { "tool": "analyze_website", "arguments": { "listId": "<listId>", "checks": ["ai"], "topN": 10 } }
@@ -40,6 +40,6 @@ Table: name, named in the AI answer (yes or no), which other businesses from the
 - It is one answer from one AI assistant. AI answers change from one ask to the next. Always say "in one sample answer", never "they are invisible in AI".
 - A business written differently from its map listing name can be missed.
 - Only businesses that have a website and a city in the list are checked.
-- If no answer came back for a city, nothing is said about those businesses and nothing is charged for that question.
+- If no answer came back for a city, record the missing answer and check the source receipt for any event or platform charges.
 - This is not weekly tracking. If the user wants to repeat it, run the check again later and compare.
 - Do not promise that any service can guarantee a place in AI answers.

@@ -11,7 +11,7 @@ You write the drafts yourself. VibeLeads gives the evidence. No tool sends anyth
 
 ## Steps
 
-1. Read the leads for free with `get_leads` (use `priority` or `onlyWithProblem` to pick the right ones). Ask how many drafts the user wants. Default is the top 5.
+1. Read the leads with `get_leads` (use `priority` or `onlyWithProblem` to pick the right ones). Ask how many drafts the user wants. Default is the top 5.
 2. Ask once, if you do not know: what the user sells, their name or business name, and the channel (email, phone call, or direct message).
 3. For each lead, build the draft only from that lead's row:
    - `whyTheyNeedYou`: the problems found. This is the reason for contact.

@@ -13,7 +13,7 @@
       },
       "minimumEvidence": "Open the dated buyer-authored original. Distinguish an open commission, supplier RFQ, software evaluation and a recommendation request; recheck closure and reply invitations. Exclude a seller advertising their own product. A full-time job is separate from a freelance commission.",
       "fallback": "business-fit",
-      "requires": "A host-provided public search and readable originals. The released buying_posts Actor route currently reports a later wave. With no host search or permitted originals, skip this lane.",
+      "requires": "Use the assistant’s included public search and open readable buyer originals. If the host cannot search or the originals are inaccessible, record that limit. Paid native Reddit or X searches require their own quote and seller approval.",
       "cost": "Use included host search only. Any separately billed access needs a quote.",
       "provenance": [
         {

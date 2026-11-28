@@ -16,7 +16,7 @@ Request: $ARGUMENTS
    - their own mix of steps, or "contact details" together with a filter → `build-your-own-workflow`
    - anything else → `find-local-leads`
 3. Ask one focused question only when material information is missing for every suitable route.
-4. Get the free quote, show the cost, and wait for a yes before any paid step.
+4. Get the source quote, show the cost, and wait for a yes before any paid step.
 5. Show the leads in a short table and end with: Done, Cost so far, Next.
 
 Use VibeLeads for Actor discovery and execution. When the seller-intake method uses included host web search, open and cite its public originals.

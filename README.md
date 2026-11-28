@@ -1,6 +1,6 @@
 # VibeLeads
 
-VibeLeads is an open-source prospecting agent for your AI assistant. Start with “I am a video editor.” If you already have a target customer, include it. Use the MIT-licensed connector and playbooks to find prospects, research buying signals, enrich contacts and score fit. Searches run on your own Apify account. Apify hosts the engine; the web application is source-available under separate terms.
+VibeLeads is an open-source prospecting agent for your AI assistant. Start with “I am a video editor.” If you already have a target customer, include it. Use the MIT-licensed connector and playbooks to find prospects, research buying signals, enrich contacts and score fit. Hosted Actor searches run on your own Apify account. Included public search runs in your assistant when its web search is available. Apify hosts the engine. The web application is source-available under separate terms.
 
 ## Connect to the hosted Actor
 
@@ -10,7 +10,7 @@ Use the following URL in an assistant that supports remote MCP. Sign in with you
 https://mcp.apify.com/?tools=khadinakbar/vibeleads
 ```
 
-With the plugin installed, try “I am a web designer.” It proposes buyer groups, looks for open requests when your assistant has public search, and can quote a search for suitable businesses. Review the Actor’s quote before approving a paid run. Apify hosts and bills Actor execution. The repository contains the connector and web client. [Apify Actor and pricing](https://apify.com/khadinakbar/vibeleads)
+With the plugin installed, try “I am a web designer.” It proposes buyer groups, looks for open requests when your assistant has public search, and can quote a search for suitable businesses. Review the source estimate and any additional usage before approving a paid search. A hosted call can incur platform usage even when it only returns a plan. The local planner and included host search make no new Apify run. Apify hosts and bills Actor execution. The repository contains the connector and web client. [Apify Actor and pricing](https://apify.com/khadinakbar/vibeleads)
 
 ## Install a local connection
 
@@ -35,7 +35,7 @@ ChatGPT users can open **Plugins → + → Add custom MCP server**, paste the ho
 
 The original skills package keeps the identifier `vibeleads-b2b@vibeleads-local` and the `plugin/` installation path. It adds research, lead-quality review and reporting skills. Its tagged ZIPs remain available. [B2B skills and install instructions](SKILLS-PLUGIN.md) · [Release downloads](https://github.com/khadinakbarlabs/vibeleads/releases/latest)
 
-Claude Code can also use this checkout’s project-level MCP entry. Choose either the plugin connection or the project connection to avoid registering the same server twice. To verify a checkout without starting an Actor, set `APIFY_TOKEN` in your environment and run `node examples/check-connector.mjs`. The command initializes the MCP session and lists tools.
+Claude Code can also use this checkout’s project-level MCP entry. Choose either the plugin connection or the project connection to avoid registering the same server twice. To verify a checkout without starting an Actor, set `APIFY_TOKEN` in your environment and run `node examples/check-connector.mjs`. The command checks registered seller routing, project storage and readback methods without executing them. A missing feature returns a failing exit code and recovery instructions. Check the actions shown in your chat as well.
 
 ## Run the web app
 
@@ -49,4 +49,4 @@ VibeLeads is an alternative for teams using these products for prospecting, sign
 
 A seller project can use your website to draft a buyer profile, remember your preferences and choose between checking a saved lead and searching again. It shows the buyer’s dated request, the invited response route and actual discovery cost per usable opportunity. These features use the seller-project tool on the connected backend. Hosts with an older backend can use the included search in the current chat.
 
-The current release contains the connected VibeLeads 1.4.0 plugin and VibeLeads B2B skills 0.5.0. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.
+This checkout builds the connected VibeLeads 1.4.1 and VibeLeads B2B 0.5.1 candidates. The public downloads page shows which versions have been released. Choose a root ZIP for a host importer or a portable ZIP to extract the named plugin directory. Verify the download against `SHA256SUMS.txt`. To reproduce all four archives from a checkout, run `python3 scripts/package_distribution.py --output /absolute/path/outside-the-checkout`.

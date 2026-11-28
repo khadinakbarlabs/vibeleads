@@ -123,6 +123,15 @@ def validate(root=ROOT):
             if any(manifest.get(key) for key in ('mcpServers', 'hooks', 'agents', 'apps')):
                 errors.append('Executable/integration components in skills-only manifest: ' + relative)
         except (OSError, ValueError): errors.append('Missing/invalid manifest: ' + relative)
+    try:
+        catalog = json.loads((root / '.claude-plugin/marketplace.json').read_text())
+        if catalog.get('name') != 'vibeleads-b2b' or not any(
+            entry.get('name') == 'vibeleads-b2b' and entry.get('source') == './'
+            for entry in catalog.get('plugins', [])
+        ):
+            errors.append('Standalone marketplace must install the B2B plugin from this folder')
+    except (ValueError, OSError, AttributeError):
+        errors.append('Missing or invalid standalone B2B marketplace')
     if manifests:
         identities = {(str(m.get('name')), str(m.get('version'))) for m in manifests if isinstance(m, dict)}
         if len(identities) != 1: errors.append('Manifest identities/versions disagree')

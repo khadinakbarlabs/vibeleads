@@ -1,0 +1,11 @@
+{
+  "name": "vibeleads-b2b",
+  "owner": {"name": "Khadin Akbar"},
+  "plugins": [
+    {
+      "name": "vibeleads-b2b",
+      "source": "./",
+      "description": "Skills for qualifying buyers, researching accounts and reporting prospecting results."
+    }
+  ]
+}

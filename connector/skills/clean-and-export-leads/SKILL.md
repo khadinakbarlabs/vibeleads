@@ -21,11 +21,18 @@ Works on a saved list (`listId`) or on the user's own rows (`rows`, up to 5,000)
 - `view`: `"cleaned"` for the rows, `"audit"` for one line per row with the reason.
 - Paging: `limit` (up to 200), `offset`, and `cleanId` to continue an earlier cleaning job.
 
-Cleaning is free. Two optional checks cost money: `checkSites` (dead or parked websites) and `checkEmails` (bad emails). Without `approved` they return a free quote. For a deeper paid email check see [email-verification](../email-verification/SKILL.md). Show it, get a yes, then call again with `"approved": true` and `"maxSpendUsd"`.
+Cleaning has no separate result fee. Two optional checks cost money: `checkSites` (dead or parked websites) and `checkEmails` (bad emails). Without `approved` they return a source quote. For a deeper paid email check see [email-verification](../email-verification/SKILL.md). Show it, get a yes, then call again with `"approved": true` and `"maxSpendUsd"`.
 
 Tell the user the count: rows in, kept, merged, dropped. Start with `"flag"` unless the user asked to remove rows.
 
 ## Export
+
+Use the family returned by the originating search or saved-list picker. Keep the source ID with the rows. The local cleaner and marking tools accept local list IDs. Use facts and evidence appropriate to each family.
+
+- For a B2B search or enriched list, use `lead_search_status` with its listId, offset and a limit of at most 200. Page to the reported total, stopping on an empty page or error. If still running, offer the current rows as a partial export. Write the returned rows to CSV with source, organization, role, contact status and evidence where supplied.
+- For seller project opportunities, use the project inbox and its available pages. Preserve the original URL, original date, requirements, reply route, status, evidence and next action. Report verified contact details only where the record supports verification.
+- For an existing local list, use the native CSV exporter below. If the only reference is an Actor dataset, read that dataset in pages. An empty or inaccessible source needs a clear result.
+
 
 ```json
 { "tool": "export_leads", "arguments": { "listId": "<listId>" } }

@@ -16,7 +16,7 @@ Request: $ARGUMENTS
    - AI visibility, AI search → `ai-visibility-check` (one sample answer per city, top 10 leads)
    - several checks in one run together with the search → `website-health-and-seo-audit`
    - nothing named → offer speed and domain first, because they are the cheapest
-4. Get the free quote, show the cost per site and the total, and wait for a yes.
+4. Get the source quote, show the cost per site and the total, and wait for a yes.
 5. After the checks, read the list again and show what was found, worst first.
 
 Do this work with the VibeLeads tool; it covers every step.

@@ -1,92 +1,66 @@
-# VibeLeads connector plugin
+# VibeLeads
 
-[Install the connector from the VibeLeads catalog](../README.md#install-in-your-assistant).
+Tell your assistant what you sell. Start with “I am a video editor.” If you have a website, share it. VibeLeads can read your offer and draft an ideal customer profile for you to edit. An assistant with included public search can start looking for buyers from your description alone.
 
-Find local businesses that need your service, from inside your AI assistant.
+## Connect your assistant
 
-Ask in plain words. VibeLeads finds the businesses, checks their emails and websites, gives each one a score from 0 to 100, and tells you why they need you. It always shows the price first and asks before it spends anything.
-
-Made for freelancers and agencies (web design, SEO, ads, social media) and for businesses that sell to local businesses.
-
-## What you can ask
-
-- "Find dentists in Austin with no website or slow websites"
-- "Find roofers in Dallas"
-- "Check for weak SEO"
-- "Find restaurants in Chicago that are under 4 stars"
-- "Find med spas in Austin, hot leads only"
-- "Find salons in London every week, only new ones"
-- "Check the speed" / "Do the SEO audit" / "Do the AI visibility tracking" on your leads
-- "I sell web design. Which playbook fits me?"
-- "Find new businesses in Denver" / "Real estate agents in Tampa"
-- "Contact details of Texas businesses with no website" (builds a custom chain of steps)
-- "Only verified emails" (optional paid check, about 3.6 cents per email)
-- "Write a short email for the top 5 leads"
-- "Export this list to a spreadsheet"
-
-Slash commands: `/find-leads`, `/lead-playbooks`, `/build-workflow`, `/check-websites`, `/weekly-leads`, `/export-leads`.
-
-## Install
-
-**Claude Code**
-
-1. Add the published marketplace with `/plugin marketplace add https://github.com/khadinakbarlabs/vibeleads.git`. For a checkout, use the repository root as the marketplace path
-2. Install the plugin: `/plugin install vibeleads@vibeleads-local`
-3. Type `/mcp`, pick `vibeleads`, and sign in.
-
-**Claude Cowork and the Claude desktop app**
-
-Add this folder as a plugin from the plugins screen (upload or pick the folder), then connect `vibeleads` when asked.
-
-**Cursor and Codex**
-
-The folder also holds a Cursor manifest and a Codex manifest. Add the folder as a local plugin in those apps. The skills and the connection are the same.
-
-## Sign-in
-
-The plugin connects to one address:
+For an assistant with remote MCP support, add this server and sign in with the Apify account where you want to save results.
 
 ```text
 https://mcp.apify.com/?tools=khadinakbar/vibeleads
 ```
 
-Sign in with your Apify account in the browser and approve access. For a local client that needs an API token, use the [stdio setup and secret-environment fallback](../README.md#install-a-local-connection).
+In ChatGPT, add a custom MCP server with OAuth and enable it in your chat. In Claude, add a custom connector under Settings and select Connect. For a terminal or desktop client, the [connection guide](https://www.vibeleads.app/connect) includes instructions for browser sign-in, the local stdio bridge and a token stored in your client’s secret environment.
 
-This address gives your assistant one VibeLeads tool, plus four helpers that only read results or stop a run.
+**Install the playbooks from GitHub.** In Claude Code, run the following commands.
 
-## What it costs
+```sh
+claude plugin marketplace add https://github.com/khadinakbarlabs/vibeleads.git
+claude plugin install vibeleads@vibeleads-local
+```
 
-- The plugin is free. VibeLeads itself is free.
-- You pay the listed price of each of the owner's Actors that VibeLeads runs for you, on your own Apify account. A basic lead search is about 1 cent per lead.
-- Deeper checks cost extra per website: speed and domain well under 1 cent, social presence about 1 cent, broken links about 3 cents, SEO audit about 10 cents. The AI visibility sample is about 8 cents per city.
-- A custom workflow costs the sum of its steps, quoted first: for example about 1.45 dollars per 100 leads for no-website leads with contact details.
-- Optional premium email verification is about 3.6 cents per email, only when you ask for it.
-- A ready-made playbook costs roughly 1 to 2 dollars per 100 businesses, extra checks included.
-- You always get the price first. Nothing runs until you say yes, and every run has a spending cap (5 dollars unless you choose another).
-- Reading saved lists, cleaning duplicates, exporting, and marking leads are free.
+In Codex, clone the repository and replace the path below with the checkout directory.
 
-Prices can change. The quote you see before each run is the one that counts.
+```sh
+codex plugin marketplace add /absolute/path/to/vibeleads
+codex plugin add vibeleads@vibeleads-local
+```
 
-## What it does not do
+**Install from a downloaded ZIP.** For a portable ZIP, use the extracted vibeleads directory. For a root ZIP, extract it into its own directory. Change to the directory containing this README and the hidden .claude-plugin folder. Use the pair for your client.
 
-- It does not send emails or messages. It writes drafts; you send them.
-- It does not look up private people. Leads are public business listings.
-- It does not invent leads or findings. If something cannot be checked, it says so.
-- It does not check a plain website address on its own. Checks run on businesses in a saved lead list.
-- Filters such as no website or low rating on a big city may need a higher look-at number. Emails are rare for businesses without a website.
-- The AI visibility check is one sample answer per city, not ongoing tracking.
+```sh
+claude plugin marketplace add "$PWD"
+claude plugin install vibeleads@vibeleads
+```
 
-## What is inside
+```sh
+codex plugin marketplace add "$PWD"
+codex plugin add vibeleads@vibeleads
+```
 
-| Part | What it is |
-|---|---|
-| `skills/` | 21 skills: shared rules, lead searches, website checks, playbooks, cleaning and export, outreach drafts, and guides for web designers, SEO people, and ads and social agencies |
-| `commands/` | 6 slash commands |
-| `.mcp.json` | The VibeLeads connection |
-| `TOOL-MAP.md` | Which request uses which skill and tool |
-| `tests/check-plugin.mjs` | A small offline check of the plugin files |
+Reload the client. Open the connector and sign in. Hosts with a ZIP importer can use the root ZIP. For a client that accepts a plugin folder, import the complete extracted folder with its hidden files. With Node.js 22 or newer, run the offline file check from the folder containing this README.
 
-Run the check with `node tests/check-plugin.mjs`.
+```sh
+node tests/check-plugin.mjs
+```
+
+## Find customers
+
+Say what you do or share your website. Your assistant infers the offer, likely buyers and buying signals, then shows a short profile you can correct. Keep each brand in its own project on the same connected account. Saved feedback and preferences help choose what to check on return. A technical audit of a prospective customer's website uses a saved prospect list.
+
+The assistant checks saved opportunities, looks for fresh demand and opens the buyer’s original request. Timing depends on the work, closure and deadlines. A usable opportunity needs a still-open request, a fit for your offer and an invited route you can use. Expect the date, requirements, link and next step. Suitable businesses to pitch are listed separately. A buyer inviting an application and an independently verified individual email are different outcomes.
+
+If your assistant has no included public search, it can show a price for an available source. If project tools are missing, reload or reconnect the server and refresh the tools in your chat. Included search can continue in the current chat while project storage is unavailable. Your assistant should tell you which records and costs it can confirm.
+
+## What you pay
+
+The download and local planner have no Apify charge. Included search uses your assistant's existing allowance. Calling the hosted Actor can incur Apify platform usage even for a preview, quote, project update or export. A delivered jobs shortlist can have a result fee. Additional sources, contact checks, storage and source minimums can affect the final bill. [Live Apify pricing](https://apify.com/khadinakbar/vibeleads/pricing)
+
+Before a paid search, review its source estimate, other charges, and whether a firm total limit is available. The ordinary source estimate defaults to $5. If you require a firm all-in limit, continue with local or included work until the quoted route can enforce it or you accept the extra cost. The seller report uses recorded spend across sources and distinct usable opportunities. It shows unknown charges explicitly and leaves unit cost undefined when none qualify.
+
+## Saved results
+
+Ask for your results, their evidence, an export or an outreach draft. Scheduled searches need separate approval for the cost and frequency. The plugin can update your project, save lists and mark outcomes. You decide whether to send a message or application. [Results dashboard](https://www.vibeleads.app/workspace)
 
 ## License
 

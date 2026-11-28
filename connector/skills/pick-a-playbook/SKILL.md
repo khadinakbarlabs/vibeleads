@@ -21,7 +21,7 @@ A playbook is a ready recipe: a search, the right filters, the right extra check
    Both arguments are optional. `audience` is `"freelancer"`, `"agency"` or `"business"`. `service` is what the user sells, in their words. If nothing matches, the answer returns all playbooks and says so.
 
 3. Show the choices in plain words: name, what it promises, its limits, and the rough cost per 100 leads. Ask the user to pick one, plus the business type, the area and how many.
-4. Free quote. Use the playbook id exactly as returned:
+4. Source quote. Use the playbook id exactly as returned:
 
 ```json
 { "tool": "plan_playbook", "arguments": { "playbook": "website-redesign-pitch", "niche": "dentists", "locations": ["Austin, TX"], "count": 50 } }

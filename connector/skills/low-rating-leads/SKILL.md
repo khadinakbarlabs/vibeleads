@@ -17,7 +17,7 @@ The `low-rating-rescue` playbook finds businesses under 4 stars that have at lea
    - "under 4 stars" → `"maxRating": 3.9`
    - "between 3 and 4 stars" → `"minRating": 3`, `"maxRating": 4`
    - Add `"minReviews": 10` (or what the user wants) so one bad review does not put a business on the list.
-2. Free quote:
+2. Source quote:
 
 ```json
 { "tool": "plan_leads", "arguments": { "niche": "restaurants", "locations": ["Chicago, IL"], "count": 50, "maxRating": 3.9, "minReviews": 10 } }
